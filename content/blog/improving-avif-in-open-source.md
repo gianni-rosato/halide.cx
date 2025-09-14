@@ -123,4 +123,4 @@ At Halide Compression, my goal is to fundamentally change these incentives. For 
 
 I hope you enjoyed the read and learned something. If you'd like to talk to me or Halide about my open-source work, Iris, or anything else, shoot us an email! Thanks for reading!
 
-{{ cta(url="mailto:gianni@halide.cx", txt="Email Us") }}
+{{ cta(url="mailto:mail@halide.cx", txt="Email Us") }}
