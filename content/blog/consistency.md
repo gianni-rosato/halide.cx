@@ -47,13 +47,13 @@ The 30 to 80 range was chosen due to its relevance for general multimedia delive
 
 ## Results
 
-![Average standard deviation across Q levels](./img/avg_stddev_ssimu2.svg)
+![Average standard deviation across Q levels](/img/avg_stddev_ssimu2.svg)
 
 The above graph shows us consistency numbers averaged across Q levels that resulted in average qualities between 30 and 80 SSIMULACRA2 on the subset1 dataset we mentioned earlier. And our winner is libjpeg-turbo! On the quality front, libjpeg-turbo is not remotely competitive with these encoders, but it scores well for consistency – we'll think more about this in the next section
 
 Next, we have our standard deviation over time:
 
-![Standard deviation graphed](./img/stddev_graphed_ssimu2.svg)
+![Standard deviation graphed](/img/stddev_graphed_ssimu2.svg)
 
 This paints an interesting picture; we see that libaom is actually the best at SSIMULACRA2 80, but performance drops off rapidly below SSIMULACRA2 ~70. Iris is a well-rounded strong performer, with concessions to libjpeg-turbo below SSIMULACRA2 ~47 (low fidelity). Curiously, while libjpegli does well, libjxl is not all that consistent overall.
 
