@@ -1,0 +1,73 @@
+.image-switcher {
+  margin: 2rem 0;
+}
+
+.image-switcher-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.image-switcher img {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: 2rem;
+  transition: opacity 0.3s ease;
+}
+
+.image-caption {
+  font-size: 1rem;
+  color: oklch(0.5 0.06 83);
+  text-align: center;
+  margin: 0;
+  font-style: italic;
+}
+
+.switcher-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.switcher-button {
+  color: oklch(0.3 0.094 83);
+  border: 1px solid oklch(0.8 0.06 83);
+  background-color: oklch(0.95 0.06 83);
+  display: inline-block;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  min-width: 120px;
+  text-align: center;
+}
+
+.switcher-button:hover {
+  transform: translateY(-2px);
+  border-color: oklch(0.5 0.06 83);
+}
+
+.switcher-button.active {
+  background-color: oklch(0.2 0.047 83);
+  color: oklch(0.95 0.06 83);
+  border-color: oklch(0.2 0.047 83);
+}
+
+.switcher-button.active:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .switcher-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .switcher-button {
+    width: 100%;
+    max-width: 200px;
+  }
+}

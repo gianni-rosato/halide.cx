@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <base target="_self" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ get_url(path='blog.css') }}" rel="stylesheet" />
+    <link href="{{ get_url(path='main.css') }}" rel="stylesheet" />
+    <link href="{{ get_url(path='metrics_table.css') }}" rel="stylesheet" />
+    <link href="{{ get_url(path='mobile_menu.css') }}" rel="stylesheet" />
+    <link href="{{ get_url(path='switcher.css') }}" rel="stylesheet" />
+    <link href="{{ get_url(path='favicon.webp') }}" rel="icon">
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"
+    ></script>
+    <title>
+      {% if page %}{{ page.title }} | Halide Compression{% elif section %}{{
+      section.title }} | Halide Compression{% else %}Halide Compression{% endif
+      %}
+    </title>
+    <meta
+      name="description"
+      content="{% if page %}{{ page.description }}{% elif section %}{{ section.description | safe }}{% else %}{% endif %}"
+    >
+    <meta
+      property="og:type"
+      content="{% if page %}article{% else %}website{% endif %}"
+    >
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <div class="logo-nav-group">
+          <a href="{{ get_url(path='@/_index.md') }}" class="logo">
+            <img
+              src="/img/halide_logo.svg"
+              alt="Halide logo"
+              class="logo-icon"
+            >
+          </a>
+          <nav class="main-nav">
+            <a href="{{ get_url(path='@/about/_index.md') }}">About</a>
+            <a href="{{ get_url(path='@/iris/_index.md') }}">Iris</a>
+            <a href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
+          </nav>
+        </div>
+
+        <div class="flex items-center">
+          <button class="mobile-menu-button" aria-label="Open menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        {% block content %} {% endblock content %}
+      </div>
+    </main>
+
+    <script src="/js/mobile_menu.min.js"></script>
+  </body>
+</html>
