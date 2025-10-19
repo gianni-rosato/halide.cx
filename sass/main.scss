@@ -36,6 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 2.5rem;
+  margin-top: 4rem;
 }
 h2 {
   font-size: 2rem;
@@ -146,13 +147,14 @@ main {
   gap: 3rem;
   align-items: center;
   margin-bottom: 4rem;
-  min-height: 12rem; /* Set a minimum height for consistent spacing */
+  min-height: 12rem;
 }
 
 .hero-title {
   font-size: 3.5rem;
   font-weight: 900;
   line-height: 1.1;
+  margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   color: oklch(0.2 0.047 83);
 }
