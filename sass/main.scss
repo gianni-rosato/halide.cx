@@ -247,6 +247,17 @@ main {
   color: oklch(0.5 0.06 83);
 }
 
+.foot {
+  font-size: 1rem;
+  color: oklch(0.3 0.094 83);
+  margin-top: 3rem;
+  margin-bottom: 0rem;
+  text-align: center;
+  a {
+    color: oklch(0.3 0.094 83);
+  }
+}
+
 @media (min-width: 768px) {
   .main-nav {
     display: flex;
