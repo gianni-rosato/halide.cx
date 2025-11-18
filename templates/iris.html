@@ -28,20 +28,12 @@
   Iris for WebP
 </h1>
 <p>
-  WebP was introduced in 2010 with the goal of providing better compression for
-  Web images. While it claimed to offer significant efficiency advantages over
-  JPEG, in practice this wasn't always true. Its adoption was also slow due to
-  an initial lack of widespread browser support and further lackluster support
-  outside of the Web ecosystem. This led to WebP being perceived as a confusing
-  addition to the Web. Iris-WebP changes all of that.
-</p>
-<p>
-  Iris-WebP provides a fast, efficient WebP encoder designed for the human eye.
+  In its speed class, Iris-WebP is the most efficient image encoder available.
   Images encoded with Iris-WebP look significantly better than those encoded
-  with the reference WebP encoder, and Iris-WebP performance outclasses encoders
-  for slower, newer Web-first formats like AVIF. Plus, WebP support is
-  ubiquitous now, and large websites serve billions of WebP images every single
-  day.
+  with the reference WebP encoder, and Iris-WebP's performance outclasses
+  encoders for slower, newer Web-first formats like AVIF. WebP support is also
+  currently ubiquitous, and large websites serve billions of WebP images every
+  single day.
 </p>
 <section class="performance-tiles">
   <div class="performance-tile">
@@ -61,9 +53,9 @@
     </svg>
     <h3>Fast</h3>
     <p>
-      Iris-WebP's slowest encodes are close to AVIF's fastest, making it
-      significantly faster than the latest modern Web codecs while still
-      expertly preserving image fidelity.
+      Iris-WebP's slowest encodes are close to AVIF's fastest, making it faster
+      than competing modern Web codecs while still delivering exceptional
+      quality.
     </p>
   </div>
   <div class="performance-tile">
@@ -83,9 +75,8 @@
     </svg>
     <h3>Efficient</h3>
     <p>
-      Achieve over 40% better compression than the best JPEG encoders, leading
-      to faster page load times and greatly reduced bandwidth at a negligible
-      compatibility cost.
+      Achieve up to 45% better compression than the best JPEG encoders, leading
+      to faster page load times and greatly reduced bandwidth.
     </p>
   </div>
   <div class="performance-tile">
@@ -106,229 +97,45 @@
     <h3>High Quality</h3>
     <p>
       Iris-WebP is designed with the human visual system in mind, allowing up to
-      21% better compression than the reference WebP encoder (often within 1% of
-      AVIF).
+      26% better compression than the reference WebP encoder.
     </p>
   </div>
 </section>
-<script src="/js/image_switcher.min.js"></script>
+<script src="/js/image_switcher.js"></script>
 <section class="image-switcher">
   <h1>See the Difference</h1>
   <p>
     Click the buttons below to switch between different encoders. The image
-    below comes from Daala's subset1 image test suite.
+    below comes from <a
+      href="https://github.com/WyohKnott/image-formats-comparison/blob/gh-pages/comparisonfiles/subset1/Original/End_of_Show_3.png"
+      target="_blank"
+    >Daala's subset1</a> image test suite.
   </p>
   <div id="iris-switcher" class="image-container"></div>
   <p>
     Iris-WebP's visual performance is unparalleled. Designing lossy image
-    compression around the human eye allows us to deliver an unmatched encoder
-    capable of delivering an uptick in quality of experience that users notice.
+    compression around the human eye allows us to provide an encoder capable of
+    delivering an uptick in quality of experience that users notice.
   </p>
 </section>
-<h1>
-  Metrics
-</h1>
+<script src="/js/metric_switcher.js"></script>
+<section class="metric-switcher">
+  <h1>Metrics</h1>
+  <p>
+    The numbers below were aggregated using the <a
+      href="https://github.com/MohamedBakrAli/Kodak-Lossless-True-Color-Image-Suite/tree/master/PhotoCD_PCD0992"
+    >Kodak Lossless True Color Image Suite</a> using the <a
+      href="https://github.com/cloudinary/ssimulacra2/blob/main/README.md"
+    >SSIMULACRA2</a>
+    metric.
+  </p>
+  <div id="metrics-switcher" class="image-container"></div>
+</section>
 <p>
-  The numbers below were aggregated from the <a
-    href="https://github.com/MohamedBakrAli/Kodak-Lossless-True-Color-Image-Suite/tree/master/PhotoCD_PCD0992"
-  >Kodak Lossless True Color Image Suite</a> using the <a
-    href="https://github.com/cloudinary/ssimulacra2/blob/main/README.md"
-  >SSIMULACRA2</a>
-  metric.
-</p>
-<p>
-  Compared to libjpeg's encoder, Iris-WebP achieves over 74% better compression
-  on average. Compared to the highly efficient jpegli, Iris is over 41% better.
+  Compared to libjpeg's encoder, Iris-WebP achieves over 77% better compression
+  on average. Compared to the highly efficient jpegli, Iris is up to 45% better.
   Within the same WebP codec, Iris outperforms the reference WebP encoder
-  included in libwebp by almost 22%.
-</p>
-<h4>
-  Efficiency Gains Compared to Other Encoders
-</h4>
-<div class="metrics-table-container">
-  <table class="metrics-table">
-    <thead>
-      <tr>
-        <th>Image</th>
-        <th>libwebp</th>
-        <th>libjpegli</th>
-        <th>libjpeg</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1.png</td>
-        <td>20.72%</td>
-        <td>29.736%</td>
-        <td>55.529%</td>
-      </tr>
-      <tr>
-        <td>2.png</td>
-        <td>32.737%</td>
-        <td>57.45%</td>
-        <td>104.437%</td>
-      </tr>
-      <tr>
-        <td>3.png</td>
-        <td>18.182%</td>
-        <td>67.187%</td>
-        <td>109.427%</td>
-      </tr>
-      <tr>
-        <td>4.png</td>
-        <td>23.991%</td>
-        <td>41.668%</td>
-        <td>78.088%</td>
-      </tr>
-      <tr>
-        <td>5.png</td>
-        <td>12.307%</td>
-        <td>26.671%</td>
-        <td>44.074%</td>
-      </tr>
-      <tr>
-        <td>6.png</td>
-        <td>30.169%</td>
-        <td>27.56%</td>
-        <td>63.299%</td>
-      </tr>
-      <tr>
-        <td>7.png</td>
-        <td>15.389%</td>
-        <td>58.442%</td>
-        <td>86.45%</td>
-      </tr>
-      <tr>
-        <td>8.png</td>
-        <td>16.322%</td>
-        <td>29.975%</td>
-        <td>47.19%</td>
-      </tr>
-      <tr>
-        <td>9.png</td>
-        <td>19.571%</td>
-        <td>67.579%</td>
-        <td>109.357%</td>
-      </tr>
-      <tr>
-        <td>10.png</td>
-        <td>20.668%</td>
-        <td>59.087%</td>
-        <td>95.159%</td>
-      </tr>
-      <tr>
-        <td>11.png</td>
-        <td>24.620%</td>
-        <td>39.464%</td>
-        <td>72.380%</td>
-      </tr>
-      <tr>
-        <td>12.png</td>
-        <td>34.446%</td>
-        <td>61.516%</td>
-        <td>111.106%</td>
-      </tr>
-      <tr>
-        <td>13.png</td>
-        <td>14.564%</td>
-        <td>7.965%</td>
-        <td>26.949%</td>
-      </tr>
-      <tr>
-        <td>14.png</td>
-        <td>21.281%</td>
-        <td>30.482%</td>
-        <td>57.939%</td>
-      </tr>
-      <tr>
-        <td>15.png</td>
-        <td>24.043%</td>
-        <td>54.772%</td>
-        <td>92.947%</td>
-      </tr>
-      <tr>
-        <td>16.png</td>
-        <td>31.278%</td>
-        <td>33.031%</td>
-        <td>81.294%</td>
-      </tr>
-      <tr>
-        <td>17.png</td>
-        <td>19.200%</td>
-        <td>47.594%</td>
-        <td>79.650%</td>
-      </tr>
-      <tr>
-        <td>18.png</td>
-        <td>21.583%</td>
-        <td>25.551%</td>
-        <td>51.007%</td>
-      </tr>
-      <tr>
-        <td>19.png</td>
-        <td>22.543%</td>
-        <td>28.969%</td>
-        <td>61.002%</td>
-      </tr>
-      <tr>
-        <td>20.png</td>
-        <td>20.878%</td>
-        <td>54.173%</td>
-        <td>88.938%</td>
-      </tr>
-      <tr>
-        <td>21.png</td>
-        <td>19.845%</td>
-        <td>38.009%</td>
-        <td>75.028%</td>
-      </tr>
-      <tr>
-        <td>22.png</td>
-        <td>23.344%</td>
-        <td>23.921%</td>
-        <td>57.395%</td>
-      </tr>
-      <tr>
-        <td>23.png</td>
-        <td>15.019%</td>
-        <td>59.299%</td>
-        <td>85.158%</td>
-      </tr>
-      <tr>
-        <td>24.png</td>
-        <td>21.206%</td>
-        <td>29.016%</td>
-        <td>52.465%</td>
-      </tr>
-      <tr>
-        <td><strong>Average</strong></td>
-        <td><strong>21.829%</strong></td>
-        <td><strong>41.630%</strong></td>
-        <td><strong>74.428%</strong></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<p>
-  Aside from passing `-optimize` to libjpeg & `-m 6` to libwebp to set the
-  speed, everything else was left stock. Iris is speed-matched to libwebp.
-</p>
-<p>
-  When benchmarked at reasonable speeds, Iris-WebP comes close to the
-  performance of highly optimized libaom for AVIF:
-</p>
-<div class="image-container">
-  <picture>
-    <img
-      src="/img/iris_subset2.svg"
-      alt="Iris on Daala's Subset2"
-      type="image/svg+xml"
-    >
-  </picture>
-</div>
-<p>
-  This is unprecedented performance for a WebP encoder, considering AVIF is
-  eight years newer than WebP.
+  included in libwebp by up to 26%.
 </p>
 <h1>
   Using Iris-WebP
@@ -338,8 +145,9 @@
   as well as access to new Iris-WebP releases and maintenance fixes over time.
 </p>
 <p>
-  Investing in Iris is an investment in the future of web image compression. If
-  you'd like to use Iris today, send us an email!
+  An Iris-WebP license is an investment in the future of web image compression
+  in pursuit of a more beautiful web. If you'd like to use Iris today, send us
+  an email!
 </p>
 <div class="call-to-action">
   <a href="mailto:mail@halide.cx" class="cta-button">Email Us</a>
