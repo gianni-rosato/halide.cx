@@ -111,6 +111,12 @@
       target="_blank"
     >Daala's subset1</a> image test suite.
   </p>
+  {% if config.extra.cmp_encoded %}
+  <div class="image-caption">
+    Encoded {{ config.extra.cmp_encoded }}
+  </div>
+  <p></p>
+  {% endif %}
   <div id="iris-switcher" class="image-container"></div>
   <p>
     Iris-WebP's visual performance is unparalleled. Designing lossy image
@@ -129,6 +135,11 @@
     >SSIMULACRA2</a>
     metric.
   </p>
+  {% if config.extra.metrics_measured %}
+  <div class="image-caption">
+    Measured {{ config.extra.metrics_measured }}
+  </div>
+  {% endif %}
   <div id="metrics-switcher" class="image-container"></div>
 </section>
 <p>

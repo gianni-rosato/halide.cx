@@ -21,3 +21,5 @@ highlight_code = true
 
 [extra]
 # Put all your custom variables here
+metrics_measured = "Oct 2025"
+cmp_encoded = "Jul 2025"
