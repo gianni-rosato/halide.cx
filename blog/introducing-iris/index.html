@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <base target="_self" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link href="https://halide.cx/blog.css" rel="stylesheet" />
+    <link href="https://halide.cx/main.css" rel="stylesheet" />
+    <link href="https://halide.cx/metrics_table.css" rel="stylesheet" />
+    <link href="https://halide.cx/mobile_menu.css" rel="stylesheet" />
+    <link href="https://halide.cx/switcher.css" rel="stylesheet" />
+    <link href="https://halide.cx/favicon.webp" rel="icon">
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"
+    ></script>
+    <title>
+      Introducing Iris for WebP | Halide Compression
+    </title>
+    <meta
+      name="description"
+      content="Today we&#x27;re excited to announce the Iris project, our in-house image encoder. We&#x27;ve begun work on Iris&#x27;s first codec, Iris-WebP: A WebP encoder that brings impressive gains over the reference encoder."
+    >
+    <meta
+      property="og:type"
+      content="article"
+    >
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <div class="logo-nav-group">
+          <a href="https://halide.cx/" class="logo">
+            <img
+              src="/img/halide_logo.svg"
+              alt="Halide logo"
+              class="logo-icon"
+            >
+          </a>
+          <nav class="main-nav">
+            <a href="https://halide.cx/about/">About</a>
+            <a href="https://halide.cx/iris/">Iris</a>
+            <a href="https://halide.cx/blog/">Blog</a>
+          </nav>
+        </div>
+
+        <div class="flex items-center">
+          <button class="mobile-menu-button" aria-label="Open menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<article class="blog-post">
+  <header class="blog-post-header">
+    <div class="blog-post-meta">
+      <time>June 04, 2025</time> •
+      <span class="author">The Halide Team</span>
+    </div>
+    <h1 class="blog-post-title">
+      Introducing Iris for WebP
+    </h1>
+  </header>
+  <div class="blog-post-content">
+    <p class="lead">
+      Today we&#x27;re excited to announce the Iris project, our in-house image encoder. We&#x27;ve begun work on Iris&#x27;s first codec, Iris-WebP: A WebP encoder that brings impressive gains over the reference encoder.
+    </p>
+    <div class="image-container">
+  <picture>
+    <img
+      src="https://halide.cx/img/sky.avif"
+      width="1536"
+      height="864"
+      alt="Sky"
+    />
+  </picture>
+</div>
+<h2 id="why-webp">Why WebP?</h2>
+<p>WebP was introduced in 2010 with the goal of providing better compression for
+Web images. While it claimed to offer significant efficiency advantages over
+JPEG, in practice this wasn't always true. Its adoption was also slow due to an
+initial lack of widespread browser support and further lackluster support
+outside of the Web ecosystem. This led to WebP being perceived as a confusing
+addition to the Web.</p>
+<p>Desipte its reputation and unclear benefits, WebP has gained significant
+traction on the Web. It is available in over 95% of Web browsers, and large
+digital asset management companies serve billions of WebP images every day.</p>
+<p>Iris-WebP provides a fast, efficient WebP encoder designed for the human eye.
+Images encoded with Iris-WebP look significantly better than those encoded with
+the reference WebP encoder, and Iris-WebP performance outclasses encoders for
+slower, newer Web-first formats like AVIF.</p>
+<h2 id="our-encoder">Our Encoder</h2>
+<p>Our primary goals building Iris-WebP are speed, compression efficiency, and
+consistency. We want to consistenty output high-quality results from our encoder
+quickly, and in doing so provide an implementation that delivers on WebP's
+initial quality promises without compromise.</p>
+<p>In order to meet our goals, we've developed robust tooling to measure visual
+fidelity with SSIMULACRA2 and Butteraugli. Visual performance is paramount, and
+we work hard to ensure Iris-WebP isn't just overfit for metrics. Our featureset
+includes novel image compression tech designed through meticulous psychovisual
+research, allowing us to provide unrivaled performance.</p>
+<p>To learn more about Iris-WebP and how it may benefit your workflow, visit the
+<a href="/iris/">Iris project page</a>. At the time of writing, we don't have metrics to
+share, but they will be coming soon to the Iris project page. We're excited to
+see how Iris can help make the web faster, lighter, and more beautiful!</p>
+<div class="call-to-action">
+  <a
+    href="&#x2F;iris"
+    class="cta-button"
+  >
+    Learn More About Iris
+  </a>
+</div>
+
+  </div>
+</article>
+
+      </div>
+      <div class="foot">
+        &copy; 2025 Halide Compression LLC. All Rights Reserved. | <a href="https://halide.cx/privacy/">Privacy Policy</a>
+      </div>
+    </main>
+
+    <script src="/js/mobile_menu.js"></script>
+  </body>
+</html>

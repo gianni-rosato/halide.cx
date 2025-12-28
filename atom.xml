@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Halide Compression</title>
+    <subtitle>Hi, we&#x27;re Halide Compression.</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://halide.cx/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://halide.cx"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-12-28T00:00:00+00:00</updated>
+    <id>https://halide.cx/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Introducing fcvvdp</title>
+        <published>2025-12-28T00:00:00+00:00</published>
+        <updated>2025-12-28T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Halide Team
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://halide.cx/blog/fcvvdp/"/>
+        <id>https://halide.cx/blog/fcvvdp/</id>
+        
+        <content type="html" xml:base="https://halide.cx/blog/fcvvdp/">&lt;div class=&quot;image-container&quot;&gt;
+  &lt;picture&gt;
+    &lt;img
+      src=&quot;https:&#x2F;&#x2F;halide.cx&#x2F;img&#x2F;slate.avif&quot;
+      width=&quot;1536&quot;
+      height=&quot;864&quot;
+      alt=&quot;Slate&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;picture&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;why&quot;&gt;Why?&lt;&#x2F;h2&gt;
+&lt;p&gt;The aphorism &quot;all models are wrong, but some are useful&quot; is commonly attributed to George E. P. Box, a British statistician. The concept is especially relevant in multimedia compression where we have lots of models to choose from for evaluating lossy image and video compression.&lt;&#x2F;p&gt;
+&lt;p&gt;Lots of metrics exist and are easily accessible; we are intimately familiar with a wide breadth of metrics and their various pros and cons for benchmarking image compression algorithms, but there will always be blind spots regardless of how many we test. When we found ColorVideoVDP (CVVDP), we discovered it was able to catch some edge cases that other powerful perceptual metrics (like SSIMULACRA2) weren&#x27;t able to; despite the fact that it has its own edge cases, it immediately became interesting to us because of this.&lt;&#x2F;p&gt;
+&lt;p&gt;The only issue we faced was that the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;gfxdisp&#x2F;colorvideovdp&quot;&gt;reference Python implementation&lt;&#x2F;a&gt; was not fast enough for our use case, increasing our Iris benchmark script&#x27;s runtime dramatically. This wasn&#x27;t an acceptable trade-off for our productivity, so we decided to build &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;halidecx&#x2F;fcvvdp&quot;&gt;fcvvdp&lt;&#x2F;a&gt; as an open-source C implementation of CVVDP for the benefit of everyone who may have faced the same issues we did.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;metrics&quot;&gt;Metrics&lt;&#x2F;h2&gt;
+&lt;p&gt;The strongest full-reference perceptual fidelity metrics we have access to are SSIMULACRA2, Butteraugli, and (to some degree) MS-SSIM. PSNR-HVS provides some level of perceptual utility as well. SSIM and eSSIM are occasionally useful for investigating a certain class of finer artifacts; the same can be said about PSNR to some degree. VMAF isn&#x27;t particularly useful for images in our experience. We don&#x27;t outright shun or ignore any metrics, but our preference is to build technology that is valuable for the end-user experience (so, the human eye). We&#x27;ve established CVVDP is relevant to the last point, so what additional criteria must we meet to use an implementation?&lt;&#x2F;p&gt;
+&lt;p&gt;The Python implementation of CVVDP is compelling research-grade software, and a &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Line-fr&#x2F;Vship&quot;&gt;fully GPU-accelerated implementation&lt;&#x2F;a&gt; exists for video. While performant GPU acceleration is compelling for benchmarking videos, images have different needs:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;GPU initialization time causes slowdowns&lt;&#x2F;li&gt;
+&lt;li&gt;Threading isn&#x27;t important, because each encode&#x2F;metric worker gets its own thread in the benchmark script&lt;&#x2F;li&gt;
+&lt;li&gt;Batch processing on the GPU fixes the first issue, but requires re-architecting parts of our benchmark script for one metric&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;So, fcvvdp should be able to slot into existing workflows as easily as SSIMULACRA2 or Butteraugli might relative to a legacy image benchmarking suite.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;implementation&quot;&gt;Implementation&lt;&#x2F;h2&gt;
+&lt;p&gt;fcvvdp is based on the GPU-accelerated implementation mentioned earlier, and is written in C. It is, predictably, strongest when it comes to images. The reference implementation takes (on average) 1.69 seconds and 928 MB of RAM to score one 576x576 pairwise image comparison. fcvvdp takes (on average) 85.5ms, and uses 61.5 MB of RAM. Scores are within a reasonable margin of perceptual error.&lt;&#x2F;p&gt;
+&lt;p&gt;On a 360p video, fcvvdp is ~18% faster in terms of wall clock time. The benefits described above generalize in terms of user time and RAM usage, but wall clock time isn&#x27;t much better on videos due to the fact that fcvvdp doesn&#x27;t feature any sort of threading. This is the implementation&#x27;s biggest limitation; while it is still faster than the reference implementation (which does feature threading) by a bit, threading would allow the relative improvement we see with images to generalize to video.&lt;&#x2F;p&gt;
+&lt;p&gt;If you&#x27;re interested in learning about how fcvvdp works, see our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;halidecx&#x2F;fcvvdp&#x2F;blob&#x2F;main&#x2F;doc&#x2F;cvvdp.md&quot;&gt;implementation docs&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;Our code is public under the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;halidecx&#x2F;fcvvdp?tab=Apache-2.0-1-ov-file#readme&quot;&gt;Apache 2.0 license&lt;&#x2F;a&gt;. We are always proud of our capability to give back to the FOSS ecosystem when we can. While Iris is a closed source product, we hope to use Iris&#x27;s impact and utility as a means of subsidizing work on open source when it helps support our mission. In this case, fcvvdp was the perfect excuse to do something great for Halide Compression while giving something valuable back to the field. We hope you enjoy fcvvdp!&lt;&#x2F;p&gt;
+&lt;div class=&quot;call-to-action&quot;&gt;
+  &lt;a
+    href=&quot;mailto:mail@halide.cx&quot;
+    class=&quot;cta-button&quot;
+  &gt;
+    Email Us
+  &lt;&#x2F;a&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Measuring Image Encoder Consistency</title>
+        <published>2025-09-14T00:00:00+00:00</published>
+        <updated>2025-09-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Halide Team
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://halide.cx/blog/consistency/"/>
+        <id>https://halide.cx/blog/consistency/</id>
+        
+        <content type="html" xml:base="https://halide.cx/blog/consistency/">&lt;div class=&quot;image-container&quot;&gt;
+  &lt;picture&gt;
+    &lt;img
+      src=&quot;https:&#x2F;&#x2F;halide.cx&#x2F;img&#x2F;streak.avif&quot;
+      width=&quot;1536&quot;
+      height=&quot;864&quot;
+      alt=&quot;Light Streak&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;picture&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;what-is-consistency&quot;&gt;What Is Consistency?&lt;&#x2F;h2&gt;
+&lt;p&gt;Consistency could mean a number of things in the context of image compression,
+but the specific definition of consistency used in this blog post measures how
+closely an image encoder&#x27;s user-configurable quality index matches a perceptual
+quality index.&lt;&#x2F;p&gt;
+&lt;p&gt;Here&#x27;s an example: your encoder has a quality slider from 1 to 100. Ideally, if
+you pass a quality value of 80, this should target some internal definition of
+what &quot;quality 80&quot; means with every image it encodes. At quality 80, if some
+images look incredible and some look clearly awful, there is a consistency
+issue. If images all end up around the same quality visually, that is the mark
+of a consistent encoder.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-is-consistency-important&quot;&gt;Why Is Consistency Important?&lt;&#x2F;h2&gt;
+&lt;p&gt;It is very common for image compression workflows to include a target quality
+loop of some kind, where a metric is utilized alongside an image encoder to
+provide feedback about how good the image looks. If it doesn&#x27;t look good enough,
+re-encode; similarly, if it is too high-quality and bits could be saved by
+aiming lower, re-encode. Considering image encoders and powerful metrics are
+quite fast, these workflows are easy to configure and often run quickly enough.&lt;&#x2F;p&gt;
+&lt;p&gt;In speed- or resource-constrained scenarios, it may not be wise to use a target
+quality loop. If you do, you may be limited to faster but far less meaningful
+metrics; for example, targeting &lt;a href=&quot;https:&#x2F;&#x2F;wiki.x266.mov&#x2F;docs&#x2F;metrics&#x2F;PSNR&quot;&gt;PSNR&lt;&#x2F;a&gt;
+is not useful for delivering images at a consistent quality baseline because our
+eyes don&#x27;t agree with PSNR&#x27;s definition of quality very often. Two separate
+encodes of different sources that have the same PSNR score often look very
+different in terms of visual quality, which brings us back to where we started.
+In these scenarios, our definition of consistency becomes relevant; an encoder&#x27;s
+ability to reliably encode images close to a given quality becomes a
+make-or-break consideration for this kind of workflow. Applications that process
+vast quantities of user-generated content can be subject to these constraints.&lt;&#x2F;p&gt;
+&lt;p&gt;A consistent encoder additionally provides a boon to user experience. Encoders
+like &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;libjxl&#x2F;libjxl&quot;&gt;libjxl&lt;&#x2F;a&gt;&#x27;s encoder (cjxl for JPEG XL
+images) and the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;jpegli&quot;&gt;jpegli&lt;&#x2F;a&gt; JPEG encoder have two
+user-accessible quality indexes; they provide a Q scale from 0 (or 1) through
+100 like most image encoders, but they also provide a &quot;distance&quot; scale. The
+benefit of this is that quality scales measured in Q are internally defined and
+often arbitrary – it isn&#x27;t clear how good &quot;quality 80&quot; will actually be
+externally, and the visual correlation for most encoder quality scales is
+usually sparsely documented. On the other hand, &quot;distance&quot; is not arbitrary.&lt;&#x2F;p&gt;
+&lt;p&gt;A &quot;distance&quot; parameter allows users to directly target a tangible &lt;em&gt;visual
+distance&lt;&#x2F;em&gt; value; roughly speaking, this indicates how far away a user needs to
+be from their screen to see artifacts. A value of 1.0 is usually considered
+visually lossless, and JPEG XL and jpegli are inspired by the Butteraugli metric
+in how this is defined. The benefits to a user are clear; you can set-and-forget
+your encoder to a distance of 1.0, and your images will always be the smallest
+possible size to achieve visually lossless fidelity given your encoder is
+perfectly consistent.&lt;&#x2F;p&gt;
+&lt;p&gt;Our encoder is called &lt;a href=&quot;https:&#x2F;&#x2F;halide.cx&#x2F;iris&#x2F;&quot;&gt;Iris-WebP&lt;&#x2F;a&gt;, and features similar
+functionality to libjxl and libjpegli through its own &quot;distance&quot; parameter for
+the reasons stated above. But everything we just described is useless if the
+distance value isn&#x27;t consistently achievable; so, how do we measure consistency?&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;measuring-consistency&quot;&gt;Measuring Consistency&lt;&#x2F;h2&gt;
+&lt;p&gt;This blog post&#x27;s title promises that we will measure this, so let&#x27;s take a look
+at some methodology.&lt;&#x2F;p&gt;
+&lt;p&gt;At a high level, here is how we measure encoder consistency holistically:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;We sweep an encoder’s user-facing quality index Q across a chosen range&lt;&#x2F;li&gt;
+&lt;li&gt;For each image and each Q, we encode once, then compute one or more perceptual
+metrics against the original&lt;&#x2F;li&gt;
+&lt;li&gt;For each Q, we aggregate the metric values across all images and write a CSV
+with the mean and standard deviation&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Here, the per-Q standard deviation is the important value. Lower standard
+deviations per Q mean the encoder achieves more uniform visual quality across
+diverse inputs at that Q.&lt;&#x2F;p&gt;
+&lt;p&gt;Internally, this testing is done with a number of different metrics; for the
+purposes of this blog post, we&#x27;ll report all of our numbers with
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;cloudinary&#x2F;ssimulacra2&quot;&gt;SSIMULACRA2&lt;&#x2F;a&gt; because it is the most
+perceptually correlated open-source metric at the time of writing.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;a href=&quot;https:&#x2F;&#x2F;aomedia.googlesource.com&#x2F;aom&#x2F;&quot;&gt;libaom&lt;&#x2F;a&gt; AV1 encoder is configured at
+speed 7, using an improved tune iq introduced in v3.13.0 (if you&#x27;d like to learn
+more about some of the ways AVIF has gotten better in the past year, read
+&lt;a href=&quot;https:&#x2F;&#x2F;halide.cx&#x2F;blog&#x2F;improving-avif-in-open-source&quot;&gt;our blog post on open source AVIF developments&lt;&#x2F;a&gt;.)
+We also tested libjpeg-turbo, libjxl, libjpegli,
+&lt;a href=&quot;https:&#x2F;&#x2F;chromium.googlesource.com&#x2F;webm&#x2F;libwebp&#x2F;&quot;&gt;libwebp&lt;&#x2F;a&gt;, and Iris-WebP. We
+configured libaom to encode 10-bit 4:4:4 images and libwebp to run at its
+slowest encoding preset (method 6), and everything else was left to defaults for
+the other encoders. The image dataset we&#x27;re testing on is
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;WyohKnott&#x2F;image-formats-comparison&#x2F;tree&#x2F;gh-pages&#x2F;comparisonfiles&#x2F;subset1&#x2F;Original&quot;&gt;Daala&#x27;s subset1&lt;&#x2F;a&gt;,
+which should give us a good baseline for medium-resolution photographic content.&lt;&#x2F;p&gt;
+&lt;p&gt;Our results will focus on:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;The average of standard deviations for Q levels between SSIMULACRA2 30 and 80&lt;&#x2F;li&gt;
+&lt;li&gt;The movement of std dev per Q level the range between SSIMULACRA2 30 and 80&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The 30 to 80 range was chosen due to its relevance for general multimedia
+delivery use cases.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;avg_stddev_ssimu2.svg&quot; alt=&quot;Average standard deviation across Q levels&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The above graph shows us consistency numbers averaged across Q levels that
+resulted in average qualities between 30 and 80 SSIMULACRA2 on the subset1
+dataset we mentioned earlier. And our winner is libjpeg-turbo! On the quality
+front, libjpeg-turbo is not remotely competitive with these encoders, but it
+scores well for consistency – we&#x27;ll think more about this in the next section.&lt;&#x2F;p&gt;
+&lt;p&gt;Next, we have standard deviation over our range:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;stddev_graphed_ssimu2.svg&quot; alt=&quot;Standard deviation graphed&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This paints an interesting picture; we see that libaom is actually the best at
+SSIMULACRA2 80, but performance drops off rapidly below SSIMULACRA2 ~70. Iris is
+a well-rounded strong performer, with concessions to libjpeg-turbo below
+SSIMULACRA2 ~47 (low fidelity). Curiously, while libjpegli does well, libjxl is
+not all that consistent overall.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;&#x2F;h2&gt;
+&lt;p&gt;Iris-WebP&#x27;s strong consistency performance coupled with its known speed and
+efficiency make it a strong performer, but consistency wins alone are not worth
+celebrating; they can only support an already fast and efficient encoder.&lt;&#x2F;p&gt;
+&lt;p&gt;In a target quality loop with an inefficient encoder, bits are wasted by default
+even if a particular target is readily hit; even though you are sacrificing
+predictability, a less consistent encoder that is more efficient is a more
+desirable choice because you can just have your target quality workflow shift
+potential inconsistency into overshooting. Overshot results might be larger than
+necessary, but they may still be smaller than worse looking outputs from a less
+efficient encoder that is still on target.&lt;&#x2F;p&gt;
+&lt;p&gt;Similarly, a consistent encoder that isn&#x27;t competitively fast is not worthwhile
+either. If at the same speed target, another encoder is more efficient, that
+encoder is considered faster and you&#x27;re leaving compression efficiency on the
+table.&lt;&#x2F;p&gt;
+&lt;p&gt;At Halide Compression, we believe image encoders that value efficiency, speed,
+and consistency are both desirable and possible. While it is true that highly
+efficient encoders may suffer consistency issues due to their spiky but still
+generally incredible performance, we believe Iris has been able to successfully
+mitigate potential consistency issues without sacrificing efficiency or speed.&lt;&#x2F;p&gt;
+&lt;div class=&quot;call-to-action&quot;&gt;
+  &lt;a
+    href=&quot;mailto:mail@halide.cx&quot;
+    class=&quot;cta-button&quot;
+  &gt;
+    Email Us
+  &lt;&#x2F;a&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>An Interview With Julio Barba</title>
+        <published>2025-08-29T00:00:00+00:00</published>
+        <updated>2025-08-29T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Halide Team
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://halide.cx/blog/julio-barba-interview/"/>
+        <id>https://halide.cx/blog/julio-barba-interview/</id>
+        
+        <content type="html" xml:base="https://halide.cx/blog/julio-barba-interview/">&lt;div class=&quot;image-container&quot;&gt;
+  &lt;picture&gt;
+    &lt;img
+      src=&quot;https:&#x2F;&#x2F;halide.cx&#x2F;img&#x2F;ocean.avif&quot;
+      width=&quot;1536&quot;
+      height=&quot;864&quot;
+      alt=&quot;Ocean&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;picture&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;who-are-you&quot;&gt;Who are you?&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;m Julio Barba, a developer who works on video and image compression
+technology, focusing on the AV1 format and its successor, AV2. I started in
+backend development but pivoted to multimedia compression in 2023 by
+contributing to popular open-source AV1 projects like
+&lt;a href=&quot;https:&#x2F;&#x2F;aomedia.googlesource.com&#x2F;aom&#x2F;&quot;&gt;libaom&lt;&#x2F;a&gt; and
+&lt;a href=&quot;https:&#x2F;&#x2F;gitlab.com&#x2F;AOMediaCodec&#x2F;SVT-AV1&#x2F;&quot;&gt;SVT-AV1&lt;&#x2F;a&gt;. I&#x27;m now also a contributor
+to AV2, the next-generation video standard from the
+&lt;a href=&quot;https:&#x2F;&#x2F;aomedia.org&quot;&gt;Alliance for Open Media (AOMedia)&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-did-you-get-involved-in-multimedia-compression&quot;&gt;How did you get involved in multimedia compression?&lt;&#x2F;h2&gt;
+&lt;p&gt;At 10 years old, I discovered MP3s and Winamp and was amazed that you could
+shrink CD music by 10x with very little quality loss. That sparked my curiosity
+in compression.&lt;&#x2F;p&gt;
+&lt;p&gt;Soon after, I learned about the royalty-free Ogg Vorbis audio format, which was
+even better than MP3. That led me down a rabbit hole of royalty-free video
+formats like Theora, VP9, and eventually AV1. In 2023, I started contributing to
+AV1 myself, focusing on improving its video and image quality.&lt;&#x2F;p&gt;
+&lt;p&gt;In 2024, I teamed up with Gianni Rosato and two friends to create
+&lt;a href=&quot;https:&#x2F;&#x2F;svt-av1-psy.com&quot;&gt;SVT-AV1-PSY&lt;&#x2F;a&gt;, a version of the SVT-AV1 encoder focused
+on making videos look as good as possible to the human eye. We&#x27;ve since
+contributed many of our improvements back to the main SVT-AV1 project, making it
+more flexible, higher quality, and easier to use.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-is-your-role-at-google&quot;&gt;What is your role at Google?&lt;&#x2F;h2&gt;
+&lt;p&gt;I work with Google&#x27;s image compression team on a feature called tune IQ, a
+brand-new mode in the libaom encoder designed for still images. It improves
+quality and consistency by intelligently directing more data to the parts of an
+image our eyes notice most, which means you get smaller files for the same
+visual quality. Tune IQ also includes a new detector that dramatically improves
+compression for content like screenshots, simple graphics, and animations.&lt;&#x2F;p&gt;
+&lt;p&gt;Today, tune IQ is already being used by customers like
+&lt;em&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.theguardian.com&#x2F;us&quot;&gt;The Guardian&lt;&#x2F;a&gt;&lt;&#x2F;em&gt;, and we&#x27;ve received great
+feedback! We&#x27;re now working to make it the default setting for creating AVIF
+images and help it become widely adopted.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-did-you-become-part-of-the-av2-development-effort&quot;&gt;How did you become part of the AV2 development effort?&lt;&#x2F;h2&gt;
+&lt;p&gt;My work with Google&#x27;s image team was a natural entry point to contributing to
+AV2&#x27;s image compression capabilities. Since Google is a founding member of
+AOMedia, it was easy to get involved. That said, the project is open source, so
+anyone can contribute, not just members!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;we-have-webp-from-vp8-heic-from-hevc-and-avif-from-av1-will-there-be-an-image-format-based-on-av2&quot;&gt;We have WebP (from VP8), HEIC (from HEVC), and AVIF (from AV1). Will there be an image format based on AV2?&lt;&#x2F;h2&gt;
+&lt;p&gt;Given AV2&#x27;s compression gains over AV1, I strongly believe the industry will
+want an image format based on it. There&#x27;s already work being done to add support
+for AVM (AV2&#x27;s reference software) into libavif, which is a popular library for
+handling AVIF images.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-av2-features-are-you-most-excited-about-for-still-image-compression&quot;&gt;What AV2 features are you most excited about for still image compression?&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;m very excited about features like user-defined Quantization Matrices (QMs).
+This unlocks some powerful applications, most notably the ability to convert
+JPEG images into the AV2 format without the additional quality loss that
+normally happens when you transcode between formats. On top of that, you can
+apply deblocking filters to these converted images to smooth out artifacts and
+improve their perceived quality even more.&lt;&#x2F;p&gt;
+&lt;p&gt;AV2 also uses higher precision math for standard 8-bit content. This helps
+prevent &quot;banding&quot; — those ugly, visible steps in what should be a smooth color
+gradient — which can be caused by rounding errors during compression.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;h-264-helped-enable-hd-video-on-the-web-while-formats-like-av1-drove-4k-and-hdr-what-new-experiences-might-av2-unlock&quot;&gt;H.264 helped enable HD video on the web, while formats like AV1 drove 4K and HDR. What new experiences might AV2 unlock?&lt;&#x2F;h2&gt;
+&lt;p&gt;That&#x27;s a great question! There&#x27;s a growing demand for high-quality Virtual
+Reality (VR) and Augmented Reality (AR) experiences, driven by products like the
+Apple Vision Pro and Meta Quest. These applications require streaming video at
+very high resolutions (4K or higher), with a wide field of view (up to 360
+degrees), and often with multiple views (e.g., one for each eye). AV2 is being
+designed with new compression tools specifically to handle this kind of
+demanding video more efficiently.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-adoption-challenges-do-you-foresee-for-av2-and-how-can-they-be-solved&quot;&gt;What adoption challenges do you foresee for AV2, and how can they be solved?&lt;&#x2F;h2&gt;
+&lt;p&gt;The main challenges will be the same ones every new codec faces: ensuring cheap,
+widespread hardware support and developing fast, efficient software for encoding
+and decoding. For AV2 to succeed, the entire ecosystem -- from chip
+manufacturers to codec developers and streaming services -- needs to work
+together.&lt;&#x2F;p&gt;
+&lt;p&gt;There will be growing pains, but if we learn from the AV1 rollout, we can speed
+things up. Developing a very fast software decoder early on (like dav1d was for
+AV1) and optimizing the software encoders will be key to driving adoption.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;can-you-speculate-on-a-timeline-for-widespread-av2-deployment&quot;&gt;Can you speculate on a timeline for widespread AV2 deployment?&lt;&#x2F;h2&gt;
+&lt;p&gt;It&#x27;s hard to say for sure since the AV2 standard is still under development.
+However, seeing the close collaboration between all the AOMedia partners, I
+think the rollout could be even faster than AV1&#x27;s. I wouldn&#x27;t be surprised to
+see the first devices with AV2 hardware support by 2027. An optimistic guess for
+widespread deployment would be around 2030.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-do-you-see-video-and-image-compression-evolving-in-the-next-5-to-10-years&quot;&gt;How do you see video and image compression evolving in the next 5 to 10 years?&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;m betting we&#x27;ll see a lot more machine learning (ML) and neural networks (NN)
+used in codec design. This could mean using AI to clean up and enhance the final
+decoded image, or it could mean building ML-based techniques directly into the
+compression process to improve quality from the start. I know of several
+research efforts already underway, and I hope to see them become part of real
+products in the future.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-are-your-thoughts-on-machine-learning-in-future-compression-standards&quot;&gt;What are your thoughts on machine learning in future compression standards?&lt;&#x2F;h2&gt;
+&lt;p&gt;As I said, I believe ML will become essential. I expect it to be adopted
+gradually -- first by using ML to create smarter filters that clean up
+compression artifacts, and then expanding to other parts of the codec as device
+performance allows.&lt;&#x2F;p&gt;
+&lt;p&gt;The ultimate &quot;holy grail&quot; would be a codec that uses machine learning
+extensively in every step of the process. We might even see codecs that are
+essentially a single, large neural network. Companies like
+&lt;a href=&quot;https:&#x2F;&#x2F;deeprender.ai&quot;&gt;Deep Render&lt;&#x2F;a&gt; have shown this is possible; we just need
+to make them fast enough to run in real-time on affordable, everyday hardware.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;if-you-could-instantly-solve-one-problem-in-compression-what-would-it-be&quot;&gt;If you could instantly solve one problem in compression, what would it be?&lt;&#x2F;h2&gt;
+&lt;p&gt;My dream is to perfect the way we handle film grain in videos. I&#x27;d want to
+create a fully automated system that can intelligently preserve or synthesize
+film grain to match the director&#x27;s creative intent, without needing manual
+tweaking for every single movie. To do that, we&#x27;d also need to develop a new
+quality metric that can actually understand and measure the visual appeal of
+film grain.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;The world of multimedia compression is
+&lt;a href=&quot;https:&#x2F;&#x2F;giannirosato.com&#x2F;blog&#x2F;post&#x2F;the-multimedia-renaissance&#x2F;&quot;&gt;moving more quickly than ever&lt;&#x2F;a&gt;,
+and Julio is at the forefront of it all. I&#x27;m consistently impressed with his
+work, and If you want to learn more about him, I&#x27;ve linked his website below.
+Thanks for your time in this interview, Julio!&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;– Gianni&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;div class=&quot;call-to-action&quot;&gt;
+  &lt;a
+    href=&quot;https:&amp;#x2F;&amp;#x2F;juliobbv.com&quot;
+    class=&quot;cta-button&quot;
+  &gt;
+    Julio&amp;#x27;s Website
+  &lt;&#x2F;a&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Improving AVIF in Open Source</title>
+        <published>2025-07-13T00:00:00+00:00</published>
+        <updated>2025-07-13T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Halide Team
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://halide.cx/blog/improving-avif-in-open-source/"/>
+        <id>https://halide.cx/blog/improving-avif-in-open-source/</id>
+        
+        <content type="html" xml:base="https://halide.cx/blog/improving-avif-in-open-source/">&lt;div class=&quot;image-container&quot;&gt;
+  &lt;picture&gt;
+    &lt;img
+      src=&quot;https:&#x2F;&#x2F;halide.cx&#x2F;img&#x2F;fall_leaves.avif&quot;
+      width=&quot;1536&quot;
+      height=&quot;864&quot;
+      alt=&quot;Red Autumn
+Leaves&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;picture&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;wiki.x266.mov&#x2F;docs&#x2F;images&#x2F;AVIF&quot;&gt;AVIF (AV1 Image File Format)&lt;&#x2F;a&gt; is
+growing in popularity for web images, thanks to its impressive compression and
+quality. However, open-source AVIF encoders struggled with consistency,
+usability, and overall compression efficiency for a long time due to their
+development cycles and (inherently) the way video encoders are designed.&lt;&#x2F;p&gt;
+&lt;p&gt;My name is Gianni Rosato, the founder of Halide Compression. My compression
+background has a foundation in working on the SVT-AV1 project with Meta as well
+as working with Two Orioles, the main authors behind the
+&lt;a href=&quot;https:&#x2F;&#x2F;wiki.x266.mov&#x2F;docs&#x2F;utilities&#x2F;dav1d&quot;&gt;dav1d software AV1 decoder&lt;&#x2F;a&gt;. My
+journey began with founding the &lt;a href=&quot;https:&#x2F;&#x2F;svt-av1-psy.com&quot;&gt;SVT-AV1-PSY&lt;&#x2F;a&gt; project,
+aimed at providing a community-developed enhanced SVT-AV1 encoder for perceptual
+quality. One of the things I worked on while involved with SVT-AV1-PSY was
+considerably improving the state of the art for AVIF.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-avif&quot;&gt;Why AVIF?&lt;&#x2F;h2&gt;
+&lt;p&gt;AVIF wasn&#x27;t on our radar as video encoder developers, but a community member
+suggested we try it out and we saw promising results instantly with our existing
+featureset. This prompted us to begin escalating our focus on still images; as a
+community-built open source project, we were not beholden to the interests of
+companies that only derived value from our video work, so we were able to shift
+focus without much trouble.&lt;&#x2F;p&gt;
+&lt;p&gt;This is something I want to highlight up front in this blog post: modern image
+codecs on the Web tend to be derivations of video standards (e.g. WebP images
+being VP8 keyframes, same with HEIC&#x2F;HEVC as well as AVIF&#x2F;AV1) with reference and
+production encoders designed for video. Because of this, image encoding is a
+poorly considered externality (with the exception of WebP, which has an
+image-first reference library separate from
+&lt;a href=&quot;https:&#x2F;&#x2F;wiki.x266.mov&#x2F;docs&#x2F;encoders&#x2F;vpxenc&quot;&gt;libvpx&lt;&#x2F;a&gt; in the form of
+&lt;a href=&quot;https:&#x2F;&#x2F;chromium.googlesource.com&#x2F;webm&#x2F;libwebp&#x2F;&quot;&gt;libwebp&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;This is where the Web ecosystem is headed; build powerful video encoders with
+associated image formats, and hope that being good at video means images will
+benefit. This is usually effective, but to truly unlock value in these formats,
+boutique image-first design considerations are necessary. This became more
+clearly true as I continued to work on AVIF in SVT-AV1-PSY.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;design-overview&quot;&gt;Design Overview&lt;&#x2F;h2&gt;
+&lt;p&gt;Improving still picture AVIF encoding (ignoring animations, which are
+essentially videos after all) means improving &lt;em&gt;all-intra coding&lt;&#x2F;em&gt;. In video
+terminology, intra-coded frames are frames which do not reference data from
+other frames (they are standalone pictures).&lt;&#x2F;p&gt;
+&lt;p&gt;&quot;Tune Still Picture&quot; (also called &quot;Tune 4&quot;) delineates SVT-AV1-PSY&#x27;s
+intra-optimized compression mode, differentiating it from the other tuning
+options in the encoder.&lt;&#x2F;p&gt;
+&lt;p&gt;Tune Still Picture is comprised primarily of the following techniques under the
+hood:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;A quantization matrix scaling curve&lt;&#x2F;li&gt;
+&lt;li&gt;Deblocking loop filter sharpness adjustment&lt;&#x2F;li&gt;
+&lt;li&gt;More sensitive variance-adaptive quantization&lt;&#x2F;li&gt;
+&lt;li&gt;Photography-tuned variance-adaptive quantization scaling&lt;&#x2F;li&gt;
+&lt;li&gt;A custom screen-content detection algorithm&lt;&#x2F;li&gt;
+&lt;li&gt;Modifications to lambda weight modulation&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;These techniques were the primary contributors to Tune 4&#x27;s strength in metrics
+as well as perceptual quality. I&#x27;ll explain what each option does in more detail
+below.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;1-quantization-matrix-scaling&quot;&gt;1. Quantization Matrix Scaling&lt;&#x2F;h3&gt;
+&lt;p&gt;After a frame is transformed from the spatial domain to the frequency domain (a
+process that separates a group of pixels into different frequency components), a
+quantization matrix (QM) is applied. This matrix contains different scaling
+factors for various frequencies. By using a non-uniform quantization matrix, an
+encoder can specify different levels of quantization to different frequency
+components (e.g. low versus high-frequency), which may allow for more graceful
+degradation according to the human eye as data is discarded.&lt;&#x2F;p&gt;
+&lt;p&gt;The AV1 specification includes a set of 15 predefined QMs. Encoders can select
+one of these for luma (light) and chroma (color) in each frame. AV1&#x27;s predefined
+QMs are designed to be reasonably effective for a wide range of content.
+SVT-AV1-PSY enables QMs by default for better visual quality, and specifies a QM
+range that the encoder can use when encoding a video.&lt;&#x2F;p&gt;
+&lt;p&gt;For still images, we care less about QMs over time and more about how carefully
+choosing QMs during the encoding process for a single intra-coded frame (our
+image). In order to identify the best QMs for our use case, we used an
+industry-standard image dataset (the &lt;a href=&quot;https:&#x2F;&#x2F;cloudinary.com&#x2F;labs&#x2F;cid22&quot;&gt;CID22&lt;&#x2F;a&gt;
+Validation Set) and measured a &lt;em&gt;convex hull&lt;&#x2F;em&gt; (how quality changes relative to
+size) according to the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;cloudinary&#x2F;ssimulacra2&quot;&gt;SSIMULACRA2&lt;&#x2F;a&gt;
+image quality metric for each QM.&lt;&#x2F;p&gt;
+&lt;p&gt;We found that for different quality levels, on average, different QMs performed
+better. We selected the best QMs for each range in order to achieve the best
+overall convex hull.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;2-deblocking-loop-filter-sharpness&quot;&gt;2. Deblocking Loop Filter Sharpness&lt;&#x2F;h3&gt;
+&lt;p&gt;This was a simpler change, despite being potentially the most effective.&lt;&#x2F;p&gt;
+&lt;p&gt;SVT-AV1-PSY features user-facing controls to modify the encoder&#x27;s internal
+deblocking loop filter sharpness. AV1 divides video frames into blocks in order
+to compress different regions of a frame differently. The deblocking loop filter
+in an encoder controls how the boundaries between blocks in each frame are
+smoothed into one another, and can be modified to be smoother or sharper
+depending on internal controls.&lt;&#x2F;p&gt;
+&lt;p&gt;We tried each sharpness level on a convex hull (as we did with QMs) and landed
+on the best overall level to set as the default for Tune Still Picture. This
+particular case illustrates the difference between an image encoder and a video
+encoder. While smoother deblocking might help a video encoder by potentially
+improving inter-frame consistency and leading to better compression, working
+with a single frame tells a different story. Thus, an image encoder ends up
+making drastically different decisions than a video encoder, even with the same
+set of tools.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;3-variance-adaptive-quantization-sensitivity&quot;&gt;3. Variance-Adaptive Quantization Sensitivity&lt;&#x2F;h3&gt;
+&lt;p&gt;Variance Adaptive Quantization (VAQ) is a feature that comes from the x264 days,
+helping to drastically improve visual quality while also improving metrics due
+to the nature of quantization in the face of low-variance image data (this
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;psy-ex&#x2F;svt-av1-psy&#x2F;blob&#x2F;master&#x2F;Docs&#x2F;Appendix-Variance-Boost.md&quot;&gt;explainer by Julio Barba&lt;&#x2F;a&gt;,
+the author of VAQ in SVT-AV1(-PSY), is a very good guide on how it works).&lt;&#x2F;p&gt;
+&lt;p&gt;VAQ only makes an encoder better when it is used properly. In the case of still
+images, increasing the strength of VAQ helped improve our convex hull, but the
+changes to VAQ didn&#x27;t stop there.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;4-variance-adaptive-quantization-scaling&quot;&gt;4. Variance-Adaptive Quantization Scaling&lt;&#x2F;h3&gt;
+&lt;p&gt;The scaling algorithm for the default VAQ implementation in SVT-AV1 follows this
+equation:&lt;&#x2F;p&gt;
+&lt;p&gt;q = pow(1.018, strengths[strength] * (-10 * log2((double)variance) + 80))&lt;&#x2F;p&gt;
+&lt;p&gt;If we take strength as a configurable variable instead of a look-up table for
+the sake of demonstration, we can plot a curve that looks like this:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;varboost_0.webp&quot; alt=&quot;Variance Boost Video Curve&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The shape of this curve should generally illustrate how variance adaptive
+quantization works, if we think about the x-axis as our input variance value and
+our y-axis as our returned quantization scaling value. Less variance means we
+&quot;boost&quot; the amount of bits sent to an area to improve its quality.&lt;&#x2F;p&gt;
+&lt;p&gt;Tuning for photographic content meant using a modified curve, defined by the
+following equation:&lt;&#x2F;p&gt;
+&lt;p&gt;q = 0.15 * strength * (-log2((double)variance) + 10) + 1;&lt;&#x2F;p&gt;
+&lt;p&gt;Here is the associated visual, with the black line representing the Still
+Picture curve:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;varboost_1.webp&quot; alt=&quot;Variance Boost Still Picture Curve&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Finding this curve required considering the type of data present in photographs,
+the sensitivity of quality to quantization in intra-coded frames, and how our
+convex hull responded. One interesting thing about this curve is that while
+low-variance data isn&#x27;t boosted as eagerly, higher variance data is tapered back
+much more slowly.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-screen-content-detection&quot;&gt;5. Screen Content Detection&lt;&#x2F;h3&gt;
+&lt;p&gt;AV1 happens to have some special tools (namely Intra Block Copy&#x2F;IBC &amp;amp; palette
+mode) that help immensely with non-photographic &quot;screen content&quot; (e.g. text
+screenshots, lineart, digital drawings) when compared to photographs.&lt;&#x2F;p&gt;
+&lt;p&gt;Making screen content tools useful was accompanied by the goal of generally
+better internal tuning when facing screen content. However, in order to improve
+efficiency on screen content, you need to know when you&#x27;re encoding it. The
+default screen content detection algorithm in SVT-AV1 wasn&#x27;t effective for our
+use case, so we worked on engineering a new one.&lt;&#x2F;p&gt;
+&lt;p&gt;Julio &amp;amp; I both came up with separate implementations, and Julio&#x27;s ended up being
+our choice of implementation in the end.
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;gianni-rosato&#x2F;photodetect2&quot;&gt;Reference Zig code&lt;&#x2F;a&gt; is provided
+if you want more technical details, but the algorithm is able to detect screen
+content effectively as well as differentiate between different kinds of screen
+content. There is a basic classification, as well as high-variance, medium
+confidence, and high confidence. This implementation allowed us to strengthen an
+already strong use case for AVIF, where older codecs (namely JPEG) fell short.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-lambda&quot;&gt;6. Lambda&lt;&#x2F;h3&gt;
+&lt;p&gt;The lambda is a parameter used in rate-distortion optimization (RDO). RDO is the
+process by which an encoder decides the best way to encode a block of pixels by
+evaluating a cost function that balances two competing goals. These goals are
+minimal distortion (how much the encoded block differs from the original) and
+minimal rate (how much data is required to encode a block). Lower rate means a
+smaller file. The RDO cost function is typically expressed via the equation
+below.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Cost = Distortion + λ * Rate&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Due to the nature of this very simple equation, you can see that a high lambda
+prioritizes rate reduction while a lower lambda will favor reducing distortion.&lt;&#x2F;p&gt;
+&lt;p&gt;In simple terms, what Tune Still Picture does is modulate the lambda depending
+on the amount of quantization we desire. At higher and lower quantization (the
+lowest &amp;amp; highest ends of the quality spectrum respectively), we ramp down the
+lambda. In the middle, we ramp it up. This improved our convex hull.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;aftermath&quot;&gt;Aftermath&lt;&#x2F;h2&gt;
+&lt;p&gt;The result of Tune Still Picture was up to 15% better compression for AVIF, as
+well as significantly better consistency and greater flexibility for SVT-AV1 as
+our features are merged (this is still an ongoing effort). See for yourself on
+the &lt;a href=&quot;https:&#x2F;&#x2F;svt-av1-psy.com&#x2F;avif&#x2F;&quot;&gt;SVT-AV1-PSY AVIF page&lt;&#x2F;a&gt;. The effort for
+better still image performance with SVT-AV1 also involved reducing the minimum
+size supported by the encoder to below 64x64 as well as implementing support for
+odd dimensions.&lt;&#x2F;p&gt;
+&lt;p&gt;Eventually, the bulk of our Tune Still Picture changes were merged into libaom&#x27;s
+aomenc, the reference AV1 encoder developed by Google. They live on as aomenc&#x27;s
+tune iq (for &quot;image quality&quot;) and our gains are still visible there.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;libaom_tune_iq.svg&quot; alt=&quot;libaom&amp;#39;s tune iq performance&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The results above were achieved on the Kodak True Color image dataset on libaom
+v3.12.1 via libavif.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-now&quot;&gt;What Now?&lt;&#x2F;h2&gt;
+&lt;p&gt;Now you know the gist of our still image improvements for AVIF! Researching &amp;amp;
+building open-source image encoding improvements was fun, but the future may
+look different for image codecs going forward.&lt;&#x2F;p&gt;
+&lt;p&gt;I am hopeful that AV2 will be an exciting development for the still image world,
+but the modern Web image compression ecosystem still has some glaring issues. In
+libaom, tune iq still suffers from consistency issues due to strange encoder
+decisions that are byproducts of images being second-class to video.
+Additionally, the fastest libaom preset often requires almost 80% more encoding
+time than the fastest libwebp preset with a much higher memory footprint.&lt;&#x2F;p&gt;
+&lt;p&gt;Potentially the biggest issue of all is that working full-time on
+community-supported encoders is impossible to justify without compensation,
+especially when you don&#x27;t have a clientele that needs strong still image
+performance.&lt;&#x2F;p&gt;
+&lt;p&gt;At Halide Compression, my goal is to fundamentally change these incentives. For
+many companies, images are highly expensive, and a highly efficient licensable
+encoder alongside an expert consulting team is a valuable thing.
+&lt;a href=&quot;&#x2F;iris&#x2F;&quot;&gt;Iris-WebP&lt;&#x2F;a&gt; is already changing the narrative for WebP by providing
+unprecedented efficiency gains over a reference implementation that is already
+designed with images in mind. An image-first ecosystem, supported by a dedicated
+team, becomes necessary to make modern image formats usable.&lt;&#x2F;p&gt;
+&lt;p&gt;I hope you enjoyed the read and learned something. If you&#x27;d like to talk to me
+or Halide about my open-source work, Iris, or anything else, shoot us an email!
+Thanks for reading!&lt;&#x2F;p&gt;
+&lt;div class=&quot;call-to-action&quot;&gt;
+  &lt;a
+    href=&quot;mailto:mail@halide.cx&quot;
+    class=&quot;cta-button&quot;
+  &gt;
+    Email Us
+  &lt;&#x2F;a&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Introducing Iris for WebP</title>
+        <published>2025-06-04T00:00:00+00:00</published>
+        <updated>2025-06-04T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Halide Team
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://halide.cx/blog/introducing-iris/"/>
+        <id>https://halide.cx/blog/introducing-iris/</id>
+        
+        <content type="html" xml:base="https://halide.cx/blog/introducing-iris/">&lt;div class=&quot;image-container&quot;&gt;
+  &lt;picture&gt;
+    &lt;img
+      src=&quot;https:&#x2F;&#x2F;halide.cx&#x2F;img&#x2F;sky.avif&quot;
+      width=&quot;1536&quot;
+      height=&quot;864&quot;
+      alt=&quot;Sky&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;picture&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;why-webp&quot;&gt;Why WebP?&lt;&#x2F;h2&gt;
+&lt;p&gt;WebP was introduced in 2010 with the goal of providing better compression for
+Web images. While it claimed to offer significant efficiency advantages over
+JPEG, in practice this wasn&#x27;t always true. Its adoption was also slow due to an
+initial lack of widespread browser support and further lackluster support
+outside of the Web ecosystem. This led to WebP being perceived as a confusing
+addition to the Web.&lt;&#x2F;p&gt;
+&lt;p&gt;Desipte its reputation and unclear benefits, WebP has gained significant
+traction on the Web. It is available in over 95% of Web browsers, and large
+digital asset management companies serve billions of WebP images every day.&lt;&#x2F;p&gt;
+&lt;p&gt;Iris-WebP provides a fast, efficient WebP encoder designed for the human eye.
+Images encoded with Iris-WebP look significantly better than those encoded with
+the reference WebP encoder, and Iris-WebP performance outclasses encoders for
+slower, newer Web-first formats like AVIF.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;our-encoder&quot;&gt;Our Encoder&lt;&#x2F;h2&gt;
+&lt;p&gt;Our primary goals building Iris-WebP are speed, compression efficiency, and
+consistency. We want to consistenty output high-quality results from our encoder
+quickly, and in doing so provide an implementation that delivers on WebP&#x27;s
+initial quality promises without compromise.&lt;&#x2F;p&gt;
+&lt;p&gt;In order to meet our goals, we&#x27;ve developed robust tooling to measure visual
+fidelity with SSIMULACRA2 and Butteraugli. Visual performance is paramount, and
+we work hard to ensure Iris-WebP isn&#x27;t just overfit for metrics. Our featureset
+includes novel image compression tech designed through meticulous psychovisual
+research, allowing us to provide unrivaled performance.&lt;&#x2F;p&gt;
+&lt;p&gt;To learn more about Iris-WebP and how it may benefit your workflow, visit the
+&lt;a href=&quot;&#x2F;iris&#x2F;&quot;&gt;Iris project page&lt;&#x2F;a&gt;. At the time of writing, we don&#x27;t have metrics to
+share, but they will be coming soon to the Iris project page. We&#x27;re excited to
+see how Iris can help make the web faster, lighter, and more beautiful!&lt;&#x2F;p&gt;
+&lt;div class=&quot;call-to-action&quot;&gt;
+  &lt;a
+    href=&quot;&amp;#x2F;iris&quot;
+    class=&quot;cta-button&quot;
+  &gt;
+    Learn More About Iris
+  &lt;&#x2F;a&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+</feed>
