@@ -1,6 +1,6 @@
 +++
-title = "Same File, Different Score?"
-date = 2026-02-03
+title = "Same Image, Different Score?"
+date = 2026-02-04
 description = "Metrics don't just measure encoder performance; decoding matters too, and even after decoding, not all post-processing is created equal."
 +++
 
