@@ -42,9 +42,9 @@ For metrics, we are looking at [fssimu2](https://github.com/gianni-rosato/fssimu
 
 Testing is done on the [gb82 image set](https://github.com/gianni-rosato/gb82-image-set), a diverse photographic image dataset of 25 images all at 576x576. The script used for testing can be found in the open source [decbench repo](https://github.com/gianni-rosato/decbench).
 
-It is very important to note that *this is not an encoder efficiency test*, and that size & quality results between encoders are not controlled in any way. The only relevant results are from the decoder & post-processor implementations, which all come from the same inputs and therefore represent some kind of efficiency improvement if the scores are higher.
-
 ## Results
+
+It is VERY important to note that *this is not an encoder efficiency test*, and that size & quality results between encoders are not controlled in any way. The only relevant results are from the decoder & post-processor implementations, which all come from the same inputs and therefore represent some kind of efficiency improvement if the scores are higher.
 
 Please note that the harmonic mean is not super useful for Butteraugli; there isn't much utility in biasing toward lower Butteraugli scores, as they are better. `dwebp_nofancy` disables the libwebp decoder's internal "fancy" chroma upsampling.
 
@@ -108,9 +108,35 @@ Please note that the harmonic mean is not super useful for Butteraugli; there is
 
 ![svtav1_fcvvdp](/img/chroma_handling/svtav1_fcvvdp.svg)
 
+## Perceptual Results
+
+Click the buttons to switch between decoding/post-processing options on this challenging image.
+
+{{ image_switcher(
+  id="chroma-decoder",
+  images=[
+    "/img/chroma_handling/cmp/original.png",
+    "/img/chroma_handling/cmp/jpegli.jpg",
+    "/img/chroma_handling/cmp/ffmpeg_filtered.png",
+    "/img/chroma_handling/cmp/djpegli.png",
+    "/img/chroma_handling/cmp/magick.png",
+    "/img/chroma_handling/cmp/ffmpeg.png",
+  ],
+  labels=[ "Source", "Your Browser", "FFmpeg (filtered)", "djpegli", "magick", "FFmpeg" ],
+  subtitles=[
+    "Source Image",
+    "cjpegli --chroma_subsampling 420 -d 1.0 original.png jpegli.jpg",
+    "ffmpeg -y -i jpegli.jpg -vf scale=flags=lanczos+accurate_rnd+full_chroma_int:param0=5,format=rgb24 -f image2 -update 1 -frames:v 1 ffmpeg_filtered.png",
+    "djpegli jpegli.jpg djpegli.png",
+    "magick jpegli.jpg magick.png",
+    "ffmpeg -y -i jpegli.jpg -pix_fmt rgb24 -f image2 -update 1 -frames:v 1 ffmpeg.png"
+  ],
+  alt="Decoder comparison"
+) }}
+
 ## Conclusion
 
-The Butteraugli results are shocking, and likely merit further investigation. Aside from that, the fact that a >2% fssimu2 efficiency improvement is achievable compared to the baseline in almost every instance here is valuable; compression researchers fight very hard for 2%, and we get it for free here.
+The Butteraugli results are shocking, and likely merit further investigation. Aside from that, the fact that a >2% fssimu2 efficiency improvement is achievable compared to the baseline in almost every test is valuable; compression researchers fight very hard for 2%, and we get it for free here.
 
 `ffmpeg_filtered` shows very good results across the board. There is potentially room for further investigation here through using other scaling algorithms.
 
@@ -120,7 +146,7 @@ JPEG decoding is a complex topic we are not going to explore in detail here, but
 
 For libwebp, Pascal's page says: "We utilise the upsampling used at decoding time (dubbed 'fancy upsampling' in libjpeg e.g.) to our advantage," with regards to Sharp YUV. It may be the case that with minor tweaks, Sharp YUV may be made to work better with other chroma scaling methods like we see in `ffmpeg_filtered`. It also isn't conclusive that "fancy upsampling" as it is implemented in libwebp's decoder is actually a net positive; with fancy upsampling disabled, `dwebp_nofancy` ekes out some wins over `dwebp` when Sharp YUV isn't used. Sharp YUV is also disabled by default in libwebp due to its computational complexity (Pascal: "Sharp-YUV locally optimizes the conversion loss, so is more expensive. That's why `-sharp_yuv` is not the default option in cwebp!"), so should `dwebp` be best prepared for the most popular encode use cases, or those that achieve the best performance? Sharp YUV isn't universally perceptually beneficial either, so the problem becomes harder to solve with that in mind.
 
-For our research direction stated at the beginning of this post, we see promising results that tell us using the default tooling for other codecs might be holding them back. `ffmpeg_filtered` wins in many cases, so at least for SVT-AV1 and jpegli, it seems like a valuable option to consider. A future direction may be to explore the computational complexity of different decoders and decode options.
+For our research direction stated at the beginning of this post, we see promising results that tell us using the default tooling for other codecs might be holding them back. `ffmpeg_filtered` wins in many cases, so at least for SVT-AV1 and jpegli, it seems like a valuable option to consider. A future direction may be to explore the computational complexity of different decoders and decode options, or to do more subjective testing and go beyond metrics.
 
 There's always more to explore with multimedia compression, and we've only scratched the surface of pre- and post-processing for 4:2:0 YCbCr here. Halide Compression is built on frontier compression expertise, so if you believe we could be valuable to you, we offer consulting services. Feel free to contact us at our email below if you have any questions about decoder optimization for your pipeline, deploying WebP at scale, or using Iris-WebP to maximize the efficiency of your image delivery solution. Thanks for reading!
 

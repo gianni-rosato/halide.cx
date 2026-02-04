@@ -1,0 +1,74 @@
+{# 
+  Shortcode: image_switcher
+
+  Renders an Iris-style image switcher container and initializes it with per-instance data.
+
+  Required args:
+    - id: unique DOM id suffix (used to avoid collisions when multiple switchers are on one page)
+    - images: array of image URLs (strings)
+    - labels: array of button labels (strings)
+    - subtitles: array of caption/subtitle strings (strings)
+
+  Optional args:
+    - title: heading text
+    - description: HTML/Markdown-rendered text (will be output as safe)
+    - caption: a small caption line shown above the switcher (like "Encoded ...")
+    - alt: img alt text (defaults to "Image comparison")
+    - class: extra class(es) added to the outer section
+
+  Notes:
+    - Zola shortcodes can't do much validation. Ensure array lengths match.
+    - This assumes `/js/image_switcher.js` defines a global `ImageSwitcher` class.
+#}
+
+{% set switcher_id = id | default(value="image-switcher") %}
+{% set dom_id = "image-switcher-" ~ switcher_id %}
+{% if class %}
+{% set section_class = "image-switcher " ~ class %}
+{% else %}
+{% set section_class = "image-switcher" %}
+{% endif %}
+{% set alt_text = alt | default(value="Image comparison") %}
+
+<section class="{{ section_class }}">
+  {% if title %}
+    <h1>{{ title }}</h1>
+  {% endif %}
+
+  {% if description %}
+    <p>{{ description | safe }}</p>
+  {% endif %}
+
+  {% if caption %}
+    <div class="image-caption">{{ caption }}</div>
+    <p></p>
+  {% endif %}
+
+  <div id="{{ dom_id }}" class="image-container"></div>
+</section>
+
+<script src="/js/image_switcher.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("{{ dom_id }}");
+    if (!container) return;
+
+    // Clear any fallback content
+    container.innerHTML = "";
+
+    const images = {{ images | json_encode() | safe }};
+    const subtitles = {{ subtitles | json_encode() | safe }};
+    const labels = {{ labels | json_encode() | safe }};
+
+    try {
+      // Ensure the first image has a reasonable alt; ImageSwitcher currently hardcodes alt,
+      // but we set it here as a data attribute in case the JS is updated to use it later.
+      container.setAttribute("data-alt", {{ alt_text | json_encode() | safe }});
+
+      new ImageSwitcher("{{ dom_id }}", images, subtitles, labels);
+    } catch (error) {
+      console.error("Failed to initialize image switcher:", error);
+      container.innerHTML = "<p>Failed to load image comparison tool.</p>";
+    }
+  });
+</script>
