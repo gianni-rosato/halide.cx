@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <base target="_self" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link href="https://halide.cx/blog.css" rel="stylesheet" />
+    <link href="https://halide.cx/main.css" rel="stylesheet" />
+    <link href="https://halide.cx/metrics_table.css" rel="stylesheet" />
+    <link href="https://halide.cx/mobile_menu.css" rel="stylesheet" />
+    <link href="https://halide.cx/switcher.css" rel="stylesheet" />
+    <link href="https://halide.cx/favicon.webp" rel="icon">
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"
+    ></script>
+    <title>
+      Iris | Halide Compression
+    </title>
+    <meta
+      name="description"
+      content=""
+    >
+    <meta
+      property="og:type"
+      content="website"
+    >
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <div class="logo-nav-group">
+          <a href="https://halide.cx/" class="logo">
+            <img
+              src="/img/halide_logo.svg"
+              alt="Halide logo"
+              class="logo-icon"
+            >
+          </a>
+          <nav class="main-nav">
+            <a href="https://halide.cx/about/">About</a>
+            <a href="https://halide.cx/iris/">Iris</a>
+            <a href="https://halide.cx/blog/">Blog</a>
+          </nav>
+        </div>
+
+        <div class="flex items-center">
+          <button class="mobile-menu-button" aria-label="Open menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        
+<section class="hero-section">
+  <div class="hero-text">
+    <h1 class="hero-title">
+      Iris
+    </h1>
+  </div>
+  <div class="hero-description">
+    <p>
+      Iris is a fast & efficient image encoder built to help provide a more
+      beautiful Web. Designed around the intricacies of the human visual system
+      and thoroughly evaluated under industry-leading psychovisual metrics, Iris
+      takes Web-first image compression technology to a new level.
+    </p>
+  </div>
+</section>
+<h1>
+  A Better WebP Encoder
+</h1>
+<section class="performance-tiles">
+  <div class="performance-tile">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="oklch(0.2 0.047 83)"
+      class="tile-icon"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <h3>Fast</h3>
+    <p>
+      Iris-WebP is faster than competing modern Web codecs while still
+      delivering exceptional quality.
+    </p>
+  </div>
+  <div class="performance-tile">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="oklch(0.2 0.047 83)"
+      class="tile-icon"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M12 9.75V12m0 0l4.754 4.754M12 12L7.246 16.754M12 12v2.25m0-12a9 9 0 110 18 9 9 0 010-18zm0 12.75a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"
+      />
+    </svg>
+    <h3>Efficient</h3>
+    <p>
+      Achieve up to 50% better compression than JPEG, leading to faster page
+      load times & reduced bandwidth.
+    </p>
+  </div>
+  <div class="performance-tile">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="oklch(0.2 0.047 83)"
+      class="tile-icon"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <h3>High Quality</h3>
+    <p>
+      Iris-WebP is designed with the human visual system in mind, allowing up to
+      17% better compression than the reference WebP encoder.
+    </p>
+  </div>
+</section>
+<p>
+  Images encoded with Iris-WebP look significantly better than those encoded
+  with the reference WebP encoder, and Iris-WebP's performance outclasses
+  encoders for slower, newer Web-first formats like AVIF. WebP support is also
+  currently ubiquitous, and large websites serve billions of WebP images every
+  single day.
+</p>
+<script src="/js/image_switcher.js"></script>
+<section class="image-switcher">
+  <p>
+    Click the buttons below to switch between different encoders. Notice how
+    Iris-WebP & libjpegli preserve fine details in the trees that libwebp
+    erroneously erases.
+  </p>
+  
+  <div class="image-caption">
+    Encoded Feb 2026
+  </div>
+  <p></p>
+  
+  <div
+    id="iris-switcher"
+    class="image-container"
+    data-image-switcher
+    data-alt="Iris WebP comparison 1"
+    data-images='["/img/vista-cwebp.webp","/img/vista-iris.webp","/img/vista.jpg","/img/vista-src.webp"]'
+    data-subtitles='["46,722 bytes | 60.74 SSIMULACRA2 | 1.68 Butteraugli (3-norm, i203) | 9.253 CVVDP","46,340 bytes | 70.45 SSIMULACRA2 | 1.60 Butteraugli (3-norm, i203) | 9.410 CVVDP","46,342 bytes | 68.73 SSIMULACRA2 | 1.63 Butteraugli (3-norm, i203) | 9.337 CVVDP","952,584 bytes"]'
+    data-labels='["libwebp","Iris-WebP","libjpegli","Source"]'
+  >
+  </div>
+</section>
+<section class="image-switcher">
+  <p>
+    In the comparison below, libjpegli severely distorts the image while
+    Iris-WebP & libwebp do not.
+  </p>
+  
+  <div class="image-caption">
+    Encoded Feb 2026
+  </div>
+  <p></p>
+  
+  <div
+    id="iris-switcher2"
+    class="image-container"
+    data-image-switcher
+    data-alt="Iris WebP comparison 2"
+    data-images='["/img/museum-cwebp.webp","/img/museum-iris.webp","/img/museum.jpg","/img/museum-src.webp"]'
+    data-subtitles='["38,466 bytes | 72.60 SSIMULACRA2 | 1.47 Butteraugli (3-norm, i203) | 9.67 CVVDP","38,432 bytes | 74.46 SSIMULACRA2 | 1.39 Butteraugli (3-norm, i203) | 9.69 CVVDP","38,440 bytes | 59.62 SSIMULACRA2 | 2.04 Butteraugli (3-norm, i203) | 9.37 CVVDP","648,952 bytes"]'
+    data-labels='["libwebp","Iris-WebP","libjpegli","Source"]'
+  >
+  </div>
+</section>
+<p>
+  Iris-WebP's visual performance is unparalleled. Designing lossy image
+  compression around the human eye allows us to provide an encoder capable of
+  delivering an uptick in quality of experience that users notice.
+</p>
+<script src="/js/metric_switcher.js"></script>
+<section class="metric-switcher">
+  <h1>Metrics</h1>
+  <p>
+    The numbers below were aggregated using the <a
+      href="https://github.com/MohamedBakrAli/Kodak-Lossless-True-Color-Image-Suite/tree/master/PhotoCD_PCD0992"
+    >Kodak Lossless True Color Image Suite</a> at medium to high fidelity.
+  </p>
+  
+  <div class="image-caption">
+    Measured Feb 2026
+  </div>
+  
+  <div id="metrics-switcher" class="image-container"></div>
+</section>
+<h1>
+  Using Iris-WebP
+</h1>
+<p>
+  A commercial license from Halide Compression means guaranteed ongoing support,
+  as well as access to new Iris-WebP releases and maintenance fixes over time.
+</p>
+<p>
+  An Iris-WebP license is an investment in the future of web image compression
+  in pursuit of a more beautiful web. If you'd like to use Iris today, send us
+  an email!
+</p>
+<div class="call-to-action">
+  <a href="mailto:mail@halide.cx" class="cta-button">Email Us</a>
+</div>
+
+      </div>
+      <div class="foot">
+        &copy; 2026 Halide Compression LLC. All Rights Reserved. | <a href="https://halide.cx/privacy/">Privacy Policy</a>
+      </div>
+    </main>
+
+    <script src="/js/mobile_menu.js"></script>
+  </body>
+</html>
