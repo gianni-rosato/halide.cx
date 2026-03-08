@@ -5,11 +5,11 @@
 .main-nav a {
   margin-left: 1.5rem;
   font-size: 1rem;
-  color: oklch(0.3 0.094 83);
+  color: var(--color-nav-text);
 }
 
 .main-nav a:hover {
-  color: oklch(0.5 0.06 83);
+  color: var(--color-body-text);
 }
 
 .main-nav.is-active {
@@ -18,10 +18,10 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: oklch(0.95 0.06 83);
+  background-color: var(--color-page-bg);
   flex-direction: column;
   padding: 1rem 1.5rem;
-  border-top: 1px solid oklch(0.8 0.06 83);
+  border-top: 1px solid var(--color-border);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -43,7 +43,7 @@
 .mobile-menu-button svg {
   width: 1.5rem;
   height: 1.5rem;
-  stroke: oklch(0.2 0 0);
+  stroke: var(--color-mobile-icon);
 }
 
 @media (min-width: 768px) {

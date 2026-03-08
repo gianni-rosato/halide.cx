@@ -62,20 +62,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const images = [
       "/img/metrics/ssimu2.svg",
       "/img/metrics/butter.svg",
-      "/img/metrics/psnrhvs.svg",
       "/img/metrics/msssim.svg",
+      "/img/metrics/cvvdp.svg",
     ];
     const subtitles = [
       "SSIMULACRA2",
       "Butteraugli 3-norm, intensity target 203",
-      "PSNR-HVS",
       "MS-SSIM",
+      "CVVDP",
     ];
     const args = [
       "SSIMULACRA2",
       "Butteraugli",
-      "PSNR-HVS",
       "MS-SSIM",
+      "CVVDP",
     ];
     try {
       new MetricSwitcher("metrics-switcher", images, subtitles, args);

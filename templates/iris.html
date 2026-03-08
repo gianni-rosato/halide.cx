@@ -14,27 +14,9 @@
     </p>
   </div>
 </section>
-<div class="image-container">
-  <picture>
-    <img
-      src="/img/hero/sun-med.avif"
-      width="1536"
-      height="864"
-      alt="Sun Peering Through Trees"
-    />
-  </picture>
-</div>
 <h1>
-  Iris for WebP
+  A Better WebP Encoder
 </h1>
-<p>
-  In its speed class, Iris-WebP is the most efficient image encoder available.
-  Images encoded with Iris-WebP look significantly better than those encoded
-  with the reference WebP encoder, and Iris-WebP's performance outclasses
-  encoders for slower, newer Web-first formats like AVIF. WebP support is also
-  currently ubiquitous, and large websites serve billions of WebP images every
-  single day.
-</p>
 <section class="performance-tiles">
   <div class="performance-tile">
     <svg
@@ -53,9 +35,8 @@
     </svg>
     <h3>Fast</h3>
     <p>
-      Iris-WebP's slowest encodes are close to AVIF's fastest, making it faster
-      than competing modern Web codecs while still delivering exceptional
-      quality.
+      Iris-WebP is faster than competing modern Web codecs while still
+      delivering exceptional quality.
     </p>
   </div>
   <div class="performance-tile">
@@ -75,8 +56,8 @@
     </svg>
     <h3>Efficient</h3>
     <p>
-      Achieve up to 45% better compression than the best JPEG encoders, leading
-      to faster page load times and greatly reduced bandwidth.
+      Achieve up to 50% better compression than JPEG, leading to faster page
+      load times & reduced bandwidth.
     </p>
   </div>
   <div class="performance-tile">
@@ -97,19 +78,23 @@
     <h3>High Quality</h3>
     <p>
       Iris-WebP is designed with the human visual system in mind, allowing up to
-      26% better compression than the reference WebP encoder.
+      17% better compression than the reference WebP encoder.
     </p>
   </div>
 </section>
+<p>
+  Images encoded with Iris-WebP look significantly better than those encoded
+  with the reference WebP encoder, and Iris-WebP's performance outclasses
+  encoders for slower, newer Web-first formats like AVIF. WebP support is also
+  currently ubiquitous, and large websites serve billions of WebP images every
+  single day.
+</p>
 <script src="/js/image_switcher.js"></script>
 <section class="image-switcher">
-  <h1>See the Difference</h1>
   <p>
-    Click the buttons below to switch between different encoders. The image
-    below comes from <a
-      href="https://github.com/WyohKnott/image-formats-comparison/blob/gh-pages/comparisonfiles/subset1/Original/End_of_Show_3.png"
-      target="_blank"
-    >Daala's subset1</a> image test suite.
+    Click the buttons below to switch between different encoders. Notice how
+    Iris-WebP & libjpegli preserve fine details in the trees that libwebp
+    erroneously erases.
   </p>
   {% if config.extra.cmp_encoded %}
   <div class="image-caption">
@@ -117,23 +102,51 @@
   </div>
   <p></p>
   {% endif %}
-  <div id="iris-switcher" class="image-container"></div>
-  <p>
-    Iris-WebP's visual performance is unparalleled. Designing lossy image
-    compression around the human eye allows us to provide an encoder capable of
-    delivering an uptick in quality of experience that users notice.
-  </p>
+  <div
+    id="iris-switcher"
+    class="image-container"
+    data-image-switcher
+    data-alt="Iris WebP comparison 1"
+    data-images='["/img/vista-cwebp.webp","/img/vista-iris.webp","/img/vista.jpg","/img/vista-src.webp"]'
+    data-subtitles='["46,722 bytes | 60.74 SSIMULACRA2 | 1.68 Butteraugli (3-norm, i203) | 9.253 CVVDP","46,340 bytes | 70.45 SSIMULACRA2 | 1.60 Butteraugli (3-norm, i203) | 9.410 CVVDP","46,342 bytes | 68.73 SSIMULACRA2 | 1.63 Butteraugli (3-norm, i203) | 9.337 CVVDP","952,584 bytes"]'
+    data-labels='["libwebp","Iris-WebP","libjpegli","Source"]'
+  >
+  </div>
 </section>
+<section class="image-switcher">
+  <p>
+    In the comparison below, libjpegli severely distorts the image while
+    Iris-WebP & libwebp do not.
+  </p>
+  {% if config.extra.cmp_encoded %}
+  <div class="image-caption">
+    Encoded {{ config.extra.cmp_encoded }}
+  </div>
+  <p></p>
+  {% endif %}
+  <div
+    id="iris-switcher2"
+    class="image-container"
+    data-image-switcher
+    data-alt="Iris WebP comparison 2"
+    data-images='["/img/museum-cwebp.webp","/img/museum-iris.webp","/img/museum.jpg","/img/museum-src.webp"]'
+    data-subtitles='["38,466 bytes | 72.60 SSIMULACRA2 | 1.47 Butteraugli (3-norm, i203) | 9.67 CVVDP","38,432 bytes | 74.46 SSIMULACRA2 | 1.39 Butteraugli (3-norm, i203) | 9.69 CVVDP","38,440 bytes | 59.62 SSIMULACRA2 | 2.04 Butteraugli (3-norm, i203) | 9.37 CVVDP","648,952 bytes"]'
+    data-labels='["libwebp","Iris-WebP","libjpegli","Source"]'
+  >
+  </div>
+</section>
+<p>
+  Iris-WebP's visual performance is unparalleled. Designing lossy image
+  compression around the human eye allows us to provide an encoder capable of
+  delivering an uptick in quality of experience that users notice.
+</p>
 <script src="/js/metric_switcher.js"></script>
 <section class="metric-switcher">
   <h1>Metrics</h1>
   <p>
     The numbers below were aggregated using the <a
       href="https://github.com/MohamedBakrAli/Kodak-Lossless-True-Color-Image-Suite/tree/master/PhotoCD_PCD0992"
-    >Kodak Lossless True Color Image Suite</a> using the <a
-      href="https://github.com/cloudinary/ssimulacra2/blob/main/README.md"
-    >SSIMULACRA2</a>
-    metric.
+    >Kodak Lossless True Color Image Suite</a> at medium to high fidelity.
   </p>
   {% if config.extra.metrics_measured %}
   <div class="image-caption">
@@ -142,12 +155,6 @@
   {% endif %}
   <div id="metrics-switcher" class="image-container"></div>
 </section>
-<p>
-  Compared to libjpeg's encoder, Iris-WebP achieves over 77% better compression
-  on average. Compared to the highly efficient jpegli, Iris is up to 45% better.
-  Within the same WebP codec, Iris outperforms the reference WebP encoder
-  included in libwebp by up to 26%.
-</p>
 <h1>
   Using Iris-WebP
 </h1>

@@ -1,5 +1,6 @@
 class ImageSwitcher {
   constructor(containerID, images, subtitles, args) {
+    this.containerID = containerID;
     this.container = document.getElementById(containerID);
     this.images = images;
     this.subtitles = subtitles;
@@ -22,11 +23,17 @@ class ImageSwitcher {
   }
 
   init() {
+    if (!this.container) {
+      throw new Error(
+        `Image switcher container not found: ${this.containerID}`,
+      );
+    }
+
     const switcherContainer = document.createElement("div");
     switcherContainer.className = "image-switcher-container";
     this.imgElement = document.createElement("img");
     this.imgElement.src = this.images[0];
-    this.imgElement.alt = "Iris WebP comparison";
+    this.imgElement.alt = this.container.dataset.alt || "Iris WebP comparison";
     this.imgElement.loading = "lazy";
     this.imgElement.onerror = () => {
       console.warn("Failed to load image:", this.images[this.currentIndex]);
@@ -55,34 +62,51 @@ class ImageSwitcher {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const switcherContainer = document.getElementById("iris-switcher");
-  if (switcherContainer) {
-    switcherContainer.innerHTML = "";
-    const images = [
-      "/img/eos3-libwebp.webp",
-      "/img/eos3-iris.webp",
-      "/img/eos3-jpegli.jpg",
-      "/img/eos3-source.png",
-    ];
-    const subtitles = [
-      "113,446 bytes | 50.90 SSIMULACRA2 | 2.73 Butteraugli (3-norm, i203)",
-      "113,450 bytes | 60.10 SSIMULACRA2 | 2.30 Butteraugli (3-norm, i203)",
-      "113,678 bytes | 54.57 SSIMULACRA2 | 2.41 Butteraugli (3-norm, i203)",
-      "1,532,759 bytes",
-    ];
-    const args = [
-      "libwebp",
-      "Iris-WebP",
-      "libjpegli",
-      "Source",
-    ];
+function parseSwitcherData(container, key) {
+  const value = container.dataset[key];
+  if (!value) {
+    throw new Error(`Missing data-${key} for #${container.id}`);
+  }
+
+  const parsed = JSON.parse(value);
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    throw new Error(`Invalid data-${key} for #${container.id}`);
+  }
+
+  return parsed;
+}
+
+function initConfiguredImageSwitchers() {
+  const switcherContainers = document.querySelectorAll("[data-image-switcher]");
+
+  switcherContainers.forEach((container, index) => {
+    if (!container.id) {
+      container.id = `image-switcher-${index + 1}`;
+    }
+
     try {
-      new ImageSwitcher("iris-switcher", images, subtitles, args);
+      const images = parseSwitcherData(container, "images");
+      const subtitles = parseSwitcherData(container, "subtitles");
+      const labels = parseSwitcherData(container, "labels");
+
+      if (
+        images.length !== subtitles.length ||
+        images.length !== labels.length
+      ) {
+        throw new Error(`Mismatched data lengths for #${container.id}`);
+      }
+
+      container.innerHTML = "";
+      new ImageSwitcher(container.id, images, subtitles, labels);
     } catch (error) {
       console.error("Failed to initialize image switcher:", error);
-      switcherContainer.innerHTML =
-        "<p>Failed to load image comparison tool.</p>";
+      container.innerHTML = "<p>Failed to load image comparison tool.</p>";
     }
-  }
+  });
+}
+
+globalThis.ImageSwitcher = ImageSwitcher;
+
+document.addEventListener("DOMContentLoaded", function () {
+  initConfiguredImageSwitchers();
 });
