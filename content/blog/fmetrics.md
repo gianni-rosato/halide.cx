@@ -169,12 +169,12 @@ Cloudinary's [CID22](https://cloudinary.com/labs/cid22).
 
 Based on the numbers:
 
-- Butteraugli is up to 31.5% faster, uses 31.6% less RAM, and is within 1% MOS
+- Butteraugli is up to 31.3% faster, uses 31.6% less RAM, and is within 1% MOS
   correlation
 - fcvvdp is unchanged
 - IW-SSIM is >1000% faster and uses less than half the RAM
 - MS-SSIM's MOS correlation is >2.5% better than libvmaf's MS-SSIM
-- SSIMULACRA2 is 72.1% faster, using 43.4% less RAM
+- SSIMULACRA2 is 211.2% faster, using 45.9% less RAM
 
 Our future plans include making everything faster (of course), as well as
 looking into FFmpeg support.
