@@ -1,0 +1,132 @@
+/* ==========================================================================
+   Layout — container, section rhythm, full-bleed bands, grids, skip link.
+   `main` deliberately has no container of its own: each section supplies one,
+   which is what lets `.band` run edge to edge.
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow {
+  max-width: 860px;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* --- Section rhythm ------------------------------------------------------ */
+
+.section {
+  padding-block: var(--space-10);
+}
+
+.section--tight {
+  padding-block: var(--space-8);
+}
+
+.section--lead {
+  padding-block: var(--space-12) var(--space-10);
+}
+
+.section > * + * {
+  margin-top: var(--space-6);
+}
+
+/* A full-bleed tinted band, used to break up long runs of white. */
+.band {
+  background-color: var(--surface-alt);
+  border-block: 1px solid var(--border);
+  padding-block: var(--space-10);
+}
+
+.band + .band {
+  border-top: 0;
+}
+
+/* --- Section heading block ----------------------------------------------- */
+
+.section-head {
+  max-width: var(--measure);
+  margin-bottom: var(--space-8);
+}
+
+.section-head p {
+  margin-top: var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--step-0);
+}
+
+.section-head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* Trailing "see all" link under a section's content. */
+.section-foot {
+  margin-top: var(--space-6);
+}
+
+/* --- Generic grids ------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 880px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- Flow helper --------------------------------------------------------- */
+
+.flow > * + * {
+  margin-top: var(--space-4);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.actions--center {
+  justify-content: center;
+}
+
+/* --- Skip link ----------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: 100;
+  transform: translateY(-200%);
+  background-color: var(--inverse);
+  color: var(--on-inverse);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  color: var(--on-inverse);
+}

@@ -1,19 +1,45 @@
-{% extends "base.html" %} {% block content %}
-<article class="blog-post">
-  <header class="blog-post-header">
-    <div class="blog-post-meta">
-      <time>{{ page.date | date(format="%B %d, %Y")}}</time> •
-      <span class="author">The Halide Team</span>
+{% extends "base.html" %}
+{% block content %}
+
+<article class="section">
+  <div class="container">
+    <div class="post">
+      <header class="post-header">
+      <span class="eyebrow">
+        {{ page.date | date(format = "%B %d, %Y") }} &middot; The Halide Team
+      </span>
+      <h1 class="post-header__title">{{ page.title }}</h1>
+      {% if page.description %}
+      <p class="lead">{{ page.description }}</p>
+      {% endif %}
+    </header>
+
+      <div class="prose">
+      {{ page.content | safe }}
     </div>
-    <h1 class="blog-post-title">
-      {{ page.title }}
-    </h1>
-  </header>
-  <div class="blog-post-content">
-    <p class="lead">
-      {{ page.description }}
-    </p>
-    {{ page.content | safe }}
+
+      <nav class="post-nav" aria-label="More posts">
+      {% if page.higher %}
+      <a class="post-nav__item" href="{{ page.higher.permalink | safe }}">
+        <span class="post-nav__dir">&larr; Older</span>
+        <span class="post-nav__title">{{ page.higher.title }}</span>
+      </a>
+      {% else %}
+      <a class="post-nav__item" href="{{ get_url(path = "@/blog/_index.md") }}">
+        <span class="post-nav__dir">&larr; All posts</span>
+        <span class="post-nav__title">Back to the blog</span>
+      </a>
+      {% endif %}
+
+      {% if page.lower %}
+      <a class="post-nav__item post-nav__item--next" href="{{ page.lower.permalink | safe }}">
+        <span class="post-nav__dir">Newer &rarr;</span>
+        <span class="post-nav__title">{{ page.lower.title }}</span>
+      </a>
+      {% endif %}
+    </nav>
+    </div>
   </div>
 </article>
+
 {% endblock content %}

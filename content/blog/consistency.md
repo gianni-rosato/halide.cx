@@ -4,8 +4,7 @@ date = 2025-09-14
 description = "Quality and speed define an image encoder's compression performance. Consistency is a close third, and easily overlooked in image encoder design. What value does it provide, and how can we measure it?"
 +++
 
-{{ hero(src="/img/streak.avif", width="1536", height="864", alt="Light Streak")
-}}
+{{ <hero src="/img/streak.avif" width="1536" height="864" alt="Light Streak" /> }}
 
 ## What Is Consistency?
 
@@ -153,4 +152,4 @@ efficient encoders may suffer consistency issues due to their spiky but still
 generally incredible performance, we believe Iris has been able to successfully
 mitigate potential consistency issues without sacrificing efficiency or speed.
 
-{{ cta(url="mailto:mail@halide.cx", txt="Email Us") }}
+{{ <cta url="mailto:mail@halide.cx" txt="Email Us" /> }}

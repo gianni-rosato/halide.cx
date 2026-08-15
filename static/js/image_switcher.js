@@ -6,20 +6,40 @@ class ImageSwitcher {
     this.subtitles = subtitles;
     this.args = args;
     this.currentIndex = 0;
+    this.decoded = new Map();
     this.init();
   }
 
-  switchImage(index) {
+  async switchImage(index) {
     const buttons = this.buttonContainer.querySelectorAll(".switcher-button");
     buttons.forEach((button) => button.classList.remove("active"));
     buttons[index].classList.add("active");
     this.currentIndex = index;
-    this.imgElement.style.opacity = "0.7";
-    this.imgElement.src = this.images[index];
     this.subtitleElement.textContent = this.subtitles[index];
-    this.imgElement.onload = () => {
-      this.imgElement.style.opacity = "1";
-    };
+
+    const src = this.images[index];
+    try {
+      await this.preload(src);
+    } catch {
+      console.warn("Failed to load image:", src);
+      this.subtitleElement.textContent = "Image failed to load";
+      return;
+    }
+
+    // A later click may have landed while we were decoding.
+    if (this.currentIndex !== index) return;
+    this.imgElement.src = src;
+  }
+
+  preload(src) {
+    let pending = this.decoded.get(src);
+    if (!pending) {
+      const image = new Image();
+      image.src = src;
+      pending = image.decode().then(() => image);
+      this.decoded.set(src, pending);
+    }
+    return pending;
   }
 
   init() {
@@ -35,6 +55,8 @@ class ImageSwitcher {
     this.imgElement.src = this.images[0];
     this.imgElement.alt = this.container.dataset.alt || "Iris WebP comparison";
     this.imgElement.loading = "lazy";
+    // Present the swapped-in frame atomically rather than on a later paint.
+    this.imgElement.decoding = "sync";
     this.imgElement.onerror = () => {
       console.warn("Failed to load image:", this.images[this.currentIndex]);
       this.subtitleElement.textContent = "Image failed to load";
@@ -59,6 +81,14 @@ class ImageSwitcher {
     switcherContainer.appendChild(this.buttonContainer);
 
     this.container.appendChild(switcherContainer);
+
+    const warm = () =>
+      this.images.forEach((src) => this.preload(src).catch(() => {}));
+    if ("requestIdleCallback" in globalThis) {
+      requestIdleCallback(warm, { timeout: 3000 });
+    } else {
+      setTimeout(warm, 1000);
+    }
   }
 }
 

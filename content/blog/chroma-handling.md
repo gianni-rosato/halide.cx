@@ -4,7 +4,7 @@ date = 2026-02-04
 description = "Metrics don't just measure encoder performance; decoding matters too, and even after decoding, not all post-processing is created equal."
 +++
 
-{{ hero(src="/img/rocks-hdr.avif", width="1536", height="864", alt="Rocks") }}
+{{ <hero src="/img/rocks-hdr.avif" width="1536" height="864" alt="Rocks" /> }}
 
 In developing our proprietary encoder [Iris](/iris/) for WebP, our aim with
 public and private testing is to properly demonstrate the value of the encoder
@@ -199,18 +199,34 @@ _avifdec's PNG outputs crashed the `butteraugli_main` tool_
 Click the buttons to switch between decoding/post-processing options on this
 challenging image.
 
-{{ image_switcher( id="chroma-decoder", images=[
-"/img/chroma_handling/cmp/original.png", "/img/chroma_handling/cmp/jpegli.jpg",
-"/img/chroma_handling/cmp/ffmpeg_filtered.png",
-"/img/chroma_handling/cmp/djpegli.png", "/img/chroma_handling/cmp/magick.png",
-"/img/chroma_handling/cmp/ffmpeg.png", ], labels=[ "Source", "Your Browser",
-"FFmpeg (filtered)", "djpegli", "magick", "FFmpeg" ], subtitles=[ "Source
-Image", "cjpegli --chroma_subsampling 420 -d 1.0 original.png jpegli.jpg",
-"ffmpeg -y -i jpegli.jpg -vf
-scale=flags=lanczos+accurate_rnd+full_chroma_int:param0=5,format=rgb24 -f image2
--update 1 -frames:v 1 ffmpeg_filtered.png", "djpegli jpegli.jpg djpegli.png",
-"magick jpegli.jpg magick.png", "ffmpeg -y -i jpegli.jpg -pix_fmt rgb24 -f
-image2 -update 1 -frames:v 1 ffmpeg.png" ], alt="Decoder comparison" ) }}
+{{ <image_switcher
+  id="chroma-decoder"
+  alt="Decoder comparison"
+  images={[
+    "/img/chroma_handling/cmp/original.png",
+    "/img/chroma_handling/cmp/jpegli.jpg",
+    "/img/chroma_handling/cmp/ffmpeg_filtered.png",
+    "/img/chroma_handling/cmp/djpegli.png",
+    "/img/chroma_handling/cmp/magick.png",
+    "/img/chroma_handling/cmp/ffmpeg.png",
+  ]}
+  labels={[
+    "Source",
+    "Your Browser",
+    "FFmpeg (filtered)",
+    "djpegli",
+    "magick",
+    "FFmpeg",
+  ]}
+  subtitles={[
+    "Source Image",
+    "cjpegli --chroma_subsampling 420 -d 1.0 original.png jpegli.jpg",
+    "ffmpeg -y -i jpegli.jpg -vf scale=flags=lanczos+accurate_rnd+full_chroma_int:param0=5,format=rgb24 -f image2 -update 1 -frames:v 1 ffmpeg_filtered.png",
+    "djpegli jpegli.jpg djpegli.png",
+    "magick jpegli.jpg magick.png",
+    "ffmpeg -y -i jpegli.jpg -pix_fmt rgb24 -f image2 -update 1 -frames:v 1 ffmpeg.png",
+  ]}
+/> }}
 
 ## Conclusion
 
@@ -259,4 +275,4 @@ at our email below if you have any questions about decoder optimization for your
 pipeline, deploying WebP at scale, or using Iris-WebP to maximize the efficiency
 of your image delivery solution. Thanks for reading!
 
-{{ cta(url="mailto:mail@halide.cx", txt="Email Us") }}
+{{ <cta url="mailto:mail@halide.cx" txt="Email Us" /> }}

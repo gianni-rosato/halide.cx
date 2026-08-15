@@ -4,8 +4,7 @@ date = 2025-07-13
 description = "AVIF is a complex image format with a lot of potential. A significant amount of this potential was unlocked in 2024; Gianni Rosato, our founder and contributor to these efforts, details how this was done & talks about the future of modern image codecs on the Web."
 +++
 
-{{ hero(src="/img/fall_leaves.avif", width="1536", height="864", alt="Red Autumn
-Leaves") }}
+{{ <hero src="/img/fall_leaves.avif" width="1536" height="864" alt="Red Autumn Leaves" /> }}
 
 ## Introduction
 
@@ -256,4 +255,4 @@ I hope you enjoyed the read and learned something. If you'd like to talk to me
 or Halide about my open-source work, Iris, or anything else, shoot us an email!
 Thanks for reading!
 
-{{ cta(url="mailto:mail@halide.cx", txt="Email Us") }}
+{{ <cta url="mailto:mail@halide.cx" txt="Email Us" /> }}

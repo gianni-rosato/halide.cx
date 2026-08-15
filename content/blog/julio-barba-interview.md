@@ -4,7 +4,7 @@ date = 2025-08-29
 description = "Julio Barba works on improving state of the art multimedia compression technology at Google. In this interview, Julio talks to Gianni about the future of multimedia compression, looking at AV2 and beyond."
 +++
 
-{{ hero(src="/img/ocean.avif", width="1536", height="864", alt="Ocean") }}
+{{ <hero src="/img/ocean.avif" width="1536" height="864" alt="Ocean" /> }}
 
 ## Who are you?
 
@@ -144,4 +144,4 @@ Thanks for your time in this interview, Julio!_
 
 _– Gianni_
 
-{{ cta(url="https://juliobbv.com", txt="Julio's Website") }}
+{{ <cta url="https://juliobbv.com" txt="Julio's Website" /> }}

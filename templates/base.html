@@ -1,83 +1,129 @@
+{%- set cur = current_path | default(value="/") -%}
+{%- if page -%}
+  {%- set page_title = page.title ~ " | Halide Compression" -%}
+  {%- set page_desc = page.description or config.description -%}
+{%- elif section -%}
+  {#- The homepage takes the bare site name, not "Home | ...". -#}
+  {%- set page_title = "Halide Compression" if cur == "/" else (section.title ~ " | Halide Compression") -%}
+  {%- set page_desc = section.description or config.description -%}
+{%- else -%}
+  {%- set page_title = "Halide Compression" -%}
+  {%- set page_desc = config.description -%}
+{%- endif -%}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <base target="_self" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ get_url(path="atom.xml", trailing_slash=false) }}">
-    <link href="{{ get_url(path='blog.css') }}" rel="stylesheet" />
-    <link href="{{ get_url(path='main.css') }}" rel="stylesheet" />
-    <link href="{{ get_url(path='metrics_table.css') }}" rel="stylesheet" />
-    <link href="{{ get_url(path='mobile_menu.css') }}" rel="stylesheet" />
-    <link href="{{ get_url(path='switcher.css') }}" rel="stylesheet" />
-    <link href="{{ get_url(path='favicon.webp') }}" rel="icon">
-    <script
-      defer
-      src="https://cloud.umami.is/script.js"
-      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"
-    ></script>
-    <title>
-      {% if page %}{{ page.title }} | Halide Compression{% elif section %}{{
-      section.title }} | Halide Compression{% else %}Halide Compression{% endif
-      %}
-    </title>
-    <meta
-      name="description"
-      content="{% if page %}{{ page.description }}{% elif section %}{{ section.description | safe }}{% else %}{% endif %}"
-    >
-    <meta
-      property="og:type"
-      content="{% if page %}article{% else %}website{% endif %}"
-    >
+
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ page_desc }}">
+
+    <meta property="og:type" content="{% if page %}article{% else %}website{% endif %}">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:description" content="{{ page_desc }}">
+    <meta property="og:url" content="{{ config.base_url ~ cur }}">
+    <meta property="og:image" content="{{ get_url(path = "img/hero/bouquet-med.avif") }}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="{{ config.base_url ~ cur }}">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ get_url(path = "atom.xml", trailing_slash = false) }}">
+    <link rel="icon" href="{{ get_url(path = "favicon.webp") }}">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="{{ get_url(path = "fonts/HankenGrotesk-VariableFont_wght.woff2") }}">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="{{ get_url(path = "fonts/Inter-VariableFont_opsz,wght.woff2") }}">
+    <link rel="stylesheet" href="{{ get_url(path = "main.css") }}">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="{{ get_url(path = "js/mobile_menu.js") }}"></script>
+    <script defer src="{{ get_url(path = "js/image_switcher.js") }}"></script>
+    {% block head_extra %}{% endblock head_extra %}
   </head>
 
   <body>
-    <header class="site-header">
-      <div class="container header-content">
-        <div class="logo-nav-group">
-          <a href="{{ get_url(path='@/_index.md') }}" class="logo">
-            <img
-              src="/img/halide_logo.svg"
-              alt="Halide logo"
-              class="logo-icon"
-            >
-          </a>
-          <nav class="main-nav">
-            <a href="{{ get_url(path='@/about/_index.md') }}">About</a>
-            <a href="{{ get_url(path='@/iris/_index.md') }}">Iris</a>
-            <a href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
-          </nav>
-        </div>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-        <div class="flex items-center">
-          <button class="mobile-menu-button" aria-label="Open menu">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </button>
-        </div>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a href="{{ get_url(path='@/_index.md') }}" class="logo">
+          <img src="{{ get_url(path='img/halide_logo.svg') }}" alt=""
+            class="logo__mark" width="24" height="24">
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="{{ get_url(path='@/about/_index.md') }}"
+            class="{% if cur is starting_with(pat='/about') %}is-current{% endif %}">About</a>
+          <a href="{{ get_url(path='@/iris/_index.md') }}"
+            class="{% if cur is starting_with(pat='/iris') %}is-current{% endif %}">Iris</a>
+          <a href="{{ get_url(path='@/blog/_index.md') }}"
+            class="{% if cur is starting_with(pat='/blog') %}is-current{% endif %}">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
     </header>
 
-    <main>
-      <div class="container">
-        {% block content %} {% endblock content %}
-      </div>
-      <div class="foot">
-        &copy; {{ now() | date(format="%Y") }} Halide Compression LLC. All Rights Reserved. | <a href="{{ get_url(path='@/privacy/_index.md') }}">Privacy Policy</a>
-      </div>
+    <main id="main">
+      {% block content %}{% endblock content %}
     </main>
 
-    <script src="/js/mobile_menu.js"></script>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <a href="{{ get_url(path='@/_index.md') }}" class="logo">
+              <img src="{{ get_url(path='img/halide_logo.svg') }}" alt=""
+                class="logo__mark" width="24" height="24">
+              <span class="logo__word">Halide Compression</span>
+            </a>
+            <p class="site-footer__blurb">
+              Multimedia compression technology that is fast, efficient, and
+              designed around the human visual system.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Site</h2>
+            <ul>
+              <li><a href="{{ get_url(path = "@/about/_index.md") }}">About</a></li>
+              <li><a href="{{ get_url(path = "@/iris/_index.md") }}">Iris</a></li>
+              <li><a href="{{ get_url(path = "@/blog/_index.md") }}">Blog</a></li>
+              <li><a href="{{ get_url(path = "@/privacy/_index.md") }}">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Contact</h2>
+            <ul>
+              <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+              <li><a href="{{ get_url(path = "atom.xml", trailing_slash = false) }}">Atom feed</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="site-footer__legal">
+          &copy; {{ now() | date(format = "%Y") }} Halide Compression LLC. All rights reserved.
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

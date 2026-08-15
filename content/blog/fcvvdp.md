@@ -4,7 +4,7 @@ date = 2025-12-28
 description = "A faster implementation of CVVDP, a perceptual video and image fidelity metric."
 +++
 
-{{ hero(src="/img/slate.avif", width="1536", height="864", alt="Slate") }}
+{{ <hero src="/img/slate.avif" width="1536" height="864" alt="Slate" /> }}
 
 ## Why?
 
@@ -86,4 +86,4 @@ mission. In this case, fcvvdp was the perfect excuse to do something great for
 Halide Compression while giving something valuable back to the field. We hope
 you enjoy fcvvdp!
 
-{{ cta(url="mailto:mail@halide.cx", txt="Email Us") }}
+{{ <cta url="mailto:mail@halide.cx" txt="Email Us" /> }}

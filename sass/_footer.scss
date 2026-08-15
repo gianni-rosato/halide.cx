@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Footer — three columns over a hairline-separated legal bar.
+   ========================================================================== */
+
+.site-footer {
+  flex-shrink: 0;
+  margin-top: var(--space-12);
+  border-top: 1px solid var(--border);
+  background-color: var(--surface-alt);
+  padding-block: var(--space-10) var(--space-6);
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+.site-footer__brand .logo {
+  margin-bottom: var(--space-4);
+}
+
+.site-footer__blurb {
+  color: var(--text-muted);
+  font-size: var(--step--1);
+  max-width: 34ch;
+  line-height: 1.6;
+}
+
+.footer-col__title {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.footer-col a {
+  font-size: var(--step--1);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.footer-col a:hover {
+  color: var(--heading);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.site-footer__legal {
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  .site-footer__grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-6);
+  }
+}

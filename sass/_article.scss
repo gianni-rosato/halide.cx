@@ -1,0 +1,272 @@
+/* ==========================================================================
+   Article — blog index cards, post header, and prose body.
+   ========================================================================== */
+
+/* --- Blog index ---------------------------------------------------------- */
+
+.post-feature {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.post-feature:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+  color: inherit;
+}
+
+.post-feature__title {
+  margin-top: var(--space-3);
+  font-size: var(--step-3);
+}
+
+.post-feature__body {
+  margin-top: var(--space-4);
+  color: var(--text-muted);
+  max-width: 60ch;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .post-feature {
+    padding: var(--space-8);
+  }
+
+  .post-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- Post layout --------------------------------------------------------- */
+
+/* The reading column. Centering it is what lets figures below break out
+   symmetrically instead of running off the left edge. */
+.post {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+.post .prose {
+  max-width: none;
+}
+
+/* --- Post header --------------------------------------------------------- */
+
+.post-header {
+  margin-bottom: var(--space-8);
+}
+
+.post-header__title {
+  margin-top: var(--space-2);
+  max-width: 20ch;
+}
+
+.post-header .lead {
+  margin-top: var(--space-5);
+  color: var(--text-muted);
+}
+
+/* Lead image emitted by the `hero` component at the top of each post. */
+.post-hero {
+  margin-bottom: var(--space-8);
+}
+
+.post-hero img {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* --- Prose --------------------------------------------------------------- */
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose > * + * {
+  margin-top: var(--space-4);
+}
+
+.prose h2 {
+  font-size: var(--step-2);
+  margin-top: var(--space-10);
+}
+
+.prose h3 {
+  font-size: var(--step-1);
+  margin-top: var(--space-8);
+}
+
+.prose h4 {
+  margin-top: var(--space-6);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--space-5);
+}
+
+.prose li + li {
+  margin-top: var(--space-2);
+}
+
+.prose li::marker {
+  color: var(--text-muted);
+}
+
+.prose blockquote {
+  margin-block: var(--space-6);
+  padding-left: var(--space-5);
+  border-left: 2px solid var(--ink-900);
+  color: var(--heading);
+  font-size: var(--step-1);
+  line-height: 1.5;
+}
+
+.prose blockquote p + p {
+  margin-top: var(--space-4);
+}
+
+.prose img,
+.prose .image-container,
+.prose .media {
+  margin-block: var(--space-8);
+}
+
+/* Charts and figures keep their natural size; center them in whatever
+   column or breakout box they land in. */
+.prose img {
+  margin-inline: auto;
+}
+
+.prose p:has(> img:only-child) {
+  text-align: center;
+}
+
+.prose figcaption {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Figures, charts and switchers break out past the reading column so wide
+   graphics stay legible without widening the text itself. The column is
+   centered, so equal negative margins keep the breakout centered too. */
+@media (min-width: 1080px) {
+  .post .prose > figure,
+  .post .prose > .image-container,
+  .post .prose > .image-switcher,
+  .post .prose > p:has(> img:only-child) {
+    --breakout: min(64rem, 100vw - 2 * var(--gutter));
+
+    width: var(--breakout);
+    margin-inline: calc((100% - var(--breakout)) / 2);
+  }
+}
+
+/* --- Tables -------------------------------------------------------------- */
+
+.prose .table-wrap,
+.prose table {
+  margin-block: var(--space-6);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-size: var(--step--1);
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose th {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--heading);
+  background-color: var(--surface-sunken);
+  white-space: nowrap;
+}
+
+.prose tr:last-child td {
+  border-bottom: 0;
+}
+
+.prose tbody tr:nth-child(even) td {
+  background-color: var(--ink-050);
+}
+
+/* --- Post footer nav ----------------------------------------------------- */
+
+.post-nav {
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+.post-nav__item {
+  text-decoration: none;
+  color: inherit;
+}
+
+.post-nav__item:hover .post-nav__title {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.post-nav__dir {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.post-nav__title {
+  display: block;
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--heading);
+}
+
+.post-nav__item--next {
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .post-nav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .post-nav__item--next {
+    text-align: right;
+  }
+}

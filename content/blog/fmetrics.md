@@ -4,8 +4,7 @@ date = 2026-07-07
 description = "Faster perceptual video and image fidelity metrics."
 +++
 
-{{ hero(src="/img/ceiling.avif", width="1536", height="864", alt="Museum
-Ceiling") }}
+{{ <hero src="/img/ceiling.avif" width="1536" height="864" alt="Museum Ceiling" /> }}
 
 ## Why?
 
@@ -188,4 +187,4 @@ mission. In this case, much like with fcvvdp, fmetrics was the perfect excuse to
 do something great for Halide Compression while giving something valuable back
 to the field. We hope you enjoy fmetrics!
 
-{{ cta(url="mailto:mail@halide.cx", txt="Email Us") }}
+{{ <cta url="mailto:mail@halide.cx" txt="Email Us" /> }}

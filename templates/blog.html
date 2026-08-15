@@ -1,22 +1,35 @@
-{% extends "base.html" %} {% block content %}
-<h1>
-  {{ section.title }}
-</h1>
-<section class="blog-posts">
-  {% for page in section.pages %}
-  <article class="blog-post-card">
-    <a
-      href="{{ page.permalink | safe }}"
-      class="blog-post-link"
-    >
-      <div class="blog-post-date">
-        {{ page.date | date(format="%B %d, %Y")}}
-      </div>
-      <h2>{{ page.title }}</h2>
-      <p>{{ page.description }}</p>
-      <div class="read-more">Read more</div>
-    </a>
-  </article>
-  {% endfor %}
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero hero--compact">
+  <div class="container">
+    <h1 class="hero__title">{{ section.title }}</h1>
+    {% if section.description %}
+    <p class="hero__lead">{{ section.description | safe }}</p>
+    {% endif %}
+  </div>
 </section>
+
+<section class="section">
+  <div class="container">
+    {% if section.pages %}
+      {% set featured = section.pages[0] %}
+      <a class="post-feature" href="{{ featured.permalink | safe }}">
+        <div>
+          <span class="card__meta">{{ featured.date | date(format = "%B %d, %Y") }} &middot; Latest</span>
+          <h2 class="post-feature__title">{{ featured.title }}</h2>
+          <p class="post-feature__body">{{ featured.description }}</p>
+          <span class="card__cue">Read more <span aria-hidden="true">&rarr;</span></span>
+        </div>
+      </a>
+
+      <div class="post-grid">
+        {% for post in section.pages[1:] %}
+          {{ <post_card post /> }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
 {% endblock content %}

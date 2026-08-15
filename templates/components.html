@@ -1,0 +1,101 @@
+{#
+  Tera components — the Zola 0.23 replacement for shortcodes.
+  Registered globally, so they are callable from both templates and markdown.
+
+  From markdown, invoke them self-closing:
+    {{ <hero src="/img/sky.avif" width="1536" height="864" alt="Sky" /> }}
+  Non-string arguments (arrays, numbers, booleans) are wrapped in braces:
+    {{ <image_switcher id="x" images={["/a.png"]} labels={["A"]} ... /> }}
+#}
+
+{# Full-width lead image at the top of a blog post. #}
+{% component hero(src: string, alt = "", width = "", height = "") -%}
+<figure class="post-hero">
+  <img
+    src="{{ get_url(path=src) }}"
+    alt="{{ alt }}"
+    width="{{ width }}"
+    height="{{ height }}"
+    decoding="async"
+  >
+</figure>
+{%- endcomponent %}
+
+{# Centered button, used to close out every blog post. #}
+{% component cta(url = "mailto:mail@halide.cx", txt = "Email Gianni") -%}
+<div class="call-to-action">
+  <a href="{{ url }}" class="btn btn--primary">{{ txt }}</a>
+</div>
+{%- endcomponent %}
+
+{#
+  Interactive encoder/decoder comparison.
+  Emits only markup: static/js/image_switcher.js is loaded once in base.html
+  and auto-initialises every [data-image-switcher] element on the page.
+#}
+{% component image_switcher(id: string, images: array, labels: array, subtitles: array, alt = "Image comparison", title = "", description = "", caption = "") -%}
+<section class="image-switcher">
+  {% if title %}<h3>{{ title }}</h3>{% endif %}
+  {% if description %}<p>{{ description | safe }}</p>{% endif %}
+  {% if caption %}<p class="image-caption">{{ caption }}</p>{% endif %}
+  <div
+    id="image-switcher-{{ id }}"
+    class="image-container"
+    data-image-switcher
+    data-alt="{{ alt }}"
+    data-images='{{ images | json_encode() | safe }}'
+    data-subtitles='{{ subtitles | json_encode() | safe }}'
+    data-labels='{{ labels | json_encode() | safe }}'
+  ></div>
+</section>
+{%- endcomponent %}
+
+{# Icon + heading + body feature tile. #}
+{% component tile(title: string, text: string, icon: string, icon2 = "") -%}
+<div class="tile">
+  <svg
+    class="tile__icon"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    aria-hidden="true"
+  >
+    <path stroke-linecap="round" stroke-linejoin="round" d="{{ icon }}" />
+    {% if icon2 %}<path stroke-linecap="round" stroke-linejoin="round" d="{{ icon2 }}" />{% endif %}
+  </svg>
+  <h3>{{ title }}</h3>
+  <p>{{ text }}</p>
+</div>
+{%- endcomponent %}
+
+{# Headline figure: a large value over a supporting label. #}
+{% component stat(value: string, label: string) -%}
+<div class="stat">
+  <span class="stat__value">{{ value }}</span>
+  <span class="stat__label">{{ label }}</span>
+</div>
+{%- endcomponent %}
+
+{# Link card used on the blog index and the homepage's "latest writing" row. #}
+{% component post_card(post) -%}
+<a class="card" href="{{ post.permalink | safe }}">
+  <span class="card__meta">{{ post.date | date(format = "%b %d, %Y") }}</span>
+  <h3 class="card__title">{{ post.title }}</h3>
+  <p class="card__body">{{ post.description }}</p>
+  <span
+    class="card__cue">Read more <span aria-hidden="true">&rarr;</span></span>
+</a>
+{%- endcomponent %}
+
+{# Dark closing band with a heading, blurb and one or two buttons. #}
+{% component cta_band(title: string, text: string, url = "mailto:mail@halide.cx", txt = "Email Us", second_url = "", second_txt = "") -%}
+<div class="cta-band">
+  <h2>{{ title }}</h2>
+  <p>{{ text }}</p>
+  <div class="actions actions--center">
+    <a href="{{ url }}" class="btn btn--primary">{{ txt }}</a>
+    {% if second_url %}<a href="{{ second_url }}" class="btn btn--secondary">{{ second_txt }}</a>{% endif %}
+  </div>
+</div>
+{%- endcomponent %}

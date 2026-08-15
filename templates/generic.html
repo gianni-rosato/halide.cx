@@ -1,8 +1,18 @@
-{% extends "base.html" %} {% block content %}
-<div class="generic">
-  <h1>
-    {{ section.title }}
-  </h1>
-  {{ section.content | safe }}
-</div>
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero hero--compact">
+  <div class="container">
+    <h1 class="hero__title">{{ section.title }}</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="prose">
+      {{ section.content | safe }}
+    </div>
+  </div>
+</section>
+
 {% endblock content %}

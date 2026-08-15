@@ -4,7 +4,7 @@ date = 2025-06-04
 description = "Today we're excited to announce the Iris project, our in-house image encoder. We've begun work on Iris's first codec, Iris-WebP: A WebP encoder that brings impressive gains over the reference encoder."
 +++
 
-{{ hero(src="/img/sky.avif", width="1536", height="864", alt="Sky") }}
+{{ <hero src="/img/sky.avif" width="1536" height="864" alt="Sky" /> }}
 
 ## Why WebP?
 
@@ -42,4 +42,4 @@ To learn more about Iris-WebP and how it may benefit your workflow, visit the
 share, but they will be coming soon to the Iris project page. We're excited to
 see how Iris can help make the web faster, lighter, and more beautiful!
 
-{{ cta(url="/iris", txt="Learn More About Iris") }}
+{{ <cta url="/iris" txt="Learn More About Iris" /> }}

@@ -1,6 +1,7 @@
 +++
 title = "Privacy Policy"
 template="generic.html"
+description = "What limited information halide.cx collects, how it is used, and your choices."
 +++
 
 We are interested in seeing how people interact with our website, but we also

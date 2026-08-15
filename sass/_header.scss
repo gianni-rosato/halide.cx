@@ -1,0 +1,148 @@
+/* ==========================================================================
+   Header — sticky translucent bar, wordmark, nav, mobile sheet.
+   `.main-nav.is-active` is the toggle contract with static/js/mobile_menu.js.
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: oklch(1 0 0 / 0.82);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter:
+  blur(1px))) {
+  .site-header {
+    background-color: var(--paper);
+  }
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--header-height);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--heading);
+  flex-shrink: 0;
+}
+
+.logo:hover {
+  color: var(--heading);
+}
+
+.logo__mark {
+  height: 1.5rem;
+  width: auto;
+  border-radius: 0;
+}
+
+.logo__word {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* --- Navigation ---------------------------------------------------------- */
+
+.main-nav {
+  display: none;
+}
+
+.main-nav a {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: var(--space-2) 0;
+}
+
+.main-nav a:hover {
+  color: var(--heading);
+}
+
+.main-nav a.is-current {
+  color: var(--heading);
+}
+
+.mobile-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: calc(var(--space-2) * -1);
+  border-radius: var(--radius-sm);
+  color: var(--heading);
+}
+
+.mobile-menu-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke: currentColor;
+}
+
+.mobile-menu-button .icon-close {
+  display: none;
+}
+
+.mobile-menu-button[aria-expanded="true"] .icon-open {
+  display: none;
+}
+
+.mobile-menu-button[aria-expanded="true"] .icon-close {
+  display: block;
+}
+
+/* Mobile sheet: full-width panel dropping from under the header. */
+.main-nav.is-active {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--paper);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-4) var(--gutter) var(--space-5);
+}
+
+.main-nav.is-active a {
+  font-size: var(--step-1);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--heading);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.main-nav.is-active a:last-child {
+  border-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .main-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .mobile-menu-button {
+    display: none;
+  }
+}

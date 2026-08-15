@@ -1,37 +1,126 @@
-{% extends "base.html" %} {% block content %}
-<section class="hero-section">
-  <div class="hero-text">
-    <h1 class="hero-title">
-      Powering a Better Web
-    </h1>
-  </div>
-  <div class="hero-description">
-    <p>
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <h1 class="hero__title">Powering a Better Web</h1>
+    <p class="hero__lead">
       Hello, we're Halide Compression. We are building multimedia compression
       technology that is fast, efficient, and designed around the human visual
       system. We believe in a more beautiful Web, and we are here to help build
       it.
     </p>
+    <div class="actions hero__actions">
+      <a href="{{ get_url(path='@/iris/_index.md') }}"
+        class="btn btn--primary">Explore Iris-WebP</a>
+      <a href="{{ get_url(path='@/about/_index.md') }}"
+        class="btn btn--secondary">Consulting Services</a>
+    </div>
   </div>
 </section>
 
-<div class="call-to-action">
-  <a href="{{ get_url(path='@/iris/_index.md') }}" class="cta-button"
-  >Explore Iris-WebP</a>
-  <a href="{{ get_url(path='@/about/_index.md') }}" class="cta-button secondary"
-  >Consulting Services</a>
-</div>
-<br>
-<br>
+<section class="band">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">What we do</span>
+      <h2>Compression expertise, end to end</h2>
+      <p>
+        We build encoders, measure them honestly, and help teams ship the
+        results. Everything we make is grounded in how images actually look to
+        people.
+      </p>
+    </div>
+    <div class="grid grid--3">
+      {{ <tile
+        title="Encoder engineering"
+        text="Custom encoders and codec optimization written in C, Zig, and assembly, built from scratch or dropped into an existing pipeline."
+        icon="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
+      /> }}
+      {{ <tile
+        title="Perceptual quality"
+        text="Fast perceptual image quality metrics and rigorous performance analysis, so quality claims hold up under scrutiny."
+        icon="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+        icon2="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+      /> }}
+      {{ <tile
+        title="Consulting"
+        text="On-site and off-site consulting for organizations that need image and video infrastructure to work at scale."
+        icon="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
+      /> }}
+    </div>
+  </div>
+</section>
 
-<div class="image-container">
-  <picture>
-    <img
-      src="/img/hero/bouquet-med.avif"
-      width="1536"
-      height="864"
-      alt="Bouquet of Flowers"
-    />
-  </picture>
-</div>
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Our product</span>
+      <h2>Iris-WebP</h2>
+      <p>
+        A faster, more efficient WebP encoder designed around the intricacies of
+        the human visual system, and evaluated under industry-leading
+        psychovisual metrics.
+      </p>
+    </div>
+    <div class="stats">
+      {{ <stat value="Up to 50%" label="Better compression than JPEG, cutting bandwidth and page load times." /> }}
+      {{ <stat value="Up to 17%" label="Better compression than the reference WebP encoder, libwebp." /> }}
+      {{ <stat value="Ubiquitous" label="WebP is supported everywhere, and served billions of times a day." /> }}
+    </div>
+    <div class="section-foot">
+      <a href="{{ get_url(path='@/iris/_index.md') }}" class="btn--ghost">
+        Explore Iris-WebP <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% set blog = get_section(path="blog/_index.md") %}
+<section class="band">
+  <div class="container">
+    <div class="section-head">
+      <h2>From the blog</h2>
+      <p>Research notes, encoder deep dives, and interviews from the compression world.</p>
+    </div>
+    <div class="grid grid--3">
+      {% for post in blog.pages[0:3] %}
+        {{ <post_card post /> }}
+      {% endfor %}
+    </div>
+    <div class="section-foot">
+      <a href="{{ get_url(path='@/blog/_index.md') }}" class="btn--ghost">
+        All posts <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% set about_url = get_url(path='@/about/_index.md') %}
+    {{ <cta_band
+      title="Let's build a more beautiful Web"
+      text="Whether you'd like to license Iris-WebP or consult with us on compression infrastructure, we'd like to hear from you."
+      txt="Email Us"
+      second_url={about_url}
+      second_txt="About Halide"
+    /> }}
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <figure class="media">
+      <img
+        src="{{ get_url(path='img/hero/bouquet-med.avif') }}"
+        width="1536"
+        height="864"
+        alt="A bouquet of flowers"
+        loading="lazy"
+        decoding="async"
+      >
+    </figure>
+  </div>
+</section>
+
 {% endblock content %}
