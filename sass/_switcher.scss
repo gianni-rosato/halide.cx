@@ -14,7 +14,11 @@
   margin-bottom: var(--space-3);
 }
 
-.image-switcher > p,
+.image-switcher > p {
+  max-width: var(--measure);
+  color: var(--text-muted);
+}
+
 .metric-switcher > p {
   max-width: var(--measure);
 }
