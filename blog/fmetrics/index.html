@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Introducing fmetrics | Halide Compression</title>
+    <meta name="description" content="Faster perceptual video and image fidelity metrics.">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Introducing fmetrics | Halide Compression">
+    <meta property="og:description" content="Faster perceptual video and image fidelity metrics.">
+    <meta property="og:url" content="https://halide.cx/blog/fmetrics/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/blog/fmetrics/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a href="https://halide.cx/" class="logo">
+          <img src="https://halide.cx/img/halide_logo.svg" alt=""
+            class="logo__mark" width="24" height="24">
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/"
+            class="">About</a>
+          <a href="https://halide.cx/iris/"
+            class="">Iris</a>
+          <a href="https://halide.cx/blog/"
+            class="is-current">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+<article class="section">
+  <div class="container">
+    <div class="post">
+      <header class="post-header">
+      <span class="eyebrow">
+        July 07, 2026 &middot; The Halide Team
+      </span>
+      <h1 class="post-header__title">Introducing fmetrics</h1>
+      
+      <p class="lead">Faster perceptual video and image fidelity metrics.</p>
+      
+    </header>
+
+      <div class="prose">
+      <figure class="post-hero">
+  <img
+    src="https://halide.cx/img/ceiling.avif"
+    alt="Museum Ceiling"
+    width="1536"
+    height="864"
+    decoding="async"
+  >
+</figure>
+<h2 id="why">Why?</h2>
+<p>At the end of last year, we discovered the well-designed ColorVideoVDP metric,
+but found the
+<a rel="external" href="https://github.com/gfxdisp/colorvideovdp">reference Python implementation</a> was
+not fast enough for our use case, increasing our <a href="/iris/">Iris</a> benchmark
+script's runtime dramatically. This wasn't an acceptable trade-off for our
+productivity, so we decided to build
+<a rel="external" href="https://github.com/halidecx/fcvvdp">fcvvdp</a> as an open-source C implementation
+of CVVDP for the benefit of everyone.</p>
+<p>Since its conception, fcvvdp has received many updates, including (by popular
+demand) task threading for parallelized video scoring. It has also gotten much
+faster overall, including on one thread. Public-facing open-source projects
+demonstrate our ability to deliver high-performance solutions to complex
+problems, so we're happy to see fcvvdp getting a level of attention that
+encourages us to continue improving it.</p>
+<p>How about other metrics? When we published fcvvdp, we felt other perceptual
+metrics were not in need of any immediate attention; Cloudinary's
+<a rel="external" href="https://github.com/cloudinary/ssimulacra2">reference SSIMULACRA2</a>
+implementation is in C++, and so is Google's
+<a rel="external" href="https://github.com/google/butteraugli">Butteraugli</a>. Lots of other relevant
+metrics were already available through
+<a rel="external" href="https://github.com/netflix/libvmaf">libvmaf</a>, and were thus easily accessible
+via FFmpeg. So, why build another metrics tool?</p>
+<h2 id="introducing-fmetrics">Introducing fmetrics</h2>
+<p>Through <a rel="external" href="https://github.com/halidecx/fmetrics">fmetrics</a>, we offer one library
+that wraps implementations of IW-SSIM, Butteraugli, SSIMULACRA2, MS-SSIM, and
+CVVDP. CVVDP is provided through fcvvdp, but the rest are new
+production-oriented implementations distinct from their references. The
+motivations behind creating each implementation are different, but the idea to
+wrap them all under a single library came from an interest in supporting other
+tools more effectively and having a much simpler CLI. We like how nicely libvmaf
+integrates with FFmpeg, so eventually we plan to do something similar.</p>
+<p>Now, we can start looking at why we re-implemented each metric, followed by
+benchmark results.</p>
+<h3 id="iw-ssim">IW-SSIM</h3>
+<p>This lesser-known variant of SSIM performed exceptionally well on the
+<a rel="external" href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=11417802">JPEG AIC-3</a>
+evaluation, and the
+<a rel="external" href="https://github.com/Jack-guo-xy/Python-IW-SSIM">reference implementation</a> is in
+Python. We wanted to be able to rapidly benchmark this like we do with other
+metrics, so writing a faster version in C featuring algorithmic optimizations in
+a language closer to the metal was an easy decision considering IW-SSIM's
+psychovisual utility.</p>
+<h3 id="butteraugli">Butteraugli</h3>
+<p>Butteraugli's most up-to-date implementation lives in the
+<a rel="external" href="https://github.com/libjxl/libjxl">libjxl</a> reference implementation of the JPEG
+XL image codec. Butteraugli is algorithmically slow already, so even small gains
+were worth pursuing here.</p>
+<h3 id="ssimulacra2">SSIMULACRA2</h3>
+<p>SSIMULACRA2 is probably the most high-profile perceptual image metric, receiving
+lots of attention and thus more implementations.
+<a rel="external" href="https://ludicon.com/">Ludicon</a>'s
+<a rel="external" href="https://github.com/Ludicon/ic-metrics">ic-metrics</a> comes to mind, as well as
+<a rel="external" href="https://github.com/gianni-rosato/fssimu2">fssimu2</a> and
+<a rel="external" href="https://github.com/dnjulek/vapoursynth-zip">Vszip</a>'s implementation. Ours
+(written in Zig) comes from fssimu2, and is useful due to better speed and
+memory usage than the reference as well as the ability to produce visual
+distortion maps like Butteraugli's. The motivation for another SSIMULACRA2
+implementation was quite different from that of CVVDP or IW-SSIM; instead of a
+sparsely implemented metric in desperate need of a faster tool, there are so
+many fast, ergonomic implementations that building another was very easy.</p>
+<h3 id="ms-ssim">MS-SSIM</h3>
+<p>MS-SSIM and SSIMULACRA2 are very similar algorithmically, so using what we
+learned from the SSIMULACRA2 implementation and bringing it to MS-SSIM was
+trivial and not worth ignoring (even though libvmaf already provides MS-SSIM).</p>
+<h3 id="cvvdp">CVVDP</h3>
+<p>Through the Zig build system, we were able to directly import fcvvdp as a Zig
+module that gets compiled into the fmetrics static library; now, updates to
+fcvvdp will be reflected in fmetrics by updating the Zig build system's
+dependency tracker (<code>build.zig.zon</code>), but the two can be maintained separately
+with ease so as not to kill fcvvdp.</p>
+<h2 id="performance">Performance</h2>
+<p>We'll be measuring three statistics:</p>
+<ul>
+<li>Speed</li>
+<li>Memory usage</li>
+<li>MOS correlation</li>
+</ul>
+<p>The last effectively tells us how accurate our metric is; rather than comparing
+correlation to the reference implementation, comparing directly to subjective
+ratings helps us not miss out on perceptual improvements that we may have
+foregone to be closer to the reference.</p>
+<p>Speed and memory testing was done on a stock Core i7-13700K with 3840x2160
+source &amp; distorted PAM images
+(<a rel="external" href="https://drive.google.com/drive/folders/1Kxzmw-jMWtbh8elPuQidY5MM1pTXkF0L?usp=sharing">Drive link</a>,
+lossless JPEG-XL sources; run <code>djxl &lt;*.pam.jxl&gt; &lt;*.pam&gt;</code> to decompress).</p>
+<p>MOS correlation was tested using <code>mos.py</code> via
+<a rel="external" href="https://github.com/gianni-rosato/mos-correlation">mos-correlation</a> on
+Cloudinary's <a rel="external" href="https://cloudinary.com/labs/cid22">CID22</a>.</p>
+<h3 id="mos-correlation">MOS Correlation</h3>
+<table><thead><tr><th>metric</th><th>SRCC (reference)</th><th>SRCC (fmetrics)</th><th>difference (%)</th></tr></thead><tbody>
+<tr><td>butteraugli (p3 i203)*</td><td>0.7929</td><td>0.7863</td><td>-0.83%</td></tr>
+<tr><td>fcvvdp**</td><td>0.8274</td><td>0.8286</td><td>+0.15%</td></tr>
+<tr><td>iw_ssim</td><td>n/a</td><td>0.7925</td><td>+0.00%</td></tr>
+<tr><td>ms_ssim</td><td>0.7845</td><td>0.8048</td><td>+2.59%</td></tr>
+<tr><td>ssimulacra2</td><td>0.8916</td><td>0.8910</td><td>-0.07%</td></tr>
+</tbody></table>
+<blockquote>
+<p>*Note: Because Butteraugli is a smaller-is-better metric, the signs are
+flipped for the SRCCs reported above.</p>
+</blockquote>
+<blockquote>
+<p>**Note: fmetrics uses the fcvvdp library (as a Zig module) with different
+I/O, so the underlying metric implementation is the same.</p>
+</blockquote>
+<h3 id="speed-ms">Speed (ms)</h3>
+<table><thead><tr><th>metric</th><th>ms (reference)</th><th>ms (fmetrics)</th><th>difference (%)</th></tr></thead><tbody>
+<tr><td>butteraugli (p3 i203)</td><td>4110</td><td>3130</td><td>31.31% faster</td></tr>
+<tr><td>fcvvdp*</td><td>1390</td><td>1390</td><td>0.00%</td></tr>
+<tr><td>iw_ssim</td><td>3020</td><td>228</td><td>1224.6% faster</td></tr>
+<tr><td>ms_ssim**</td><td>1110</td><td>106</td><td>947.2% faster</td></tr>
+<tr><td>ssimulacra2</td><td>722</td><td>232</td><td>211.2% faster</td></tr>
+</tbody></table>
+<blockquote>
+<p>*Note: fmetrics uses the fcvvdp library (as a Zig module) with different I/O,
+so the underlying metric implementation is the same.</p>
+</blockquote>
+<blockquote>
+<p>**Note: MS-SSIM comparison isn't fair, as libvmaf has to compute other
+metrics in the filterchain alongside MS-SSIM.</p>
+</blockquote>
+<h3 id="ram-usage-mb">RAM Usage (MB)</h3>
+<table><thead><tr><th>metric</th><th>MB (reference)</th><th>MB (fmetrics)</th><th>difference (%)</th></tr></thead><tbody>
+<tr><td>butteraugli (p3 i203)</td><td>2440</td><td>1670</td><td>-31.56%</td></tr>
+<tr><td>fcvvdp*</td><td>1600</td><td>1600</td><td>0.00%</td></tr>
+<tr><td>iw_ssim</td><td>2660</td><td>551</td><td>-79.29%</td></tr>
+<tr><td>ms_ssim**</td><td>841</td><td>376</td><td>-55.29%</td></tr>
+<tr><td>ssimulacra2</td><td>1370</td><td>741</td><td>-45.91%</td></tr>
+</tbody></table>
+<blockquote>
+<p>*Note: fmetrics uses the fcvvdp library (as a Zig module) with different I/O,
+so the underlying metric implementation is the same.</p>
+</blockquote>
+<blockquote>
+<p>**Note: MS-SSIM comparison isn't fair, as libvmaf has to compute other
+metrics in the filterchain alongside MS-SSIM.</p>
+</blockquote>
+<h2 id="conclusion">Conclusion</h2>
+<p>Based on the numbers:</p>
+<ul>
+<li>Butteraugli is up to 31.3% faster, uses 31.6% less RAM, and is within 1% MOS
+correlation</li>
+<li>fcvvdp is unchanged</li>
+<li>IW-SSIM is &gt;1000% faster and uses less than half the RAM</li>
+<li>MS-SSIM's MOS correlation is &gt;2.5% better than libvmaf's MS-SSIM</li>
+<li>SSIMULACRA2 is 211.2% faster, using 45.9% less RAM</li>
+</ul>
+<p>Our future plans include making everything faster (of course), as well as
+looking into FFmpeg support.</p>
+<p>Our code is public under the
+<a rel="external" href="https://github.com/halidecx/fmetrics?tab=Apache-2.0-1-ov-file#readme">Apache 2.0 license</a>.
+We are always proud of our capability to give back to the FOSS ecosystem when we
+can. While Iris is a closed-source product, we hope to use Iris's impact and
+utility as a means of subsidizing work on open-source when it helps support our
+mission. In this case, much like with fcvvdp, fmetrics was the perfect excuse to
+do something great for Halide Compression while giving something valuable back
+to the field. We hope you enjoy fmetrics!</p>
+<div class="call-to-action">
+  <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+</div>
+
+    </div>
+
+      <nav class="post-nav" aria-label="More posts">
+      
+      <a class="post-nav__item" href="https://halide.cx/blog/chroma-handling/">
+        <span class="post-nav__dir">&larr; Older</span>
+        <span class="post-nav__title">Same Image, Different Score?</span>
+      </a>
+      
+
+      
+    </nav>
+    </div>
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <a href="https://halide.cx/" class="logo">
+              <img src="https://halide.cx/img/halide_logo.svg" alt=""
+                class="logo__mark" width="24" height="24">
+              <span class="logo__word">Halide Compression</span>
+            </a>
+            <p class="site-footer__blurb">
+              Multimedia compression technology that is fast, efficient, and
+              designed around the human visual system.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Site</h2>
+            <ul>
+              <li><a href="https://halide.cx/about/">About</a></li>
+              <li><a href="https://halide.cx/iris/">Iris</a></li>
+              <li><a href="https://halide.cx/blog/">Blog</a></li>
+              <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Contact</h2>
+            <ul>
+              <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+              <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
