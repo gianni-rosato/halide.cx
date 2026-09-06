@@ -39,12 +39,33 @@ no subjective image distortion dataset available that we know of using a WebP
 encoder that isn't libwebp, so artifacts that the reference encoder doesn't
 naturally produce risk being blind spots for any trained metric.
 
-While we found SSIMULACRA2 accurately rewarded good mode decision changes for
-4x4 blocks, it encouraged blocking artifacts. These are rare in libwebp's
-output; it was tuned for PSNR and SSIM, metrics that reward smoothing more than
-modern perceptual metrics do. Artifacts from 8x8 blocking are common in JPEG,
-but 4x4 blocking lands on SSIMULACRA2's finest distortion scale, which its
-subjective training data likely gave it little reason to weight heavily.
+We discovered that SSIMULACRA2 accurately rewarded good mode decision changes
+for 4x4 blocks, but it encouraged blocking artifacts. These are rare in
+libwebp's output; it was tuned for PSNR and SSIM, metrics that reward smoothing
+more than modern perceptual metrics do. Artifacts from 8x8 blocking are common
+in JPEG, but 4x4 blocking lands on SSIMULACRA2's finest distortion scale, which
+its subjective training data likely gave it little reason to weight heavily.
+
+{{ <image_switcher id="i4-blocking-src" alt="4x4 Blocking Source Images"
+images={[ "/img/metric-limits/block-og.webp",
+"/img/metric-limits/noblock-og.webp", "/img/metric-limits/ripples.webp", ]}
+labels={[ "Blocking", "No Blocking", "Source", ]} subtitles={[ "Size: 54068
+bytes | SSIMU2: 36.33", "Size: 54732 bytes | SSIMU2: 30.14", "Size: 1501760
+bytes" ]} /> }}
+
+At a normal viewing distance, the "Blocking" image likely looks better. However:
+
+{{ <image_switcher id="i4-blocking" alt="4x4 Blocking Artifacts" images={[
+"/img/metric-limits/block.webp", "/img/metric-limits/noblock.webp", ]} labels={[
+"Blocking", "No Blocking", ]} subtitles={[ "Original Image Size: 54068 | SSIMU2:
+36.33", "Original Image Size: 54732 | SSIMU2: 30.14", ]} /> }}
+
+Thus, the goal becomes striking a balance between macro-scale detail and
+finer-grained artifacting.
+
+> _Note: The images above were crafted to showcase the effect of 4x4 blocking on
+> SSIMULACRA2 & don't represent Iris's default behavior at any point during
+> development._
 
 While 4x4 blocking was the main culprit, we also saw strange behavior at low
 fidelity, where the encoder would look just as bad as other encoders but score
