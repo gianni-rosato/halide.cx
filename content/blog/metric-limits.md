@@ -9,7 +9,7 @@ description = "As encoders mature, metrics become less valuable."
 }}
 
 Maturity is hard to define, but we believe Iris-WebP qualifies: it turned one
-year old in May. SVT-AV1 and libaom, also qualify and certainly libwebp and
+year old in May. SVT-AV1 and libaom also qualify, and certainly libwebp and
 libjpeg. Over that year, our workflow has had to adapt to the encoder's growing
 capabilities. As we work on our upcoming encoder codenamed Aperture, those
 lessons are more relevant than ever.
