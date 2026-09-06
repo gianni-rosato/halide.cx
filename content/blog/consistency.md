@@ -4,7 +4,8 @@ date = 2025-09-14
 description = "Quality and speed define an image encoder's compression performance. Consistency is a close third, and easily overlooked in image encoder design. What value does it provide, and how can we measure it?"
 +++
 
-{{ <hero src="/img/streak.avif" width="1536" height="864" alt="Light Streak" /> }}
+{{ <hero src="/img/streak.avif" width="1536" height="864" alt="Light Streak" />
+}}
 
 ## What Is Consistency?
 

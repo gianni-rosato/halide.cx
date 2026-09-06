@@ -10,8 +10,7 @@
 
 .hero__title {
   font-size: var(--step-5);
-  font-weight: 800;
-  letter-spacing: -0.035em;
+  font-weight: 500;
   line-height: 1.02;
   max-width: 16ch;
 }
@@ -116,7 +115,6 @@ a.card,
   font-family: var(--font-mono);
   font-size: var(--step--1);
   color: var(--text-muted);
-  letter-spacing: 0.03em;
 }
 
 .card__title {
@@ -136,7 +134,7 @@ a.card,
   align-items: center;
   gap: var(--space-2);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 500;
   font-size: var(--step--1);
   color: var(--heading);
 }
@@ -210,8 +208,7 @@ a.card,
   font-family: var(--font-display);
   /* One step below the h2 above it, so the section title stays dominant. */
   font-size: var(--step-2);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 500;
   line-height: 1;
   color: var(--heading);
 }
@@ -257,7 +254,6 @@ a.card,
   margin-top: var(--space-2);
   font-family: var(--font-mono);
   font-size: var(--step--1);
-  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
 }

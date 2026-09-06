@@ -1,5 +1,5 @@
 +++
 title="Home"
 template="index.html"
-description = "Halide Compression builds multimedia compression technology that is fast, efficient, and designed around the human visual system."
+description = "Halide Compression builds image encoders and measurement tools. Iris-WebP produces files 27% smaller than libwebp at equal quality and speed."
 +++

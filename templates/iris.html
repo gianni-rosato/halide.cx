@@ -5,10 +5,10 @@
   <div class="container">
     <h1 class="hero__title">Iris</h1>
     <p class="hero__lead">
-      Iris is a fast &amp; efficient image encoder built to help provide a more
-      beautiful Web. Designed around the intricacies of the human visual system
-      and thoroughly evaluated under industry-leading psychovisual metrics, Iris
-      takes Web-first image compression technology to a new level.
+      Iris-WebP is a WebP encoder tuned for how people see images. At the
+      same encode time as libwebp's default setting, it produces files
+      up to 27% smaller at equal quality. The output is standard WebP and
+      decodes everywhere WebP already does.
     </p>
     <div class="actions hero__actions">
       <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
@@ -21,9 +21,9 @@
 <section class="section section--tight">
   <div class="container">
     <div class="stats">
-      {{ <stat value="Up to 50%" label="Better compression than JPEG, cutting bandwidth and page load times." /> }}
-      {{ <stat value="Up to 17%" label="Better compression than libwebp, the reference WebP encoder." /> }}
-      {{ <stat value="Faster" label="Quicker than competing modern Web codecs, with no loss in quality." /> }}
+      {{ <stat value="27%" label="Smaller than libwebp (method 4) at equal quality (CVVDP) and equal encode time." /> }}
+      {{ <stat value="26%" label="Smaller than libjpeg-turbo at equal quality (CVVDP), and 31% smaller than jpegli by the same measure." /> }}
+      {{ <stat value="40%" label="Faster than libwebp's slowest setting (method 6), while still producing 22% smaller files at identical quality." /> }}
     </div>
   </div>
 </section>
@@ -31,30 +31,30 @@
 <section class="band">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Why Iris</span>
+      <span class="eyebrow">why Iris</span>
       <h2>A Better WebP Encoder</h2>
       <p>
-        Images encoded with Iris-WebP look significantly better than those
-        encoded with the reference WebP encoder, and Iris-WebP's performance
-        outclasses encoders for slower, newer Web-first formats like AVIF. WebP
-        support is also currently ubiquitous, and large websites serve billions
-        of WebP images every single day.
+        WebP is supported by every major browser, and large sites serve
+        billions of WebP images every day. Iris-WebP keeps the format and replaces
+        the encoder. Switching means smaller files at the quality you already
+        ship, or higher quality at the file sizes you already pay for, with no
+        change to decoders, CDNs, or markup.
       </p>
     </div>
     <div class="grid grid--3">
       {{ <tile
-        title="Fast"
-        text="Iris-WebP is faster than competing modern Web codecs while still delivering exceptional quality."
+        title="Speed"
+        text="Iris-WebP has seven speed settings. Its slowest encodes a Kodak image in 72 ms against 118 ms for libwebp's slowest, and its fastest runs in 13 ms."
         icon="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
       /> }}
       {{ <tile
-        title="Efficient"
-        text="Achieve up to 50% better compression than JPEG, leading to faster page load times & reduced bandwidth."
+        title="Efficiency"
+        text="At matched speed, Iris-WebP beats libwebp on every perceptual metric we track: CVVDP, SSIMULACRA2, MS-SSIM, IW-SSIM, and even VMAF."
         icon="M12 9.75V12m0 0l4.754 4.754M12 12L7.246 16.754M12 12v2.25m0-12a9 9 0 110 18 9 9 0 010-18zm0 12.75a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"
       /> }}
       {{ <tile
-        title="High Quality"
-        text="Iris-WebP is designed with the human visual system in mind, allowing up to 17% better compression than the reference WebP encoder."
+        title="Tradeoffs"
+        text="Iris-WebP's default perceptual tune is not as performant on legacy metrics (SSIM, PSNR)."
         icon="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
       /> }}
     </div>
@@ -64,21 +64,20 @@
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Comparisons</span>
+      <span class="eyebrow">comparisons</span>
       <h2>See the difference</h2>
       <p>
-        Iris-WebP's visual performance is unparalleled. Designing lossy image
-        compression around the human eye allows us to provide an encoder capable
-        of delivering an uptick in quality of experience that users notice.
+        Each image is encoded to the same file size.
+        The captions list the size and metric scores. Higher is better
+        for SSIMULACRA2 and CVVDP, and lower is better for Butteraugli.
       </p>
     </div>
 
     <section class="image-switcher">
       <h3>Preserving fine detail</h3>
       <p>
-        Click the buttons below to switch between different encoders. Notice how
-        Iris-WebP &amp; libjpegli preserve fine details in the trees that libwebp
-        erroneously erases.
+        Switch between encoders with the buttons. libwebp smooths away the
+        texture in the trees, while Iris-WebP and libjpegli keep it.
       </p>
       {% if config.extra.cmp_encoded %}
       <p class="image-caption">Encoded {{ config.extra.cmp_encoded }}</p>
@@ -97,8 +96,9 @@
     <section class="image-switcher">
       <h3>Avoiding distortion</h3>
       <p>
-        In the comparison below, libjpegli severely distorts the image while
-        Iris-WebP &amp; libwebp do not.
+        The opposite happens here. libjpegli distorts flat regions badly, and
+        both WebP encoders hold up. This image shows why we do not tune for one
+        metric or one image.
       </p>
       {% if config.extra.cmp_encoded %}
       <p class="image-caption">Encoded {{ config.extra.cmp_encoded }}</p>
@@ -120,7 +120,6 @@
   <div class="container">
     <section class="metric-switcher">
       <div class="section-head">
-        <span class="eyebrow">Measured</span>
         <h2>Metrics</h2>
         <p>
           The numbers below were aggregated using the <a
@@ -147,19 +146,18 @@
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Licensing</span>
+      <span class="eyebrow">licensing</span>
       <h2>Using Iris-WebP</h2>
     </div>
     <div class="measure flow">
       <p>
-        A commercial license from Halide Compression means guaranteed ongoing
-        support, as well as access to new Iris-WebP releases and maintenance
-        fixes over time.
+        Iris-WebP is licensed commercially. A license includes the encoder,
+        new releases, maintenance fixes, and direct support from us.
       </p>
       <p>
-        An Iris-WebP license is an investment in the future of web image
-        compression in pursuit of a more beautiful web. If you'd like to use
-        Iris today, send us an email!
+        If you want to test it on your own images before deciding, email us
+        with a sample and the encoder settings you use today. We will send
+        back a size and metric comparison.
       </p>
     </div>
   </div>
@@ -168,8 +166,8 @@
 <section class="section section--tight">
   <div class="container">
     {{ <cta_band
-      title="Ready to try Iris-WebP?"
-      text="Tell us about your image pipeline and we'll help you discover how Iris-WebP can help."
+      title="Test Iris-WebP on your images"
+      text="Send us a few representative images and your current encoder settings. We will reply with file sizes and metric scores from Iris-WebP."
       txt="Email Us"
     /> }}
   </div>

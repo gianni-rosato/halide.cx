@@ -1,5 +1,5 @@
 +++
 title="About"
 template="about.html"
-description = "Halide Compression develops industry-leading compression products and provides expert consulting for companies where multimedia matters."
+description = "Halide Compression licenses Iris-WebP and consults on codec optimization, encoder development, and image and video pipelines."
 +++

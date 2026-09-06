@@ -3,12 +3,11 @@
 
 <section class="hero">
   <div class="container">
-    <h1 class="hero__title">Powering a Better Web</h1>
+    <h1 class="hero__title">Smaller images, better quality</h1>
     <p class="hero__lead">
-      Hello, we're Halide Compression. We are building multimedia compression
-      technology that is fast, efficient, and designed around the human visual
-      system. We believe in a more beautiful Web, and we are here to help build
-      it.
+      Halide Compression builds image encoders and the tools to measure them.
+      Our first product, Iris-WebP, produces files 27% smaller than the
+      reference WebP encoder at equal visual quality and equal speed.
     </p>
     <div class="actions hero__actions">
       <a href="{{ get_url(path='@/iris/_index.md') }}"
@@ -22,29 +21,29 @@
 <section class="band">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">What we do</span>
-      <h2>Frontier compression expertise</h2>
+      <span class="eyebrow">what we do</span>
+      <h2>Frontier Compression Engineering</h2>
       <p>
-        We build encoders and tools to measure their efficiency. Then, we help
-        teams ship the results. Everything we make is grounded in how images
-        actually look to people.
+        We write encoders, we measure them with perceptual metrics, and we help
+        teams put the results into production. Our tuning targets what the human
+        eye sees.
       </p>
     </div>
     <div class="grid grid--3">
       {{ <tile
         title="Encoder engineering"
-        text="Custom encoders and low-level codec optimizations."
+        text="Encoders written from scratch, and speed and efficiency work on existing codecs in C, Zig, and assembly."
         icon="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
       /> }}
       {{ <tile
         title="Perceptual quality"
-        text="Fast perceptual image quality metrics and rigorous performance analysis, so quality holds up under scrutiny."
+        text="We evaluate every change against the best percetpual metrics."
         icon="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
         icon2="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
       /> }}
       {{ <tile
         title="Consulting"
-        text="On-site and off-site consulting for organizations that need image and video infrastructure at scale."
+        text="On-site and remote consulting on encoder selection, tuning, and image & video pipelines at scale."
         icon="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
       /> }}
     </div>
@@ -54,18 +53,19 @@
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Our product</span>
+      <span class="eyebrow">our product</span>
       <h2>Iris-WebP</h2>
       <p>
-        A faster, more efficient WebP encoder designed around the intricacies of
-        the human visual system, and evaluated under industry-leading
-        psychovisual metrics.
+        A WebP encoder tuned for the human visual system. Compared to
+        libwebp, the reference encoder, Iris-WebP produces smaller files at
+        the same visual quality and the same encode time. Full results
+        are on the Iris page.
       </p>
     </div>
     <div class="stats">
-      {{ <stat value="Up to 50%" label="Better compression than JPEG, cutting bandwidth and page load times." /> }}
-      {{ <stat value="Up to 17%" label="Better compression than the reference WebP encoder, libwebp." /> }}
-      {{ <stat value="Ubiquitous" label="WebP is supported everywhere, and served billions of times a day." /> }}
+      {{ <stat value="27%" label="Smaller files than libwebp at equal CVVDP score and equal speed. 13% by SSIMULACRA2, 29% by MS-SSIM." /> }}
+      {{ <stat value="26%" label="Smaller files than libjpeg-turbo at equal CVVDP score. 24% by SSIMULACRA2, 35% by MS-SSIM." /> }}
+      {{ <stat value="Drop-in" label="Output is standard WebP. Every browser that shows WebP today shows Iris output unchanged." /> }}
     </div>
     <div class="section-foot">
       <a href="{{ get_url(path='@/iris/_index.md') }}" class="btn--ghost">
@@ -80,7 +80,7 @@
   <div class="container">
     <div class="section-head">
       <h2>From the blog</h2>
-      <p>Research notes, encoder deep dives, and interviews from the compression world.</p>
+      <p>Encoder write-ups, metric comparisons, and interviews with people who work on compression.</p>
     </div>
     <div class="grid grid--3">
       {% for post in blog.pages[0:3] %}
@@ -99,8 +99,8 @@
   <div class="container">
     {% set about_url = get_url(path='@/about/_index.md') %}
     {{ <cta_band
-      title="Let's build a more beautiful Web"
-      text="Whether you'd like to license Iris-WebP or consult with us on compression infrastructure, we'd like to hear from you."
+      title="Talk to us"
+      text="We license Iris-WebP and take on consulting work. Send us a note about your image pipeline and we will reply."
       txt="Email Us"
       second_url={about_url}
       second_txt="About Halide"

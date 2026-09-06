@@ -7,7 +7,7 @@ generate_feeds = true
 feed_filenames = ["atom.xml"]
 title = "Halide Compression"
 author = "Halide Team"
-description = "Hi, we're Halide Compression."
+description = "Halide Compression builds image encoders and measurement tools. Iris-WebP produces smaller files than libwebp at equal quality and speed."
 
 [markdown]
 [markdown.highlighting]

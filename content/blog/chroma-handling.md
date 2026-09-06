@@ -199,34 +199,18 @@ _avifdec's PNG outputs crashed the `butteraugli_main` tool_
 Click the buttons to switch between decoding/post-processing options on this
 challenging image.
 
-{{ <image_switcher
-  id="chroma-decoder"
-  alt="Decoder comparison"
-  images={[
-    "/img/chroma_handling/cmp/original.png",
-    "/img/chroma_handling/cmp/jpegli.jpg",
-    "/img/chroma_handling/cmp/ffmpeg_filtered.png",
-    "/img/chroma_handling/cmp/djpegli.png",
-    "/img/chroma_handling/cmp/magick.png",
-    "/img/chroma_handling/cmp/ffmpeg.png",
-  ]}
-  labels={[
-    "Source",
-    "Your Browser",
-    "FFmpeg (filtered)",
-    "djpegli",
-    "magick",
-    "FFmpeg",
-  ]}
-  subtitles={[
-    "Source Image",
-    "cjpegli --chroma_subsampling 420 -d 1.0 original.png jpegli.jpg",
-    "ffmpeg -y -i jpegli.jpg -vf scale=flags=lanczos+accurate_rnd+full_chroma_int:param0=5,format=rgb24 -f image2 -update 1 -frames:v 1 ffmpeg_filtered.png",
-    "djpegli jpegli.jpg djpegli.png",
-    "magick jpegli.jpg magick.png",
-    "ffmpeg -y -i jpegli.jpg -pix_fmt rgb24 -f image2 -update 1 -frames:v 1 ffmpeg.png",
-  ]}
-/> }}
+{{ <image_switcher id="chroma-decoder" alt="Decoder comparison" images={[
+"/img/chroma_handling/cmp/original.png", "/img/chroma_handling/cmp/jpegli.jpg",
+"/img/chroma_handling/cmp/ffmpeg_filtered.png",
+"/img/chroma_handling/cmp/djpegli.png", "/img/chroma_handling/cmp/magick.png",
+"/img/chroma_handling/cmp/ffmpeg.png", ]} labels={[ "Source", "Your Browser",
+"FFmpeg (filtered)", "djpegli", "magick", "FFmpeg", ]} subtitles={[ "Source
+Image", "cjpegli --chroma_subsampling 420 -d 1.0 original.png jpegli.jpg",
+"ffmpeg -y -i jpegli.jpg -vf
+scale=flags=lanczos+accurate_rnd+full_chroma_int:param0=5,format=rgb24 -f image2
+-update 1 -frames:v 1 ffmpeg_filtered.png", "djpegli jpegli.jpg djpegli.png",
+"magick jpegli.jpg magick.png", "ffmpeg -y -i jpegli.jpg -pix_fmt rgb24 -f
+image2 -update 1 -frames:v 1 ffmpeg.png", ]} /> }}
 
 ## Conclusion
 

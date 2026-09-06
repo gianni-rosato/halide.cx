@@ -4,7 +4,9 @@ date = 2026-07-07
 description = "Faster perceptual video and image fidelity metrics."
 +++
 
-{{ <hero src="/img/ceiling.avif" width="1536" height="864" alt="Museum Ceiling" /> }}
+{{
+<hero src="/img/ceiling.avif" width="1536" height="864" alt="Museum Ceiling" />
+}}
 
 ## Why?
 

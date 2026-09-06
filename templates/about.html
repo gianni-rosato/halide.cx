@@ -5,10 +5,10 @@
   <div class="container">
     <h1 class="hero__title">About</h1>
     <p class="hero__lead">
-      Halide Compression was founded to address a core need that a vast quantity
-      of Web companies face: delivering high-quality images at scale is hard,
-      and new compression tech should make it easier, but often doesn't. We
-      develop solutions to this problem.
+      Serving good-looking images at scale is hard. New codecs promise to make
+      it easier and often do not, because the encoder matters more than the
+      format. Halide Compression builds encoders and measurement tools that
+      close that gap.
     </p>
   </div>
 </section>
@@ -16,12 +16,13 @@
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Services</span>
-      <h2>What We Can Do</h2>
+      <span class="eyebrow">services</span>
+      <h2>What we do</h2>
       <p>
-        At Halide Compression, our aim is to provide industry-leading products
-        and expert consulting services to help companies where multimedia
-        matters.
+        We license Iris-WebP, and we consult on codec optimization, custom
+        encoder development, and image and video pipelines. Past work includes
+        video compression for Fortune 10 clients and texture compression for
+        game studios.
       </p>
     </div>
 
@@ -31,32 +32,24 @@
       <div class="profile__bio flow">
         <p>
           <a href="https://giannirosato.com/" target="_blank" rel="noopener">Gianni Rosato</a>
-          is the multimedia compression engineer who founded Halide Compression.
-          With deep expertise in video and image codec development spanning AV1,
-          VP9, WebP, and emerging standards, Gianni specializes in building
-          high-performance encoding solutions from scratch as well as improving
-          image compression infrastructure at scale.
+          founded Halide Compression and wrote Iris-WebP. He has worked on AV1,
+          VP9, and WebP encoders, both building new ones and improving
+          existing ones.
         </p>
         <p>
-          Aside from creating our own Iris-WebP, Gianni started in multimedia
-          compression working on perceptual features for the SVT-AV1 video
-          encoder through SVT-AV1-PSY. This is where he began to work on
-          <a href="{{ get_url(path = "@/blog/improving-avif-in-open-source.md") }}">frontier image compression technology</a>,
-          eventually adopted by Google's reference AV1 encoder. His open-source
-          contributions also include developing fast perceptual image quality
-          metrics and advancing target-quality image compression. He also
-          co-founded The Codec Wiki, a technical resource dedicated to making
-          advanced compression concepts accessible to development teams. Since
-          working in open source, Gianni has been involved in contract work to
-          improve video compression solutions for Fortune 10 clients as well as
-          texture compression for game studios.
+          Gianni started in open source, adding perceptual features to the
+          SVT-AV1 video encoder through the SVT-AV1-PSY project. Work from that
+          project on
+          <a href="{{ get_url(path = "@/blog/improving-avif-in-open-source.md") }}">still-image tuning for AV1</a>
+          was later adopted by libaom, Google's reference AV1 encoder. He has
+          also written fast implementations of perceptual quality metrics and
+          target-quality encoding tools, and co-founded <a href="https://codecs.wiki" target="_blank">The Codec Wiki</a>, a
+          reference for engineers working with codecs.
         </p>
         <p>
-          Gianni's approach combines low-level systems programming in C, Zig,
-          and assembly with rigorous performance analysis. Based in Boston,
-          Gianni consults through us on codec optimization, custom encoder
-          development, and compression infrastructure for organizations
-          requiring state-of-the-art image and video processing solutions.
+          He works in C, Zig, and assembly, and measures every change against
+          perceptual metrics before shipping it. He is based in San Francisco
+          and consults through Halide Compression.
         </p>
       </div>
     </div>
@@ -67,8 +60,8 @@
   <div class="container">
     {% set iris_url = get_url(path='@/iris/_index.md') %}
     {{ <cta_band
-      title="Contact Us"
-      text="We are able to provide on-site and off-site consulting on-demand or on a schedule. If you'd like to license our products or consult with us, we are reachable at the address below. We hope to hear from you soon!"
+      title="Contact us"
+      text="Consulting is available on-site or remote, for a single engagement or on a schedule. For licensing or consulting, email us and describe the problem. We reply to every message."
       txt="Email Us"
       second_url={iris_url}
       second_txt="Explore Iris-WebP"

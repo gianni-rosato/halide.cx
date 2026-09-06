@@ -50,8 +50,7 @@
 .logo__word {
   font-family: var(--font-display);
   font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
   line-height: 1;
 }
 
@@ -125,7 +124,7 @@
 .main-nav.is-active a {
   font-size: var(--step-1);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--heading);
   padding-block: var(--space-3);
   border-bottom: 1px solid var(--border);
