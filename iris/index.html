@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iris | Halide Compression</title>
+    <meta name="description" content="Iris-WebP is a WebP encoder tuned for the human visual system. At equal encode time it produces files 27% smaller than libwebp by CVVDP, at equal quality.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Iris | Halide Compression">
+    <meta property="og:description" content="Iris-WebP is a WebP encoder tuned for the human visual system. At equal encode time it produces files 27% smaller than libwebp by CVVDP, at equal quality.">
+    <meta property="og:url" content="https://halide.cx/iris/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/iris/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a href="https://halide.cx/" class="logo">
+          <img src="https://halide.cx/img/halide_logo.svg" alt=""
+            class="logo__mark" width="24" height="24">
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/"
+            class="">About</a>
+          <a href="https://halide.cx/iris/"
+            class="is-current">Iris</a>
+          <a href="https://halide.cx/blog/"
+            class="">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+<section class="hero">
+  <div class="container">
+    <h1 class="hero__title">Iris</h1>
+    <p class="hero__lead">
+      Iris-WebP is a WebP encoder tuned for how people see images. At the
+      same encode time as libwebp's default setting, it produces files
+      up to 27% smaller at equal quality. The output is standard WebP and
+      decodes everywhere WebP already does.
+    </p>
+    <div class="actions hero__actions">
+      <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+      <a href="https://halide.cx/blog/introducing-iris/"
+        class="btn btn--secondary">Read the announcement</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="stats">
+      <div class="stat">
+  <span class="stat__value">27%</span>
+  <span class="stat__label">Smaller than libwebp (method 4) at equal quality (CVVDP) and equal encode time.</span>
+</div>
+      <div class="stat">
+  <span class="stat__value">26%</span>
+  <span class="stat__label">Smaller than libjpeg-turbo at equal quality (CVVDP), and 31% smaller than jpegli by the same measure.</span>
+</div>
+      <div class="stat">
+  <span class="stat__value">40%</span>
+  <span class="stat__label">Faster than libwebp&#39;s slowest setting (method 6), while still producing 22% smaller files at identical quality.</span>
+</div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">why Iris</span>
+      <h2>A Better WebP Encoder</h2>
+      <p>
+        WebP is supported by every major browser, and large sites serve
+        billions of WebP images every day. Iris-WebP keeps the format and replaces
+        the encoder. Switching means smaller files at the quality you already
+        ship, or higher quality at the file sizes you already pay for, with no
+        change to decoders, CDNs, or markup.
+      </p>
+    </div>
+    <div class="grid grid--3">
+      <div class="tile">
+  <svg
+    class="tile__icon"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    aria-hidden="true"
+  >
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+    
+  </svg>
+  <h3>Speed</h3>
+  <p>Iris-WebP has seven speed settings. Its slowest encodes a Kodak image in 72 ms against 118 ms for libwebp&#39;s slowest, and its fastest runs in 13 ms.</p>
+</div>
+      <div class="tile">
+  <svg
+    class="tile__icon"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    aria-hidden="true"
+  >
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75V12m0 0l4.754 4.754M12 12L7.246 16.754M12 12v2.25m0-12a9 9 0 110 18 9 9 0 010-18zm0 12.75a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
+    
+  </svg>
+  <h3>Efficiency</h3>
+  <p>At matched speed, Iris-WebP beats libwebp on every perceptual metric we track: CVVDP, SSIMULACRA2, MS-SSIM, IW-SSIM, and even VMAF.</p>
+</div>
+      <div class="tile">
+  <svg
+    class="tile__icon"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    aria-hidden="true"
+  >
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    
+  </svg>
+  <h3>Tradeoffs</h3>
+  <p>Iris-WebP&#39;s default perceptual tune is not as performant on legacy metrics (SSIM, PSNR).</p>
+</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">comparisons</span>
+      <h2>See the difference</h2>
+      <p>
+        Each image is encoded to the same file size.
+        The captions list the size and metric scores. Higher is better
+        for SSIMULACRA2 and CVVDP, and lower is better for Butteraugli.
+      </p>
+    </div>
+
+    <section class="image-switcher">
+      <h3>Preserving fine detail</h3>
+      <p>
+        Switch between encoders with the buttons. libwebp smooths away the
+        texture in the trees, while Iris-WebP and libjpegli keep it.
+      </p>
+      
+      <p class="image-caption">Encoded Feb 2026</p>
+      
+      <div
+        id="iris-switcher"
+        class="image-container"
+        data-image-switcher
+        data-alt="Iris-WebP comparison: a mountain vista"
+        data-images='["/img/vista-cwebp.webp","/img/vista-iris.webp","/img/vista.jpg","/img/vista-src.webp"]'
+        data-subtitles='["46,722 bytes | 60.74 SSIMULACRA2 | 1.68 Butteraugli (3-norm, i203) | 9.253 CVVDP","46,340 bytes | 70.45 SSIMULACRA2 | 1.60 Butteraugli (3-norm, i203) | 9.410 CVVDP","46,342 bytes | 68.73 SSIMULACRA2 | 1.63 Butteraugli (3-norm, i203) | 9.337 CVVDP","952,584 bytes"]'
+        data-labels='["libwebp","Iris-WebP","libjpegli","Source"]'
+      ></div>
+    </section>
+
+    <section class="image-switcher">
+      <h3>Avoiding distortion</h3>
+      <p>
+        The opposite happens here. libjpegli distorts flat regions badly, and
+        both WebP encoders hold up. This image shows why we do not tune for one
+        metric or one image.
+      </p>
+      
+      <p class="image-caption">Encoded Feb 2026</p>
+      
+      <div
+        id="iris-switcher2"
+        class="image-container"
+        data-image-switcher
+        data-alt="Iris-WebP comparison: a museum interior"
+        data-images='["/img/museum-cwebp.webp","/img/museum-iris.webp","/img/museum.jpg","/img/museum-src.webp"]'
+        data-subtitles='["38,466 bytes | 72.60 SSIMULACRA2 | 1.47 Butteraugli (3-norm, i203) | 9.67 CVVDP","38,432 bytes | 74.46 SSIMULACRA2 | 1.39 Butteraugli (3-norm, i203) | 9.69 CVVDP","38,440 bytes | 59.62 SSIMULACRA2 | 2.04 Butteraugli (3-norm, i203) | 9.37 CVVDP","648,952 bytes"]'
+        data-labels='["libwebp","Iris-WebP","libjpegli","Source"]'
+      ></div>
+    </section>
+  </div>
+</section>
+
+<section class="band">
+  <div class="container">
+    <section class="metric-switcher">
+      <div class="section-head">
+        <h2>Metrics</h2>
+        <p>
+          The numbers below were aggregated using the <a
+            href="https://github.com/MohamedBakrAli/Kodak-Lossless-True-Color-Image-Suite/tree/master/PhotoCD_PCD0992"
+          >Kodak Lossless True Color Image Suite</a> at medium to high fidelity.
+        </p>
+      </div>
+      
+      <p class="image-caption">Measured Aug 2026</p>
+      
+      <div
+        id="metrics-switcher"
+        class="image-container"
+        data-image-switcher
+        data-alt="Iris-WebP quality metrics"
+        data-images='["/img/metrics/CVVDP.svg","/img/metrics/IW-SSIM.svg","/img/metrics/SSIMULACRA2.svg","/img/metrics/MS-SSIM.svg","/img/metrics/PSNR.svg"]'
+        data-subtitles='["CVVDP","IW-SSIM","SSIMULACRA2","MS-SSIM","PSNR"]'
+        data-labels='["CVVDP","IW-SSIM","SSIMULACRA2","MS-SSIM","PSNR"]'
+      ></div>
+    </section>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">licensing</span>
+      <h2>Using Iris-WebP</h2>
+    </div>
+    <div class="measure flow">
+      <p>
+        Iris-WebP is licensed commercially. A license includes the encoder,
+        new releases, maintenance fixes, and direct support from us.
+      </p>
+      <p>
+        If you want to test it on your own images before deciding, email us
+        with a sample and the encoder settings you use today. We will send
+        back a size and metric comparison.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="cta-band">
+  <h2>Test Iris-WebP on your images</h2>
+  <p>Send us a few representative images and your current encoder settings. We will reply with file sizes and metric scores from Iris-WebP.</p>
+  <div class="actions actions--center">
+    <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+    
+  </div>
+</div>
+  </div>
+</section>
+
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <a href="https://halide.cx/" class="logo">
+              <img src="https://halide.cx/img/halide_logo.svg" alt=""
+                class="logo__mark" width="24" height="24">
+              <span class="logo__word">Halide Compression</span>
+            </a>
+            <p class="site-footer__blurb">
+                Frontier compression technology for a more beautiful Internet.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Site</h2>
+            <ul>
+              <li><a href="https://halide.cx/about/">About</a></li>
+              <li><a href="https://halide.cx/iris/">Iris</a></li>
+              <li><a href="https://halide.cx/blog/">Blog</a></li>
+              <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Contact</h2>
+            <ul>
+              <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+              <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

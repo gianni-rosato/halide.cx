@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Limitations of Perceptual Metrics | Halide Compression</title>
+    <meta name="description" content="As encoders mature, metrics become less valuable.">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Limitations of Perceptual Metrics | Halide Compression">
+    <meta property="og:description" content="As encoders mature, metrics become less valuable.">
+    <meta property="og:url" content="https://halide.cx/blog/metric-limits/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/blog/metric-limits/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a href="https://halide.cx/" class="logo">
+          <img src="https://halide.cx/img/halide_logo.svg" alt=""
+            class="logo__mark" width="24" height="24">
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/"
+            class="">About</a>
+          <a href="https://halide.cx/iris/"
+            class="">Iris</a>
+          <a href="https://halide.cx/blog/"
+            class="is-current">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+<article class="section">
+  <div class="container">
+    <div class="post">
+      <header class="post-header">
+      <span class="eyebrow">
+        September 05, 2026 &middot; The Halide Team
+      </span>
+      <h1 class="post-header__title">Limitations of Perceptual Metrics</h1>
+      
+      <p class="lead">As encoders mature, metrics become less valuable.</p>
+      
+    </header>
+
+      <div class="prose">
+      <figure class="post-hero">
+  <img
+    src="https://halide.cx/img/fsky-hdr.avif"
+    alt="Sky Before Sunset"
+    width="1536"
+    height="864"
+    decoding="async"
+  >
+</figure>
+<p>Maturity is hard to define, but we believe Iris-WebP qualifies: it turned one
+year old in May. SVT-AV1 and libaom also qualify, and certainly libwebp and
+libjpeg. Over that year, our workflow has had to adapt to the encoder's growing
+capabilities. As we work on our upcoming encoder codenamed Aperture, those
+lessons are more relevant than ever.</p>
+<h2 id="discovery">Discovery</h2>
+<p>Early in Iris-WebP's development cycle,
+<a rel="external" href="https://codecs.wiki/docs/metrics/SSIMULACRA2">SSIMULACRA2</a> guided a lot of our
+development decisions. This worked well for the majority of the encoder's
+history, driving consistent perceptual gains over libwebp as we introduced new
+features. However, we began to notice the limits of this approach as our
+evaluation framework became more advanced and SSIMULACRA2 scores diverged from
+other metrics.</p>
+<p>Here are the properties of SSIMULACRA2 that affected us most:</p>
+<ul>
+<li>The metric was tuned on subjective human ratings and has some "weights and
+biases" that work well on its training dataset</li>
+<li>It leverages multi-scale distortion with weighted score averaging, so
+distortion at different scales affects its performance</li>
+<li>SSIMULACRA2 loses its strong perceptual correlation below medium fidelity
+(SSIMU2 ~65-70)</li>
+<li>It measures distortion in the color channels</li>
+</ul>
+<p>We believe these factors put Iris-WebP in a unique position to overfit. There is
+no subjective image distortion dataset available that we know of using a WebP
+encoder that isn't libwebp, so artifacts that the reference encoder doesn't
+naturally produce risk being blind spots for any trained metric.</p>
+<p>We discovered that SSIMULACRA2 accurately rewarded good mode decision changes
+for 4x4 blocks, but it encouraged blocking artifacts. These are rare in
+libwebp's output; it was tuned for PSNR and SSIM, metrics that reward smoothing
+more than modern perceptual metrics do. Artifacts from 8x8 blocking are common
+in JPEG, but 4x4 blocking lands on SSIMULACRA2's finest distortion scale, which
+its subjective training data likely gave it little reason to weight heavily.</p>
+<section class="image-switcher">
+  <div
+    id="image-switcher-i4-blocking-src"
+    class="image-container"
+    data-image-switcher
+    data-alt="4x4 Blocking Source Images"
+    data-images='["/img/metric-limits/block-og.webp","/img/metric-limits/noblock-og.webp","/img/metric-limits/ripples.webp"]'
+    data-subtitles='["Size: 54068\nbytes | SSIMU2: 36.33","Size: 54732 bytes | SSIMU2: 30.14","Size: 1501760\nbytes"]'
+    data-labels='["Blocking","No Blocking","Source"]'
+  ></div>
+</section>
+<p>At a normal viewing distance, the "Blocking" image likely looks better. However:</p>
+<section class="image-switcher">
+  <div
+    id="image-switcher-i4-blocking"
+    class="image-container"
+    data-image-switcher
+    data-alt="4x4 Blocking Artifacts"
+    data-images='["/img/metric-limits/block.webp","/img/metric-limits/noblock.webp"]'
+    data-subtitles='["Original Image Size: 54068 | SSIMU2:\n36.33","Original Image Size: 54732 | SSIMU2: 30.14"]'
+    data-labels='["Blocking","No Blocking"]'
+  ></div>
+</section>
+<p>Thus, the goal becomes striking a balance between macro-scale detail and
+finer-grained artifacting.</p>
+<blockquote>
+<p><em>Note: The images above were crafted to showcase the effect of 4x4 blocking on
+SSIMULACRA2 &amp; don't represent Iris's default behavior at any point during
+development.</em></p>
+</blockquote>
+<p>While 4x4 blocking was the main culprit, we also saw strange behavior at low
+fidelity, where the encoder would look just as bad as other encoders but score
+much better. Low fidelity is hard because nothing looks good, but we still want
+to look better in that range, and visual checks confirmed SSIMULACRA2 couldn't
+drive this.</p>
+<p>Lastly, SSIMULACRA2 over-values chroma relative to both our own eyes and other
+metrics. While color quality is important and early testing showed SSIMULACRA2
+helping to provide meaningful perceptual gains, this advantage went away as
+gains became smaller and harder to verify visually.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>For a long time, our default Iris tune was designed primarily around
+SSIMULACRA2. Since March, we've used a more perceptually aligned default tune
+based on a combination of metrics that still include SSIMULACRA2. We've updated
+our metrics on the Iris page to showcase the difference</p>
+<p>Spotting these issues early was a motivator for developing
+<a href="/blog/fcvvdp">fcvvdp</a>, which we currently believe is the strongest perceptual
+image metric available. To be clear, the underlying
+<a rel="external" href="https://arxiv.org/html/2401.11485">CVVDP algorithm</a> comes from the University
+of Cambridge; fcvvdp is our implementation.</p>
+<p>Re-aligning our benchmarking was easy; delivering real perceptual gains in an
+efficient encoder without overfitting remains hard. Incremental gains are hard
+to see by eye, so perceptual drift appears slowly — especially when the encoder
+is already ahead.</p>
+<p>Aperture has a larger set of coding tools available, which means more
+opportunities for pitfalls. We don't ship encoders to clients without looking
+beyond the metrics, so we are taking extra steps to ensure Aperture is
+perceptually excellent before a public release. We believe in a more beautiful
+Internet, and we hope to continue to be maximally scrutinizing as we pursue that
+goal.</p>
+<div class="call-to-action">
+  <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+</div>
+
+    </div>
+
+      <nav class="post-nav" aria-label="More posts">
+      
+      <a class="post-nav__item" href="https://halide.cx/blog/fmetrics/">
+        <span class="post-nav__dir">&larr; Older</span>
+        <span class="post-nav__title">Introducing fmetrics</span>
+      </a>
+      
+
+      
+    </nav>
+    </div>
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <a href="https://halide.cx/" class="logo">
+              <img src="https://halide.cx/img/halide_logo.svg" alt=""
+                class="logo__mark" width="24" height="24">
+              <span class="logo__word">Halide Compression</span>
+            </a>
+            <p class="site-footer__blurb">
+                Frontier compression technology for a more beautiful Internet.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Site</h2>
+            <ul>
+              <li><a href="https://halide.cx/about/">About</a></li>
+              <li><a href="https://halide.cx/iris/">Iris</a></li>
+              <li><a href="https://halide.cx/blog/">Blog</a></li>
+              <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Contact</h2>
+            <ul>
+              <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+              <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
