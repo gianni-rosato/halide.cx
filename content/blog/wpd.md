@@ -14,7 +14,7 @@ time, wpd can't just maintain the status quo for speed; it offers superior
 single-threaded performance, and parallelizes better across multiple threads
 compared to alternatives.
 
-Source code: https://github.com/halidecx/wpd
+Source code: [https://github.com/halidecx/wpd](https://github.com/halidecx/wpd)
 
 ## Safety
 
