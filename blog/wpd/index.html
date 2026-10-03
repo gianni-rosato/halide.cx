@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Introducing wpd | Halide Compression</title>
+    <meta name="description" content="Faster, safer WebP decoding for everyone.">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Introducing wpd | Halide Compression">
+    <meta property="og:description" content="Faster, safer WebP decoding for everyone.">
+    <meta property="og:url" content="https://halide.cx/blog/wpd/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/blog/wpd/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a href="https://halide.cx/" class="logo">
+          <img src="https://halide.cx/img/halide_logo.svg" alt=""
+            class="logo__mark" width="24" height="24">
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/"
+            class="">About</a>
+          <a href="https://halide.cx/iris/"
+            class="">Iris</a>
+          <a href="https://halide.cx/blog/"
+            class="is-current">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+<article class="section">
+  <div class="container">
+    <div class="post">
+      <header class="post-header">
+      <span class="eyebrow">
+        October 02, 2026 &middot; The Halide Team
+      </span>
+      <h1 class="post-header__title">Introducing wpd</h1>
+      
+      <p class="lead">Faster, safer WebP decoding for everyone.</p>
+      
+    </header>
+
+      <div class="prose">
+      <figure class="post-hero">
+  <img
+    src="https://halide.cx/img/building.avif"
+    alt="Building"
+    width="1536"
+    height="864"
+    decoding="async"
+  >
+</figure>
+<p>wpd is a faster, safer WebP decoder than libwebp, designed to help secure the
+Web from vulnerabilities like
+<a rel="external" href="https://nvd.nist.gov/vuln/detail/cve-2023-4863">CVE-2023-4863</a>. At the same
+time, wpd can't just maintain the status quo for speed; it offers superior
+single-threaded performance, and parallelizes better across multiple threads
+compared to alternatives.</p>
+<p>Source code: <a rel="external" href="https://github.com/halidecx/wpd">https://github.com/halidecx/wpd</a></p>
+<h2 id="safety">Safety</h2>
+<p>Image decoders and other image processing libraries are used everywhere, from
+the OS level to sandboxed browser processes. They also process complex untrusted
+input data, which makes them vulnerable to memory safety bugs. CVE-2023-4863
+affected potentially billions of devices running Chrome, Firefox, Signal,
+Microsoft Teams, and more – CISA confirmed it was actively exploited in the
+wild, and it was added to their Known Exploited Vulnerabilities catalog
+thereafter. Vulnerabilities like these have serious consequences for nearly all
+consumer hardware.</p>
+<p>While libwebp is likely safer than it was in the past, it does not "solve"
+memory safety by being well-fuzzed. According to the Chromium team,
+<a rel="external" href="https://www.chromium.org/Home/chromium-security/memory-safety/">around 70%</a> of
+their high-severity security bugs come from memory safety issues.</p>
+<p>To address this, wpd is written in Rust, with handwritten assembly routines for
+performance. The handwritten SIMD present in the decoder is carefully scoped and
+checked for correctness, and largely exists in less risky places. Nonetheless,
+for consumers looking to harden their environments, wpd can be compiled without
+handwritten assembly; this leaves the non-SIMD code we've written entirely
+verifiably memory-safe, with the only unsafe code being in the vetted
+<a rel="external" href="https://docs.rs/zerocopy/latest/zerocopy/">zerocopy</a> crate. This is a marked
+improvement over libwebp, which is written entirely in unsafe C with SIMD
+intrinsics.</p>
+<h3 id="performance">Performance</h3>
+<p>It isn't enough to just be safer;
+<a rel="external" href="https://crates.io/crates/image-webp">image-webp</a> already has that covered. We
+also needed to make wpd faster, so safety did not come with compromised
+performance.</p>
+<p>We benchmarked wpd on a subset of our
+<a rel="external" href="https://github.com/halidecx/wpd-test-data">developer test data</a>, and compared
+to libwebp, it is:</p>
+<ul>
+<li>1-thread, lossy: <strong>1.19x</strong> faster</li>
+<li>1-thread, lossless: <strong>2.74x</strong> faster</li>
+<li>multi-thread, lossy: <strong>2.68x</strong> faster</li>
+<li>multi-thread, lossless: <strong>3.19x</strong> faster</li>
+</ul>
+<p>Because our test suite mixes animated WebP content with still content, our
+multi-threaded results take advantage of parallel image decoding which results
+in more impressive gains there. Our single-threaded advantage is pure
+algorithmic improvement.</p>
+<section class="image-switcher">
+  <div
+    id="image-switcher-wpd-single-thread"
+    class="image-container"
+    data-image-switcher
+    data-alt="Single-threaded WPD and libwebp
+decoding benchmark comparison"
+    data-images='["/img/wpd/lossy-single.svg","/img/wpd/lossless-single.svg"]'
+    data-subtitles='["Single-threaded lossy decoding","Single-threaded lossless\ndecoding"]'
+    data-labels='["Lossy","Lossless"]'
+  ></div>
+</section>
+<section class="image-switcher">
+  <div
+    id="image-switcher-wpd-multi-thread"
+    class="image-container"
+    data-image-switcher
+    data-alt="Multi-threaded WPD and libwebp
+decoding benchmark comparison"
+    data-images='["/img/wpd/lossy-multi.svg","/img/wpd/lossless-multi.svg"]'
+    data-subtitles='["Multi-threaded lossy decoding","Multi-threaded lossless decoding"]'
+    data-labels='["Lossy","Lossless"]'
+  ></div>
+</section>
+<p>These numbers come from our benchmarking harness in the wpd repository, using
+image-webp 0.2.4 and libwebp <code>a1d89ff</code>.</p>
+<h3 id="features">Features</h3>
+<p>Feature parity with libwebp is a target for wpd as well, as every use case that
+relies on libwebp deserves an upgrade. Compared to image-webp, wpd is a proper
+libwebp replacement, with some additional features included on top:</p>
+<table><thead><tr><th>Decoder feature</th><th style="text-align: center">image-webp</th><th style="text-align: center">libwebp</th><th style="text-align: center">wpd</th></tr></thead><tbody>
+<tr><td>Lossy WebP</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Lossless WebP</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Alpha transparency</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Animation with composited frames</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Animation durations and loop count</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Animation rewind/reset</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Raw animation subframe decoding</td><td style="text-align: center">☐</td><td style="text-align: center">⚠¹</td><td style="text-align: center">☑</td></tr>
+<tr><td>Per-frame geometry, blend, disposal inspection without decoding</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Image dimensions and alpha inspection without decoding</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>ICC, EXIF, and XMP extraction</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>RGB/RGBA output</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>BGR/BGRA/ARGB output</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Premultiplied alpha output</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>YUV420P output</td><td style="text-align: center">⚠²</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>YUVA420P output</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>RGB565 and RGBA4444 output</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>BGR565 and BGRA4444 output</td><td style="text-align: center">☐</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td></tr>
+<tr><td>Built-in cropping</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Built-in scaling</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Scaling with automatic aspect-ratio preservation</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Vertical flip</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Selectable simple/fancy chroma upsampling</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Optional bypass of lossy in-loop filtering</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Color/alpha dithering controls</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☐</td></tr>
+<tr><td>Incremental decoding via appended bytes</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Incremental decoding via cumulative borrowed buffer</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Access to completed rows before still-image decode finishes</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Caller-owned output buffer</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Configurable output strides, including negative strides</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Internal multithreaded decoding</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Explicit thread-count setting</td><td style="text-align: center">☐</td><td style="text-align: center">☐³</td><td style="text-align: center">☑</td></tr>
+<tr><td>Parallel animation frame decode-ahead</td><td style="text-align: center">☐</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td></tr>
+<tr><td>Configurable pixel-count limit before frame allocation/decode</td><td style="text-align: center">☐</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td></tr>
+<tr><td>Explicit optimized SIMD implementations</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>C ABI</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td><td style="text-align: center">☑</td></tr>
+<tr><td>Rust API</td><td style="text-align: center">☑</td><td style="text-align: center">☐</td><td style="text-align: center">☑</td></tr>
+</tbody></table>
+<ol>
+<li>Requires demuxing the frame payload and passing it to the image decoder. Its
+animation decoder returns composited canvases.</li>
+<li>Exposed by its low-level VP8 decoder; the caller must extract the VP8 payload
+from the WebP container. Its complete WebP decoder outputs RGB/RGBA.</li>
+<li>Exposes a boolean to enable threading, rather than a requested thread count.</li>
+</ol>
+<p>Format and processing rows describe still-image capabilities. libwebp includes
+libwebpdemux; its composited animation API supports fewer formats and options.
+wpd’s subframe mode excludes crop/scale/flip, and its partial-row API excludes
+animations and transformed output.</p>
+<h3 id="goals">Goals</h3>
+<p>We want to give back to open source as much as possible. This project is our
+third addition to our open source catalogue, joining <a href="/blog/fcvvdp">fcvvdp</a> and
+<a href="/blog/fmetrics">fmetrics</a>. Our release of wpd means we officially have more
+major open source projects than closed source (Iris-WebP and the currently
+unreleased Aperture). We'd like this ratio to grow even more skewed toward open
+source in the future, and we'll always commit to supporting our open work as
+first-class support targets, no different from our closed encoders.</p>
+<p>To further our security goals for wpd, we are exploring partnerships with
+cybersecurity firms who are interested in securing the world's most critical
+software. We'd like everyone to use wpd for free today; if there's anything
+stopping you, don't hesitate to let us know what it is and we'll address it (or,
+push some code yourself!).</p>
+<p>We look forward to seeing people pick up wpd. It is under the most permissive
+open source license we can manage, BSD 2-Clause. If you've been following our
+developments, you'll be hearing from us again soon, so stay tuned – we hope you
+find wpd valuable!</p>
+<div class="call-to-action">
+  <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+</div>
+
+    </div>
+
+      <nav class="post-nav" aria-label="More posts">
+      
+      <a class="post-nav__item" href="https://halide.cx/blog/metric-limits/">
+        <span class="post-nav__dir">&larr; Older</span>
+        <span class="post-nav__title">Limitations of Perceptual Metrics</span>
+      </a>
+      
+
+      
+    </nav>
+    </div>
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <a href="https://halide.cx/" class="logo">
+              <img src="https://halide.cx/img/halide_logo.svg" alt=""
+                class="logo__mark" width="24" height="24">
+              <span class="logo__word">Halide Compression</span>
+            </a>
+            <p class="site-footer__blurb">
+                Frontier compression technology for a more beautiful Internet.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Site</h2>
+            <ul>
+              <li><a href="https://halide.cx/about/">About</a></li>
+              <li><a href="https://halide.cx/iris/">Iris</a></li>
+              <li><a href="https://halide.cx/blog/">Blog</a></li>
+              <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Contact</h2>
+            <ul>
+              <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+              <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
