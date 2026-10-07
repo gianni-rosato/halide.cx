@@ -27,7 +27,7 @@ image encoder.
 Over a year ago, our research began with Iris-WebP. Extending our methodology
 and the techniques we've discovered to a vastly larger set of coding tools
 brings us to Iris-AVIF, where we've achieved state of the art results and
-produced a world class image encoder that represents the frontier of image
+produced a world-class image encoder that represents the frontier of image
 compression efficiency.
 
 {{ <image_switcher id="iris-avif-metrics"
@@ -45,7 +45,7 @@ time ago, while the best AV1 encoders continue to improve today. The two leading
 encoders (SVT-AV1 and libaom) are developed by massive companies with incredible
 resources, and lots of attention is put into AVIF.
 
-To compete at the frotier of image compression with Iris-WebP as a base, we had
+To compete at the frontier of image compression with Iris-WebP as a base, we had
 to go beyond what we initially thought was possible and experiment liberally
 with AV1's broad set of intra-coding tools to produce the best AVIF images.
 AV1's intra-coding toolset is wildly versatile; we've seen and even
@@ -74,7 +74,7 @@ WebP. Because of these tools, Iris-AVIF is a uniquely intelligent encoder.
 
 Iris-AVIF intelligently detects whether an image contains a grain pattern it can
 reproduce synthetically, and then determines exactly how much. It can flexibly
-emulate anything from course film grain to fine digital chroma noise, without
+emulate anything from coarse film grain to fine digital chroma noise, without
 manual intervention.
 
 {{ <image_switcher id="iris-avif-grain"
@@ -93,7 +93,7 @@ tricks.
 
 AVIF supports HDR natively, and we're excited to support it in Iris-AVIF.
 Iris-AVIF's performance is a highlight; notice below how Iris retains the lines
-on the bottom building better at one fifth the speed of SVT-AV1.
+on the bottom building better than SVT-AV1 while being 5 times faster.
 
 {{ <image_switcher id="iris-avif-hdr" images={["/img/iris-avif/sf-t-iris.avif",
 "/img/iris-avif/sf-t-svt.avif", "/img/iris-avif/sf-t.png"]}
@@ -109,15 +109,15 @@ adaptation, and efficient reproduction. While Iris-WebP is still versatile,
 Iris-AVIF is intelligent in its ability to understand and adapt to the content
 it encounters.
 
-## Peceptual alignment
+## Perceptual alignment
 
 Iris-AVIF is our most perceptually optimized encoder, and places the preferences
 of the human eye first. We ran into some of the
 [limitations of perceptual metrics](/blog/metric-limits) early in its
-development, and as even Iris-WebP reached maturity that metrics failed to
-reward, it became clear a strong perceptual tune should be available upon
-release. We took extra time to make sure it was up to our standards before this
-announcement.
+development, and as Iris-WebP achieved perceptual improvements that metrics
+failed to reward, it became clear a strong perceptual tune should be available
+upon release. We took extra time to make sure it was up to our standards before
+this announcement.
 
 Perceptual fidelity remains top of mind in our mission to produce a more
 beautiful Web, but we understand that subjective methodology has limitations.
