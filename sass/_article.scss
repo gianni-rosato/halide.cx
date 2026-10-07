@@ -153,6 +153,22 @@
   margin-inline: auto;
 }
 
+.post .prose .image-switcher > .image-container {
+  margin-block: 2.5rem;
+}
+
+.post .prose .image-switcher-container img {
+  margin-block: 0;
+}
+
+.post .prose > .image-switcher:not(:has(> h3)) {
+  margin-top: var(--space-4);
+}
+
+.post .prose .image-switcher > .image-container:first-child .image-switcher-container {
+  margin-top: 0;
+}
+
 .prose p:has(> img:only-child) {
   text-align: center;
 }
@@ -165,13 +181,9 @@
   text-align: center;
 }
 
-/* Figures, charts and switchers break out past the reading column so wide
-   graphics stay legible without widening the text itself. The column is
-   centered, so equal negative margins keep the breakout centered too. */
 @media (min-width: 1080px) {
   .post .prose > figure,
   .post .prose > .image-container,
-  .post .prose > .image-switcher,
   .post .prose > p:has(> img:only-child) {
     --breakout: min(64rem, 100vw - 2 * var(--gutter));
 
@@ -179,8 +191,6 @@
     margin-inline: calc((100% - var(--breakout)) / 2);
   }
 }
-
-/* --- Tables -------------------------------------------------------------- */
 
 .prose .table-wrap,
 .prose table {
