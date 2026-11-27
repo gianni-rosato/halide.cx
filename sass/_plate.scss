@@ -1,0 +1,436 @@
+/* ==========================================================================
+   Plates — the image collages.
+
+   A plate is a grid (--cols × --rows, set inline as --dcols/--drows, with
+   optional --mcols/--mrows for small screens). Windows are cut into it at
+   grid coordinates and each one shows the same photograph, in the same
+   place, at a different fidelity:
+
+     .win--photo  the decoded image, untouched
+     .win--blur   the low frequencies: blurred, gradient-mapped, grained
+     .win--bits   the image as a field of glyphs
+   Blur and bits windows are canvases painted by js/plates.js from the
+   pixels under them; nothing is filtered or blended live.
+
+   Every window's media is sized to the whole frame (by default the whole
+   plate) and offset by the window's own position, so a bits window laid
+   over a photo window continues the picture rather than repeating it.
+   js/plates.js also draws the dashed guides along every window edge.
+
+   Markup comes from the `win` component in templates/components.html.
+   ========================================================================== */
+
+.plate {
+  --blur: 0.026;
+  --cols: var(--dcols, 12);
+  --rows: var(--drows, 8);
+  --guide-c: var(--ink-guide);
+  --handle-c: var(--on-ink);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: var(--ar, 12 / 8);
+  min-height: var(--min-h, 0);
+  /* aspect-ratio would otherwise turn min-height into a min-width and push
+     the plate past the viewport; the clamp lets only the height grow. */
+  max-width: 100%;
+  background-color: var(--ink);
+  color: var(--on-ink);
+}
+
+/* Two plates in a row: a dashed seam, as above the footer, keeps them
+   from reading as one field. Drawn over the windows. */
+.plate + .plate::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 9;
+  height: 1px;
+  background-image: repeating-linear-gradient(to right, var(--ink-guide) 0 4px, transparent 4px 9px);
+  pointer-events: none;
+}
+
+/* A plate laid straight onto paper: no ground, dark guides and handles. */
+.plate--paper {
+  --guide-c: var(--guide);
+  --handle-c: var(--ink);
+
+  background-color: transparent;
+  color: inherit;
+}
+
+.plate__field {
+  position: absolute;
+  inset: 0;
+}
+
+/* --- Windows ------------------------------------------------------------- */
+
+.win {
+  --x: var(--dx, 0);
+  --y: var(--dy, 0);
+  --w: var(--dw, 1);
+  --h: var(--dh, 1);
+  --fx: var(--dfx, 0);
+  --fy: var(--dfy, 0);
+  --fw: var(--dfw, var(--cols));
+  --fh: var(--dfh, var(--rows));
+
+  position: absolute;
+  z-index: var(--z, 1);
+  left: calc(var(--x) / var(--cols) * 100%);
+  top: calc(var(--y) / var(--rows) * 100%);
+  width: calc(var(--w) / var(--cols) * 100%);
+  height: calc(var(--h) / var(--rows) * 100%);
+}
+
+.win__clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* The frame-sized image, shifted so only this window's part shows. */
+.win__media {
+  position: absolute;
+  max-width: none;
+  width: calc(var(--fw) / var(--w) * 100%);
+  height: calc(var(--fh) / var(--h) * 100%);
+  left: calc((var(--fx) - var(--x)) / var(--w) * 100%);
+  top: calc((var(--fy) - var(--y)) / var(--h) * 100%);
+  object-fit: cover;
+  object-position: var(--pos, 50% 50%);
+}
+
+.win--photo {
+  z-index: var(--z, 2);
+}
+
+/* Painted windows wait on their ground, then fade in once drawn. */
+.win--blur .win__clip,
+.win--bits .win__clip {
+  background-color: var(--glyph-ground);
+}
+
+.win__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+
+.is-drawn .win__canvas {
+  opacity: 1;
+}
+
+.win--bits {
+  z-index: var(--z, 3);
+}
+
+/* Selection handles: a small square on each corner, drawn with four
+   one-colour gradients so a single pseudo-element covers all of them. */
+.win--photo::before,
+.win--bits::before,
+.win--handles::before {
+  --hs: var(--handle);
+
+  content: "";
+  position: absolute;
+  z-index: 5;
+  inset: calc(var(--hs) / -2);
+  pointer-events: none;
+  background:
+    linear-gradient(var(--handle-c) 0 0) 0 0 / var(--hs) var(--hs) no-repeat,
+    linear-gradient(var(--handle-c) 0 0) 100% 0 / var(--hs) var(--hs) no-repeat,
+    linear-gradient(var(--handle-c) 0 0) 0 100% / var(--hs) var(--hs) no-repeat,
+    linear-gradient(var(--handle-c) 0 0) 100% 100% / var(--hs) var(--hs) no-repeat;
+}
+
+.win.win--bare::before {
+  content: none;
+}
+
+/* --- Guides (inserted by js/plates.js) ----------------------------------- */
+
+.plate__guides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.plate__guide {
+  position: absolute;
+}
+
+.plate__guide--v {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-image: repeating-linear-gradient(to bottom, var(--guide-c) 0 4px, transparent 4px 9px);
+}
+
+.plate__guide--h {
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: repeating-linear-gradient(to right, var(--guide-c) 0 4px, transparent 4px 9px);
+}
+
+/* --- Text set into a plate ----------------------------------------------- */
+
+.plate__content {
+  --cx: var(--dcx, 1);
+  --cy: var(--dcy, 1);
+  --cw: var(--dcw, 6);
+
+  position: absolute;
+  z-index: 8;
+  left: calc(var(--cx) / var(--cols) * 100%);
+  top: calc(var(--cy) / var(--rows) * 100%);
+  width: calc(var(--cw) / var(--cols) * 100%);
+}
+
+.plate h1,
+.plate h2,
+.plate h3 {
+  color: inherit;
+}
+
+.plate__content .display > span + span {
+  padding-left: calc(100% / var(--cw));
+}
+
+.plate__lead {
+  margin-top: var(--space-6);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--on-ink-muted);
+  max-width: 44ch;
+}
+
+.plate--paper .plate__lead {
+  color: var(--text-muted);
+}
+
+/* Running text knocks the dashed guides out behind it, the way a label
+   interrupts the lines of a technical drawing. Display type does not. */
+.plate:not(.plate--paper) .plate__lead,
+.plate:not(.plate--paper) .stat__label {
+  background-color: var(--ink);
+  box-shadow: 0 0 0 0.45em var(--ink);
+}
+
+.plate__content .actions {
+  margin-top: var(--space-6);
+}
+
+/* --- Small screens: the field keeps its own grid, text drops below ------- */
+
+@media (max-width: 1023px) {
+  .plate {
+    --cols: var(--mcols, var(--dcols, 12));
+    --rows: var(--mrows, var(--drows, 8));
+
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  /* On tablets the field would run most of a screen tall and push the
+     heading below the fold; cap it and let the tiles widen instead. */
+  .plate__field {
+    position: relative;
+    inset: auto;
+    aspect-ratio: var(--mar, var(--ar, 12 / 8));
+  }
+
+  .plate:not(.plate--paper) > .plate__field {
+    max-height: min(48vh, 27rem);
+  }
+
+  .win {
+    --x: var(--mx, var(--dx, 0));
+    --y: var(--my, var(--dy, 0));
+    --w: var(--mw, var(--dw, 1));
+    --h: var(--mh, var(--dh, 1));
+    --fx: 0;
+    --fy: 0;
+    --fw: var(--cols);
+    --fh: var(--rows);
+  }
+
+  .win--desk {
+    display: none;
+  }
+
+  .plate__content {
+    position: relative;
+    inset: auto;
+    width: auto;
+    padding: var(--space-8) var(--gutter) var(--space-10);
+  }
+
+  .plate--text-first .plate__content {
+    order: -1;
+    padding-bottom: var(--space-8);
+  }
+
+  .plate__content .display > span + span {
+    padding-left: 0.5em;
+  }
+
+  .win--blur {
+    --blur: 0.045;
+  }
+}
+
+/* --- Tones: one per photograph --------------------------------------------
+   --ramp is the gradient map for blur windows and --blur their radius as a
+   share of the viewport width; js/plates.js reads them with the glyph
+   colours. Each pair is
+   taken from the photo: the bouquet's violet statice and chartreuse stems,
+   the shoreline's blue water and pink foam, and so on. */
+
+.tone-violet {
+  --ramp: #120a1f #3b1b78 #8a5ae0 #d9c9f6 #f6f4df;
+  --glyph: #d2ef62;
+  --glyph-hot: #f3fccb;
+  --glyph-ground: #1c1629;
+}
+
+.tone-tide {
+  --ramp: #0a0f2e #2638c9 #6f7ff0 #f29bd0 #fdeed6;
+  --glyph: #ff9ad3;
+  --glyph-hot: #ffe1f2;
+  --glyph-ground: #251b30;
+}
+
+.tone-umber {
+  --ramp: #120b07 #4a2512 #a8622a #efc98c #fbf6ea;
+  --glyph: #f2c46d;
+  --glyph-hot: #fff0cc;
+  --glyph-ground: #1f1711;
+}
+
+.tone-moss {
+  --ramp: #0a0f07 #22370f #6e9a1c #cdea52 #f4f8dc;
+  --glyph: #c9f04b;
+  --glyph-hot: #f0fcc4;
+  --glyph-ground: #171e12;
+}
+
+.tone-ember {
+  --ramp: #14070a #5e0f17 #c4311c #ff9a3c #ffe9c4;
+  --glyph: #ff8f3a;
+  --glyph-hot: #ffe1c0;
+  --glyph-ground: #211412;
+}
+
+/* Iris-AVIF's colour: the maple's deepest reds, kept clear of ember's orange. */
+.tone-crimson {
+  --ramp: #13060a #4c0a16 #a8121f #f04a3e #ffe2da;
+  --glyph: #ff5a50;
+  --glyph-hot: #ffd8d2;
+  --glyph-ground: #210f12;
+}
+
+/* The bay at dusk: slate water in the shadows, the hazy sky's sand on top. */
+.tone-haze {
+  --ramp: #0a0e13 #233140 #5b6f80 #c8b597 #f4eee3;
+  --glyph: #dac6a2;
+  --glyph-hot: #f8f0e1;
+  --glyph-ground: #151a20;
+}
+
+.tone-dusk {
+  --ramp: #0c1230 #24459e #5f8fe8 #ffab86 #fff2e2;
+  --glyph: #9cc3ff;
+  --glyph-hot: #e6f0ff;
+  --glyph-ground: #131a31;
+}
+
+.tone-teal {
+  --ramp: #071216 #0f3a44 #2f8c86 #9fe3cf #eef8f1;
+  --glyph: #7fe6cf;
+  --glyph-hot: #dcfbf2;
+  --glyph-ground: #0f201f;
+}
+
+/* --- Plate headings below the display size ------------------------------- */
+
+.band-title {
+  font-size: var(--step-4);
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+
+@media (max-width: 1023px) {
+  .plate__content--stats {
+    padding-top: 0;
+  }
+}
+
+/* --- Pause switch ---------------------------------------------------------
+   Added by js/motion.js to every block with ambient animation; one press
+   pauses them all. Hidden when reduced motion already holds them still. */
+
+.motion-toggle {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--ink-guide);
+  background-color: var(--ink);
+  color: var(--on-ink-muted);
+  cursor: pointer;
+}
+
+.motion-toggle:hover {
+  color: var(--on-ink);
+  border-color: var(--on-ink-muted);
+}
+
+.motion-toggle:focus-visible {
+  outline: 2px solid var(--on-ink);
+  outline-offset: 2px;
+}
+
+.motion-toggle svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: currentColor;
+}
+
+.motion-toggle[aria-pressed="true"] .motion-toggle__pause,
+.motion-toggle:not([aria-pressed="true"]) .motion-toggle__play {
+  display: none;
+}
+
+/* Small screens stack the field above the text, so the switch joins the
+   flow right after the field and lifts into its bottom corner; the
+   negative top margin and the bottom margin cancel to take no space. */
+@media (max-width: 1023px) {
+  .plate > .motion-toggle {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    flex: none;
+    align-self: flex-end;
+    margin: calc(-2rem - var(--space-3)) var(--space-3) var(--space-3) 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-toggle {
+    display: none;
+  }
+}

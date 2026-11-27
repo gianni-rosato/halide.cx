@@ -21,6 +21,9 @@
   if (!ctx) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const motion = globalThis.halideMotion;
+  // Reduced motion, or the reader's pause switch (js/motion.js).
+  const calm = () => reduceMotion.matches || !!motion?.paused;
 
   /* --- Tunables ---------------------------------------------------------- */
   const FONT_PX = 13; // CSS px. Roboto Mono's advance width is ~0.6em.
@@ -127,36 +130,48 @@
 
   /* --- Field ------------------------------------------------------------- */
 
-  // Right edge of the hero text, in canvas px, so the mark can sit in the
-  // space beside it.
-  function textRight() {
+  // Extent of the hero text in canvas px: the right edge of its set lines
+  // and buttons (the column is wider than any line) and its bottom edge.
+  function textBox() {
     const content = canvas.parentElement.querySelector(".launch-hero__content");
-    if (!content) return W * 0.45;
-    const left = canvas.getBoundingClientRect().left;
+    if (!content) return { right: W * 0.45, bottom: H * 0.6, edge: W };
+    const c = canvas.getBoundingClientRect();
+    // The container's inner right edge: the page margin the mark keeps to.
+    const edge = content.getBoundingClientRect().right - c.left -
+      parseFloat(getComputedStyle(content).paddingRight);
     let right = 0;
-    for (const el of content.children) {
-      const range = document.createRange();
-      range.selectNodeContents(el);
-      right = Math.max(right, range.getBoundingClientRect().right - left);
+    let bottom = 0;
+    const take = (r) => {
+      right = Math.max(right, r.right - c.left);
+      bottom = Math.max(bottom, r.bottom - c.top);
+    };
+    const range = document.createRange();
+    const walk = document.createTreeWalker(content, NodeFilter.SHOW_TEXT);
+    for (let t = walk.nextNode(); t; t = walk.nextNode()) {
+      if (!t.data.trim()) continue;
+      range.selectNodeContents(t);
+      take(range.getBoundingClientRect());
     }
-    return right || W * 0.45;
+    for (const btn of content.querySelectorAll(".btn")) take(btn.getBoundingClientRect());
+    return { right: right || W * 0.45, bottom: bottom || H * 0.6, edge: edge || W };
   }
 
-  // Where the mark sits, in CSS px. On wide screens it is centred in the
-  // free space right of the text; narrow screens stack the title above, so
-  // it is centred lower down.
+  // Where the mark sits, in CSS px. On desktop it is centred in the free
+  // space right of the text; below that the text spans the hero, so the
+  // mark is centred in the room the stylesheet leaves under the buttons.
   function placeLogo() {
     const aspect = LOGO_W / LOGO_H;
-    if (W < 768) {
-      const h = Math.min(H * 0.34, (W * 0.7) / aspect);
+    const text = textBox();
+    if (W < 1024) {
+      const free = Math.max(H - text.bottom, 0);
+      const h = Math.min(free * 0.8, (W * 0.6) / aspect);
       const w = h * aspect;
-      return { x: W / 2 - w / 2, y: H * 0.78 - h / 2, w, h };
+      return { x: W / 2 - w / 2, y: text.bottom + (free - h) / 2, w, h };
     }
-    const x0 = textRight();
-    const free = W - x0;
+    const free = text.edge - text.right;
     const h = Math.min(H * 0.6, (free * 0.8) / aspect);
     const w = h * aspect;
-    const cx = x0 + free / 2;
+    const cx = text.right + free / 2;
     return { x: cx - w / 2, y: H / 2 - h / 2, w, h };
   }
 
@@ -357,7 +372,7 @@
     const dirty = new Set();
     const fl = glowCells.length;
 
-    if (!reduceMotion.matches) {
+    if (!calm()) {
       const flips = Math.max(1, Math.round(n * AMBIENT_FLIP));
       for (let k = 0; k < flips; k++) {
         const i = (Math.random() * n) | 0;
@@ -442,7 +457,7 @@
 
     dirty.forEach(paintCell);
 
-    const idle = !pointer && reduceMotion.matches && dirty.size === 0;
+    const idle = !pointer && calm() && dirty.size === 0;
     if (visible && !document.hidden && !idle) schedule();
   }
 
@@ -495,6 +510,10 @@
   }
 
   reduceMotion.addEventListener("change", schedule);
+  if (motion) {
+    motion.on(schedule);
+    canvas.parentElement.append(motion.button());
+  }
 
   /* --- Boot -------------------------------------------------------------- */
   const start = () => {

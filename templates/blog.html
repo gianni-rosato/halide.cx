@@ -1,33 +1,20 @@
 {% extends "base.html" %}
+
+{# No glyph fields or code here: skip the Roboto Mono preload. #}
+{% block mono_preload %}{% endblock mono_preload %}
+
 {% block content %}
 
-<section class="hero hero--compact">
-  <div class="container">
-    <h1 class="hero__title">{{ section.title }}</h1>
-    {% if section.description %}
-    <p class="hero__lead">{{ section.description | safe }}</p>
-    {% endif %}
-  </div>
-</section>
+{{ <head_plate title={section.title} lead={section.description} src="/img/sky.avif" bits="no" /> }}
 
-<section class="section">
+<section class="sheet">
   <div class="container">
     {% if section.pages %}
-      {% set featured = section.pages[0] %}
-      <a class="post-feature" href="{{ featured.permalink | safe }}">
-        <div>
-          <span class="card__meta">{{ featured.date | date(format = "%B %d, %Y") }} &middot; Latest</span>
-          <h2 class="post-feature__title">{{ featured.title }}</h2>
-          <p class="post-feature__body">{{ featured.description }}</p>
-          <span class="card__cue">Read more <span aria-hidden="true">&rarr;</span></span>
-        </div>
-      </a>
-
-      <div class="post-grid">
-        {% for post in section.pages[1:] %}
-          {{ <post_card post /> }}
-        {% endfor %}
-      </div>
+    <div class="post-list">
+      {% for post in section.pages %}
+        {{ <post_row post /> }}
+      {% endfor %}
+    </div>
     {% endif %}
   </div>
 </section>

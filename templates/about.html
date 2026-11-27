@@ -1,25 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="hero hero--compact">
-  <div class="container">
-    <h1 class="hero__title">About</h1>
-    <p class="hero__lead">
-      Serving good-looking images at scale is hard. New codecs promise to make
-      it easier and often do not, because the encoder matters more than the
-      format. Halide Compression builds encoders and measurement tools that
-      close that gap.
-    </p>
-  </div>
-</section>
+{{ <head_plate
+  title="About"
+  lead="Serving good-looking images at scale is hard. New codecs promise to make it easier and often do not, because the encoder matters more than the format. Halide Compression builds encoders and measurement tools that close that gap."
+  src="/img/hero/bolt.avif"
+/> }}
 
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">services</span>
-      <h2>What we do</h2>
+<section class="sheet">
+  <div class="container split">
+    <div class="split__head">
+      <h2>What we do.</h2>
       <p>
-        We license Iris-WebP, and we consult on codec optimization, custom
+        We license Iris-AVIF and Iris-WebP, and we consult on codec optimization, custom
         encoder development, and image and video pipelines. Past work includes
         video compression for Fortune 10 clients and texture compression for
         game studios.
@@ -28,8 +21,8 @@
 
     <div class="profile">
       <h3 class="profile__name">Gianni Rosato</h3>
-      <p class="profile__role">Founder &amp; Compression Engineer</p>
-      <div class="profile__bio flow">
+      <p class="profile__role">Founder and compression engineer</p>
+      <div class="profile__bio">
         <p>
           <a href="https://giannirosato.com/" target="_blank" rel="noopener">Gianni Rosato</a>
           founded Halide Compression and wrote Iris-WebP. He has worked on AV1,
@@ -56,17 +49,13 @@
   </div>
 </section>
 
-<section class="section section--tight">
-  <div class="container">
-    {% set iris_url = get_url(path='@/iris/_index.md') %}
-    {{ <cta_band
-      title="Contact us"
-      text="Consulting is available on-site or remote, for a single engagement or on a schedule. For licensing or consulting, email us and describe the problem. We reply to every message."
-      txt="Email Us"
-      second_url={iris_url}
-      second_txt="Explore Iris-WebP"
-    /> }}
-  </div>
-</section>
+{% set iris_url = get_url(path='@/iris/_index.md') %}
+{{ <cta_band
+  title="Contact us."
+  text="Consulting is available on-site or remote, for a single engagement or on a schedule. For licensing or consulting, email us and describe the problem. We reply to every message."
+  txt="Email Us"
+  second_url={iris_url}
+  second_txt="Explore Iris-WebP"
+/> }}
 
 {% endblock content %}

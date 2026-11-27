@@ -1,126 +1,144 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="hero">
-  <div class="container">
-    <h1 class="hero__title">Smaller images, better quality</h1>
-    <p class="hero__lead">
+{% set bouquet = "/img/hero/bouquet-med.avif" %}
+{% set ocean = "/img/hero/ocean-med.avif" %}
+{% set leaves = "/img/fall_leaves.avif" %}
+
+<section class="plate plate--hero tone-violet"
+  style="--dcols:12;--drows:8;--ar:12 / 6.7;--min-h:40rem;--mcols:6;--mrows:4;--mar:6 / 3.6">
+  <div class="plate__field" aria-hidden="true">
+    {{ <win mode="blur" src={bouquet} x="0" y="0" w="3" h="3" mx="0" my="0" mw="3" mh="2" /> }}
+    {{ <win mode="bits" src={bouquet} x="0" y="0" w="2" h="2" mx="0" my="1" mw="2" mh="2" /> }}
+    {{ <win mode="photo" src={bouquet} eager="yes" x="3" y="1" w="3" h="2" /> }}
+    {{ <win mode="photo" src={bouquet} eager="yes" x="8" y="0" w="4" h="4" mx="3" my="0" mw="3" mh="3" /> }}
+    {{ <win mode="bits" src={bouquet} x="7" y="2" w="2" h="2" mx="2" my="2" mw="2" mh="2" /> }}
+    {{ <win mode="blur" src={bouquet} x="9" y="4" w="3" h="3" mx="4" my="3" mw="2" mh="1" /> }}
+    {{ <win mode="bits" src={bouquet} x="11" y="4" w="1" h="2" /> }}
+  </div>
+  <div class="plate__content" style="--dcx:1;--dcy:3.3;--dcw:7">
+    <h1 class="display"><span>Smaller images,</span><span>better quality.</span></h1>
+    <p class="plate__lead">
       Halide Compression builds image encoders and the tools to measure them.
-      Our first product, Iris-WebP, produces files 27% smaller than the
-      reference WebP encoder at equal visual quality and equal speed.
+      Iris-AVIF and Iris-WebP compress better than the reference encoders
+      for their formats, at equal visual quality and equal speed.
     </p>
-    <div class="actions hero__actions">
-      <a href="{{ get_url(path='@/iris/_index.md') }}"
-        class="btn btn--primary">Explore Iris-WebP</a>
+    <div class="actions">
+      <a href="{{ get_url(path='@/iris-avif/_index.md') }}"
+        class="btn btn--primary">Explore Iris-AVIF</a>
       <a href="{{ get_url(path='@/about/_index.md') }}"
         class="btn btn--secondary">Consulting Services</a>
     </div>
   </div>
 </section>
 
-<section class="band">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">what we do</span>
-      <h2>Frontier Compression Engineering</h2>
+<section class="sheet">
+  <div class="container split">
+    <div class="split__head">
+      <h2>Frontier compression engineering.</h2>
       <p>
         We write encoders, we measure them with perceptual metrics, and we help
         teams put the results into production. Our tuning targets what the human
         eye sees.
       </p>
     </div>
-    <div class="grid grid--3">
-      {{ <tile
-        title="Encoder engineering"
-        text="Encoders written from scratch, and speed and efficiency work on existing codecs in C, Zig, and assembly."
-        icon="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
-      /> }}
-      {{ <tile
-        title="Perceptual quality"
-        text="We evaluate every change against the best perceptual metrics."
-        icon="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-        icon2="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-      /> }}
-      {{ <tile
-        title="Consulting"
-        text="On-site and remote consulting on encoder selection, tuning, and image & video pipelines at scale."
-        icon="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
-      /> }}
+    <dl class="ledger">
+      <div class="ledger__row">
+        <dt>Encoder engineering</dt>
+        <dd>Encoders written from scratch, and speed and efficiency work on existing codecs in C, Zig, and assembly.</dd>
+      </div>
+      <div class="ledger__row">
+        <dt>Perceptual quality</dt>
+        <dd>We evaluate every change against the best perceptual metrics.</dd>
+      </div>
+      <div class="ledger__row">
+        <dt>Consulting</dt>
+        <dd>On-site and remote consulting on encoder selection, tuning, and image &amp; video pipelines at scale.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="plate plate--band tone-crimson"
+  style="--dcols:12;--drows:7;--ar:12 / 6.6;--min-h:44rem;--mcols:6;--mrows:3;--mar:6 / 3">
+  <div class="plate__field" aria-hidden="true">
+    {{ <win mode="photo" src={leaves} x="8" y="1" w="4" h="4" mx="2" my="0" mw="4" mh="2" /> }}
+    {{ <win mode="bits" src={leaves} x="6" y="0" w="3" h="2" mx="0" my="1" mw="3" mh="2" /> }}
+    {{ <win mode="blur" src={leaves} x="8" y="5" w="4" h="2" mx="3" my="2" mw="3" mh="1" /> }}
+    {{ <win mode="bits" src={leaves} x="11" y="0" w="1" h="1" /> }}
+  </div>
+  <div class="plate__content" style="--dcx:1;--dcy:1;--dcw:5">
+    <h2 class="band-title">Iris-AVIF</h2>
+    <p class="plate__lead">
+      Our most efficient encoder. Iris-AVIF brings the research behind
+      Iris-WebP to AV1's larger toolset, and adds grain synthesis and HDR.
+    </p>
+    <div class="actions">
+      <a href="{{ get_url(path='@/iris-avif/_index.md') }}" class="btn btn--secondary">See the full results</a>
+    </div>
+  </div>
+  <div class="plate__content plate__content--stats" style="--dcx:1;--dcy:5;--dcw:6">
+    <div class="stats stats--compact">
+      {{ <stat value="21%" label="Better compression than libaom at equal CVVDP score, with a faster encode." /> }}
+      {{ <stat value="20%" label="Better compression than Iris-WebP at equal quality and equal speed." /> }}
+      {{ <stat value="29×" label="Faster than libaom at 1% better CVVDP score." /> }}
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">our product</span>
-      <h2>Iris-WebP</h2>
-      <p>
-        A WebP encoder tuned for the human visual system. Compared to
-        libwebp, the reference encoder, Iris-WebP produces smaller files at
-        the same visual quality and the same encode time. Full results
-        are on the Iris-WebP page.
-      </p>
+<section class="plate plate--band tone-tide"
+  style="--dcols:12;--drows:7;--ar:12 / 6.6;--min-h:44rem;--mcols:6;--mrows:3;--mar:6 / 3">
+  <div class="plate__field" aria-hidden="true">
+    {{ <win mode="photo" src={ocean} x="7" y="0" w="5" h="3" mx="2" my="0" mw="4" mh="2" /> }}
+    {{ <win mode="bits" src={ocean} x="7" y="2" w="3" h="3" mx="1" my="1" mw="2" mh="2" /> }}
+    {{ <win mode="blur" src={ocean} x="9" y="4" w="3" h="3" mx="3" my="2" mw="3" mh="1" /> }}
+    {{ <win mode="blur" src={ocean} x="5" y="0" w="2" h="1" /> }}
+  </div>
+  <div class="plate__content" style="--dcx:1;--dcy:1;--dcw:5">
+    <h2 class="band-title">Iris-WebP</h2>
+    <p class="plate__lead">
+      A WebP encoder tuned for the human visual system. Compared to
+      libwebp, the reference encoder, Iris-WebP produces smaller files at
+      the same visual quality and the same encode time.
+    </p>
+    <div class="actions">
+      <a href="{{ get_url(path='@/iris/_index.md') }}" class="btn btn--secondary">See the full results</a>
     </div>
-    <div class="stats">
+  </div>
+  <div class="plate__content plate__content--stats" style="--dcx:1;--dcy:5;--dcw:6">
+    <div class="stats stats--compact">
       {{ <stat value="27%" label="Smaller files than libwebp at equal CVVDP score and equal speed. 13% by SSIMULACRA2, 29% by MS-SSIM." /> }}
       {{ <stat value="26%" label="Smaller files than libjpeg-turbo at equal CVVDP score. 24% by SSIMULACRA2, 35% by MS-SSIM." /> }}
       {{ <stat value="Drop-in" label="Output is standard WebP. Every browser that shows WebP today shows Iris output unchanged." /> }}
-    </div>
-    <div class="section-foot">
-      <a href="{{ get_url(path='@/iris/_index.md') }}" class="btn--ghost">
-        Explore Iris-WebP <span class="btn__arrow" aria-hidden="true">&rarr;</span>
-      </a>
     </div>
   </div>
 </section>
 
 {% set blog = get_section(path="blog/_index.md") %}
-<section class="band">
+<section class="sheet">
   <div class="container">
-    <div class="section-head">
-      <h2>From the blog</h2>
+    <div class="head">
+      <h2>From the blog.</h2>
       <p>Encoder write-ups, metric comparisons, and interviews with people who work on compression.</p>
     </div>
-    <div class="grid grid--3">
+    <div class="post-list">
       {% for post in blog.pages[0:3] %}
-        {{ <post_card post /> }}
+        {{ <post_row post /> }}
       {% endfor %}
     </div>
-    <div class="section-foot">
-      <a href="{{ get_url(path='@/blog/_index.md') }}" class="btn--ghost">
-        All posts <span class="btn__arrow" aria-hidden="true">&rarr;</span>
-      </a>
-    </div>
+    <p class="sheet__foot">
+      <a class="more-link" href="{{ get_url(path='@/blog/_index.md') }}">Read all posts</a>
+    </p>
   </div>
 </section>
 
-<section class="section">
-  <div class="container">
-    {% set about_url = get_url(path='@/about/_index.md') %}
-    {{ <cta_band
-      title="Talk to us"
-      text="We license Iris-WebP and take on consulting work. Send us a note about your image pipeline and we will reply."
-      txt="Email Us"
-      second_url={about_url}
-      second_txt="About Halide"
-    /> }}
-  </div>
-</section>
-
-<section class="section section--tight">
-  <div class="container">
-    <figure class="media">
-      <img
-        src="{{ get_url(path='img/hero/bouquet-med.avif') }}"
-        width="1536"
-        height="864"
-        alt="A bouquet of flowers"
-        loading="lazy"
-        decoding="async"
-      >
-    </figure>
-  </div>
-</section>
+{% set about_url = get_url(path='@/about/_index.md') %}
+{{ <cta_band
+  title="Talk to us."
+  text="We license Iris-AVIF and Iris-WebP and take on consulting work. Send us a note about your image pipeline and we will reply."
+  txt="Email Us"
+  second_url={about_url}
+  second_txt="About Halide"
+/> }}
 
 {% endblock content %}

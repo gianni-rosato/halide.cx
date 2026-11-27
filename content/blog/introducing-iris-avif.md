@@ -5,6 +5,7 @@ template = "blog-launch.html"
 description = "Iris-AVIF is our new AVIF encoder, and the best image encoder we know how to build. It sets a new frontier for how small a beautiful image can be."
 
 [extra]
+cover = "/img/fall_leaves.avif"
 tagline = "Our most efficient image encoder, and the best image encoder in the world."
 cover_alt = "The Halide Compression mark burning, drawn in shifting ones and zeros"
 
@@ -17,7 +18,7 @@ stats_note = "Measured Oct 2026 on the Kodak Lossless True Color Image Suite."
 
 hero_actions = [
   { url = "#article-text", txt = "Read More", style = "btn--primary" },
-  { url = "/iris/", txt = "Iris page" },
+  { url = "/iris-avif/", txt = "Iris-AVIF page" },
 ]
 +++
 

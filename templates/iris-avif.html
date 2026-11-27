@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% set leaves = "/img/fall_leaves.avif" %}
+{% set webp_url = get_url(path='@/iris/_index.md') %}
+
+<section class="plate plate--hero tone-crimson"
+  style="--dcols:12;--drows:8;--ar:12 / 6.9;--min-h:44rem;--mcols:6;--mrows:4;--mar:6 / 3.6">
+  <div class="plate__field" aria-hidden="true">
+    {{ <win mode="photo" src={leaves} eager="yes" x="7" y="0" w="5" h="4" mx="2" my="0" mw="4" mh="2" /> }}
+    {{ <win mode="bits" src={leaves} x="5" y="1" w="3" h="3" mx="0" my="1" mw="3" mh="2" /> }}
+    {{ <win mode="blur" src={leaves} x="8" y="4" w="4" h="2" mx="3" my="2" mw="3" mh="2" /> }}
+    {{ <win mode="blur" src={leaves} x="3" y="0" w="2" h="1" mx="0" my="0" mw="2" mh="1" /> }}
+    {{ <win mode="bits" src={leaves} x="7" y="5" w="1" h="1" /> }}
+  </div>
+  <div class="plate__content" style="--dcx:1;--dcy:1.4;--dcw:5">
+    <h1 class="display">Iris-AVIF</h1>
+    <p class="plate__lead">
+      Iris-AVIF is our AVIF encoder, built on the perceptual research behind
+      Iris-WebP. At equal quality it compresses 21% better than libaom, and
+      it encodes faster. It also handles film grain, HDR, and screen content.
+      The output is standard AVIF.
+    </p>
+    <div class="actions">
+      <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+      <a href="{{ get_url(path='@/blog/introducing-iris-avif.md') }}"
+        class="btn btn--secondary">Read the announcement</a>
+    </div>
+  </div>
+  <div class="plate__content plate__content--stats" style="--dcx:1;--dcy:6;--dcw:10">
+    <div class="stats">
+      {{ <stat value="21%" label="Better compression than libaom at equal quality (CVVDP), with a faster encode time." /> }}
+      {{ <stat value="20%" label="Better compression than Iris-WebP at equal quality and equal speed." /> }}
+      {{ <stat value="29×" label="Faster than libaom at 1% better quality (CVVDP)." /> }}
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="container split">
+    <div class="split__head">
+      <h2>An encoder that adapts.</h2>
+      <p>
+        Iris-AVIF takes the methods behind Iris-WebP and applies them to AV1's
+        much larger set of intra-coding tools. It detects what kind of
+        image it has been given and changes how it encodes it. The files it
+        writes are standard AVIF, which decodes in more than 95% of web
+        browsers.
+      </p>
+    </div>
+    <dl class="ledger">
+      <div class="ledger__row">
+        <dt>Grain synthesis</dt>
+        <dd>Iris-AVIF detects grain it can reproduce synthetically and decides how much to add, from coarse film grain to fine digital chroma noise, with no manual settings.</dd>
+      </div>
+      <div class="ledger__row">
+        <dt>HDR</dt>
+        <dd>AVIF stores HDR natively, without the layering tricks that JPEG and WebP need. On our HDR test image, Iris-AVIF keeps more detail than SVT-AV1 and encodes 5 times faster.</dd>
+      </div>
+      <div class="ledger__row">
+        <dt>Screen content</dt>
+        <dd>Compresses screenshots and other screen content up to 415% better than JPEG.</dd>
+      </div>
+      <div class="ledger__row">
+        <dt>Perceptual tune</dt>
+        <dd>The default tune targets what people see, including improvements that metrics fail to reward.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="container">
+    <div class="head">
+      <h2>See the difference.</h2>
+      <p>
+        Switch between encoders with the buttons. The captions list each
+        encoder's settings, its encode time, and the file size.
+      </p>
+    </div>
+
+    <section class="image-switcher">
+      <h3>Grain synthesis</h3>
+      <p>
+        The two files are within 1% of each other in size, and Iris-AVIF
+        encodes in less than half the time. Compare the texture of the sand
+        with the source.
+      </p>
+      <div
+        id="iris-avif-grain"
+        class="image-container"
+        data-image-switcher
+        data-alt="Iris-AVIF grain synthesis comparison: sand"
+        data-images='["/img/iris-avif/sand-iris.avif","/img/iris-avif/sand-svt.avif","/img/iris-avif/sand-lossless.webp"]'
+        data-subtitles='["Iris-AVIF Speed 0 | 1,012 ms | 7,995 bytes","SVT-AV1 Tune 4 Preset 0 | 2,312 ms | 8,046 bytes","Source | 564,008 bytes"]'
+        data-labels='["Iris-AVIF","SVT-AV1","Source"]'
+      ></div>
+    </section>
+
+    <section class="image-switcher">
+      <h3>HDR</h3>
+      <p>
+        Iris-AVIF keeps the lines on the lower building that SVT-AV1 loses,
+        in a fifth of the encode time. View this one on an HDR display.
+      </p>
+      <div
+        id="iris-avif-hdr"
+        class="image-container"
+        data-image-switcher
+        data-alt="Iris-AVIF HDR comparison: a city at night"
+        data-images='["/img/iris-avif/sf-t-iris.avif","/img/iris-avif/sf-t-svt.avif","/img/iris-avif/sf-t.png"]'
+        data-subtitles='["Iris-AVIF Speed 5 | 20.4 ms | 20,028 bytes | 9.462 CVVDP","SVT-AV1 Tune 3 P5 | 102.5 ms | 20,802 bytes | 9.402 CVVDP","Source | 3,185,254 bytes"]'
+        data-labels='["Iris-AVIF","SVT-AV1","Source"]'
+      ></div>
+    </section>
+  </div>
+</section>
+
+<section class="sheet sheet--ruled">
+  <div class="container">
+    <section class="metric-switcher">
+      <div class="head">
+        <h2>Metrics.</h2>
+        <p>
+          The numbers below were aggregated using the <a
+            href="https://github.com/MohamedBakrAli/Kodak-Lossless-True-Color-Image-Suite/tree/master/PhotoCD_PCD0992"
+          >Kodak Lossless True Color Image Suite</a>. Measured Oct 2026.
+        </p>
+      </div>
+      <div
+        id="iris-avif-metrics"
+        class="image-container"
+        data-image-switcher
+        data-alt="Iris-AVIF compression efficiency"
+        data-images='["/img/iris-avif/iris-avif_cvvdp.svg","/img/iris-avif/iris-avif_ms-ssim.svg","/img/iris-avif/iris-avif_ssimu2.svg"]'
+        data-subtitles='["CVVDP","MS-SSIM","SSIMULACRA2"]'
+        data-labels='["CVVDP","MS-SSIM","SSIMULACRA2"]'
+      ></div>
+    </section>
+  </div>
+</section>
+
+<section class="sheet sheet--ruled">
+  <div class="container split">
+    <div class="split__head">
+      <h2>Iris-AVIF or Iris-WebP.</h2>
+    </div>
+    <div class="flow measure">
+      <p>
+        Iris-AVIF compresses 20% better than Iris-WebP at the same quality
+        and speed, and it adds grain synthesis and HDR. AVIF decodes in more
+        than 95% of web browsers, 1.47% fewer than WebP.
+      </p>
+      <p>
+        <a href="{{ webp_url }}">Iris-WebP</a> is mature and still improving
+        alongside Iris-AVIF. If you already ship WebP or need the widest
+        decoder support, it drops into your pipeline unchanged.
+      </p>
+      <p>
+        To evaluate either encoder, email us a few of your images and the
+        encoder settings you use today.
+      </p>
+    </div>
+  </div>
+</section>
+
+{{ <cta_band
+  title="Test Iris-AVIF on your images."
+  text="Send us a few representative images and your current encoder settings. We will reply with file sizes and metric scores from Iris-AVIF."
+  txt="Email Us"
+  src="/img/fall_leaves.avif"
+  tone="crimson"
+/> }}
+
+{% endblock content %}

@@ -8,16 +8,51 @@
     {{ <image_switcher id="x" images={["/a.png"]} labels={["A"]} ... /> }}
 #}
 
-{# Full-width lead image at the top of a blog post. #}
+{#
+  The tone a served photograph is drawn in (sass/_plate.scss), chosen from
+  what is in the picture.
+  Greyscale and unlisted photos get "teal". Components cannot read config,
+  so this is the single place the mapping lives.
+#}
+{% component tone_for(src: string) -%}
+{%- if "bouquet" in src -%}violet
+{%- elif "flower" in src -%}umber
+{%- elif "ocean" in src -%}tide
+{%- elif "snails" in src -%}moss
+{%- elif "fall_leaves" in src -%}ember
+{%- elif "bolt" in src -%}haze
+{%- elif "sky" in src -%}dusk
+{%- else -%}teal
+{%- endif -%}
+{%- endcomponent %}
+
+{#
+  One window cut into a plate (see sass/_plate.scss). Coordinates are grid
+  units on the plate's desktop grid; mx/my/mw/mh place it on the small-screen
+  grid, and a window without them is hidden there. fx/fy/fw/fh shrink the
+  image's frame from the whole plate to a region of it.
+    mode    photo | blur | bits
+    rate    shimmer speed for bits windows, 1 = normal
+    handles "no" removes the corner handles, "yes" adds them to blur windows
+#}
+{% component win(mode: string, src: string, x = "0", y = "0", w = "1", h = "1", mx = "", my = "", mw = "", mh = "", fx = "", fy = "", fw = "", fh = "", z = "", pos = "", tone = "", rate = "", handles = "", alt = "", eager = "") -%}
+<div class="win win--{{ mode }}{% if not mx %} win--desk{% endif %}{% if tone %} tone-{{ tone }}{% endif %}{% if handles == "no" %} win--bare{% elif handles == "yes" %} win--handles{% endif %}"
+  style="--dx:{{ x }};--dy:{{ y }};--dw:{{ w }};--dh:{{ h }};{% if mx %}--mx:{{ mx }};--my:{{ my }};--mw:{{ mw }};--mh:{{ mh }};{% endif %}{% if fx %}--dfx:{{ fx }};--dfy:{{ fy }};--dfw:{{ fw }};--dfh:{{ fh }};{% endif %}{% if z %}--z:{{ z }};{% endif %}{% if pos %}--pos:{{ pos }};{% endif %}"
+  {%- if mode != "photo" %} data-src="{{ get_url(path=src) }}"{% if rate %} data-rate="{{ rate }}"{% endif %}{% endif %}>
+  <div class="win__clip">
+    {%- if mode != "photo" %}
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+    {%- else %}
+    <img class="win__media" src="{{ get_url(path=src) }}" alt="{{ alt }}" decoding="async"{% if not eager %} loading="lazy"{% endif %}>
+    {%- endif %}
+  </div>
+</div>
+{%- endcomponent %}
+
+{# Lead image at the top of a blog post, shown as the plain photograph. #}
 {% component hero(src: string, alt = "", width = "", height = "") -%}
 <figure class="post-hero">
-  <img
-    src="{{ get_url(path=src) }}"
-    alt="{{ alt }}"
-    width="{{ width }}"
-    height="{{ height }}"
-    decoding="async"
-  >
+  <img src="{{ get_url(path=src) }}" alt="{{ alt }}"{% if width %} width="{{ width }}" height="{{ height }}"{% endif %} decoding="async" fetchpriority="high">
 </figure>
 {%- endcomponent %}
 
@@ -50,22 +85,11 @@
 </section>
 {%- endcomponent %}
 
-{# Icon + heading + body feature tile. #}
-{% component tile(title: string, text: string, icon: string, icon2 = "") -%}
-<div class="tile">
-  <svg
-    class="tile__icon"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke-width="1.5"
-    aria-hidden="true"
-  >
-    <path stroke-linecap="round" stroke-linejoin="round" d="{{ icon }}" />
-    {% if icon2 %}<path stroke-linecap="round" stroke-linejoin="round" d="{{ icon2 }}" />{% endif %}
-  </svg>
-  <h3>{{ title }}</h3>
-  <p>{{ text }}</p>
+{# Heading + body row in a ledger. Kept under its old name for old markup. #}
+{% component tile(title: string, text: string, icon = "", icon2 = "") -%}
+<div class="ledger__row">
+  <h3 class="ledger__title">{{ title }}</h3>
+  <p class="ledger__body">{{ text }}</p>
 </div>
 {%- endcomponent %}
 
@@ -77,25 +101,82 @@
 </div>
 {%- endcomponent %}
 
-{# Link card used on the blog index and the homepage's "latest writing" row. #}
-{% component post_card(post) -%}
-<a class="card" href="{{ post.permalink | safe }}">
-  <span class="card__meta">{{ post.date | date(format = "%b %d, %Y") }}</span>
-  <h3 class="card__title">{{ post.title }}</h3>
-  <p class="card__body">{{ post.description }}</p>
-  <span
-    class="card__cue">Read more <span aria-hidden="true">&rarr;</span></span>
+{#
+  One row in a list of posts. The thumbnail is the post's lead image, read
+  from the post's `hero` component, or `extra.cover` when set.
+#}
+{% component post_row(post, fallback = "/img/hero/bouquet-med.avif") -%}
+{%- set cover = post.extra.cover | default(value="") -%}
+{%- if not cover -%}
+  {%- set parts = post.content | split(pat='class="post-hero"') -%}
+  {%- if parts | length > 1 -%}
+    {#- The rendered src is an absolute URL; keep the path from /img/ on. -#}
+    {%- set url = parts[1] | split(pat='src="') | nth(n=1) | split(pat='"') | first -%}
+    {%- set cover = "/img/" ~ (url | split(pat="/img/") | last) -%}
+  {%- else -%}
+    {%- set cover = fallback -%}
+  {%- endif -%}
+{%- endif -%}
+<a class="post-row" href="{{ post.permalink | safe }}">
+  <div class="post-row__thumb">
+    <img src="{{ get_url(path=cover) }}" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">{{ post.title }}</h3>
+    <time class="post-row__date" datetime="{{ post.date }}">{{ post.date | date(format = "%b %-d, %Y") }}</time>
+    {% if post.description %}<p class="post-row__body">{{ post.description }}</p>{% endif %}
+  </div>
 </a>
 {%- endcomponent %}
 
-{# Dark closing band with a heading, blurb and one or two buttons. #}
-{% component cta_band(title: string, text: string, url = "mailto:mail@halide.cx", txt = "Email Us", second_url = "", second_txt = "") -%}
-<div class="cta-band">
-  <h2>{{ title }}</h2>
-  <p>{{ text }}</p>
-  <div class="actions actions--center">
-    <a href="{{ url }}" class="btn btn--primary">{{ txt }}</a>
-    {% if second_url %}<a href="{{ second_url }}" class="btn btn--secondary">{{ second_txt }}</a>{% endif %}
+{#
+  Closing plate: a heading, blurb and one or two buttons set beside the
+  orchid at three fidelities.
+#}
+{% component cta_band(title: string, text: string, url = "mailto:mail@halide.cx", txt = "Email Us", second_url = "", second_txt = "", src = "/img/hero/flower-med.avif", tone = "umber") -%}
+<section class="plate plate--cta tone-{{ tone }}"
+  style="--dcols:12;--drows:5;--ar:12 / 4.4;--min-h:30rem;--mcols:6;--mrows:3;--mar:6 / 3;--dcx:1;--dcy:1;--dcw:5">
+  <div class="plate__field" aria-hidden="true">
+    {{ <win mode="blur" src={src} x="5" y="0" w="2" h="3" mx="0" my="0" mw="2" mh="3" /> }}
+    {{ <win mode="photo" src={src} x="8" y="0" w="4" h="5" mx="3" my="0" mw="3" mh="3" /> }}
+    {{ <win mode="bits" src={src} x="7" y="1" w="2" h="3" mx="2" my="1" mw="2" mh="2" /> }}
   </div>
-</div>
+  <div class="plate__content">
+    <h2 class="cta-title">{{ title }}</h2>
+    <p class="plate__lead">{{ text }}</p>
+    <div class="actions">
+      <a href="{{ url }}" class="btn btn--primary">{{ txt }}</a>
+      {% if second_url %}<a href="{{ second_url }}" class="btn btn--secondary">{{ second_txt }}</a>{% endif %}
+    </div>
+  </div>
+</section>
+{%- endcomponent %}
+
+{#
+  Page heading set into a short plate, for interior pages. The photograph's
+  tone comes from `tone_for` unless one is given; bits="no" drops the ASCII
+  window (the blog keeps its images plain).
+#}
+{% component head_plate(title: string, src: string, lead = "", tone = "", level = "h1", url = "", txt = "", second_url = "", second_txt = "", bits = "yes") -%}
+<section class="plate plate--head tone-{% if tone %}{{ tone }}{% else %}{{ <tone_for src={src} /> }}{% endif %}"
+  style="--dcols:12;--drows:5;--ar:12 / 4.4;--min-h:28rem;--mcols:6;--mrows:3;--mar:6 / 2.6;--dcx:1;--dcy:1.5;--dcw:6">
+  <div class="plate__field" aria-hidden="true">
+    {{ <win mode="blur" src={src} x="5" y="0" w="2" h="1" /> }}
+    {{ <win mode="photo" src={src} eager="yes" x="8" y="0" w="4" h="3" mx="2" my="0" mw="4" mh="2" /> }}
+    {%- if bits != "no" %}
+    {{ <win mode="bits" src={src} x="7" y="2" w="2" h="2" mx="1" my="1" mw="2" mh="2" /> }}
+    {%- endif %}
+    {{ <win mode="blur" src={src} x="9" y="3" w="3" h="2" mx="3" my="2" mw="3" mh="1" /> }}
+  </div>
+  <div class="plate__content">
+    <h1 class="display">{{ title }}</h1>
+    {% if lead %}<p class="plate__lead">{{ lead | safe }}</p>{% endif %}
+    {%- if url %}
+    <div class="actions">
+      <a href="{{ url }}" class="btn btn--primary">{{ txt }}</a>
+      {% if second_url %}<a href="{{ second_url }}" class="btn btn--secondary">{{ second_txt }}</a>{% endif %}
+    </div>
+    {%- endif %}
+  </div>
+</section>
 {%- endcomponent %}

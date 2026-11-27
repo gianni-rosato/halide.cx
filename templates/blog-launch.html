@@ -2,7 +2,8 @@
   Launch post layout. Selected per post with `template = "blog-launch.html"`
   in the page's front matter. Differs from blog-page.html in three ways: a
   full-bleed dark hero with the binary-fire canvas, a headline stats strip
-  driven by `[[extra.stats]]`, and ruled chapters in the prose.
+  driven by `[[extra.stats]]` at the head of the article column, and ruled
+  chapters in the prose.
 #}
 {% extends "base.html" %}
 
@@ -23,41 +24,41 @@
     <div class="launch-hero__scrim" aria-hidden="true"></div>
 
     <div class="container launch-hero__content">
-      <span class="launch-hero__eyebrow">
-        {{ page.date | date(format = "%B %d, %Y") }} &middot; The Halide Team
-      </span>
-      <h1 class="launch-hero__title">{{ page.title }}</h1>
-      {% if page.extra.tagline %}
-      <p class="launch-hero__lead">{{ page.extra.tagline }}</p>
-      {% endif %}
-      {% if page.extra.hero_actions %}
-      <div class="actions launch-hero__actions">
-        {% for action in page.extra.hero_actions %}
-        <a href="{{ action.url }}" class="btn {{ action.style | default(value = "btn--secondary") }}">{{ action.txt }}</a>
-        {% endfor %}
+      <div class="post">
+        <h1 class="launch-hero__title">{{ page.title }}</h1>
+        {% if page.extra.tagline %}
+        <p class="launch-hero__lead">{{ page.extra.tagline }}</p>
+        {% endif %}
+        <p class="launch-hero__meta">
+          Published <time datetime="{{ page.date }}">{{ page.date | date(format = "%B %-d, %Y") }}</time> by the Halide Team
+        </p>
+        {% if page.extra.hero_actions %}
+        <div class="actions launch-hero__actions">
+          {% for action in page.extra.hero_actions %}
+          <a href="{{ action.url }}" class="btn {{ action.style | default(value = "btn--secondary") }}">{{ action.txt }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
-      {% endif %}
     </div>
   </header>
 
-  {% if page.extra.stats %}
-  <section class="launch-stats" aria-label="Headline results">
-    <div class="container">
-      <div class="stats launch-stats__grid">
-        {% for s in page.extra.stats %}
-        {{ <stat value={s.value} label={s.label} /> }}
-        {% endfor %}
-      </div>
-      {% if page.extra.stats_note %}
-      <p class="image-caption launch-stats__note">{{ page.extra.stats_note }}</p>
-      {% endif %}
-    </div>
-  </section>
-  {% endif %}
-
-  <div class="section launch-body">
+  <div class="sheet launch-body">
     <div class="container">
       <div class="post">
+        {% if page.extra.stats %}
+        <section class="launch-stats" aria-label="Headline results">
+          <div class="stats launch-stats__grid">
+            {% for s in page.extra.stats %}
+            {{ <stat value={s.value} label={s.label} /> }}
+            {% endfor %}
+          </div>
+          {% if page.extra.stats_note %}
+          <p class="image-caption launch-stats__note">{{ page.extra.stats_note }}</p>
+          {% endif %}
+        </section>
+        {% endif %}
+
         <div id="article-text" class="prose prose--launch">
           {{ page.content | safe }}
         </div>
@@ -65,19 +66,19 @@
         <nav class="post-nav" aria-label="More posts">
           {% if page.higher %}
           <a class="post-nav__item" href="{{ page.higher.permalink | safe }}">
-            <span class="post-nav__dir">&larr; Older</span>
+            <span class="post-nav__dir">Older post</span>
             <span class="post-nav__title">{{ page.higher.title }}</span>
           </a>
           {% else %}
           <a class="post-nav__item" href="{{ get_url(path = "@/blog/_index.md") }}">
-            <span class="post-nav__dir">&larr; All posts</span>
+            <span class="post-nav__dir">All posts</span>
             <span class="post-nav__title">Back to the blog</span>
           </a>
           {% endif %}
 
           {% if page.lower %}
           <a class="post-nav__item post-nav__item--next" href="{{ page.lower.permalink | safe }}">
-            <span class="post-nav__dir">Newer &rarr;</span>
+            <span class="post-nav__dir">Newer post</span>
             <span class="post-nav__title">{{ page.lower.title }}</span>
           </a>
           {% endif %}

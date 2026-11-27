@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="hero hero--compact">
-  <div class="container">
-    <h1 class="hero__title">{{ section.title }}</h1>
-  </div>
-</section>
+{{ <head_plate title={section.title} src="/img/slate.avif" /> }}
 
-<section class="section">
+<section class="sheet">
   <div class="container">
-    <div class="prose">
-      {{ section.content | safe }}
+    <div class="post">
+      <div class="prose">
+        {{ section.content | safe }}
+      </div>
     </div>
   </div>
 </section>
