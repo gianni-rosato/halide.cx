@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0e0b15">
+
+    <title>Introducing Iris-AVIF | Halide Compression</title>
+    <meta name="description" content="Iris-AVIF is our new AVIF encoder, and the best image encoder we know how to build. It sets a new frontier for how small a beautiful image can be.">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Introducing Iris-AVIF | Halide Compression">
+    <meta property="og:description" content="Iris-AVIF is our new AVIF encoder, and the best image encoder we know how to build. It sets a new frontier for how small a beautiful image can be.">
+    <meta property="og:url" content="https://halide.cx/blog/introducing-iris-avif/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/blog/introducing-iris-avif/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/RobotoMono-VariableFont_wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    <script defer src="https://halide.cx/js/motion.js"></script>
+    <script defer src="https://halide.cx/js/plates.js"></script>
+    
+<script defer src="https://halide.cx/js/binary_fire.js"></script>
+
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header on-ink">
+      <div class="site-header__inner">
+        <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+          <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+          </svg>
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/">About</a>
+          <a href="https://halide.cx/iris-avif/">Iris-AVIF</a>
+          <a href="https://halide.cx/iris/">Iris-WebP</a>
+          <a href="https://halide.cx/blog/" class="is-current">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M3.75 8.25h16.5M3.75 15.75h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+<article class="launch">
+  <header class="launch-hero">
+    <canvas
+      class="launch-hero__canvas"
+      data-binary-fire
+      role="img"
+      aria-label="The Halide Compression mark burning, drawn in shifting ones and zeros"
+    ></canvas>
+    <div class="launch-hero__scrim" aria-hidden="true"></div>
+
+    <div class="container launch-hero__content">
+      <div class="post">
+        <h1 class="launch-hero__title">Introducing Iris-AVIF</h1>
+        
+        <p class="launch-hero__lead">Our most efficient image encoder, and the best image encoder in the world.</p>
+        
+        <p class="launch-hero__meta">
+          Published <time datetime="2026-10-07">October 7, 2026</time> by the Halide Team
+        </p>
+        
+        <div class="actions launch-hero__actions">
+          
+          <a href="#article-text" class="btn btn--primary">Read More</a>
+          
+          <a href="/iris-avif/" class="btn btn--secondary">Iris-AVIF page</a>
+          
+        </div>
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="sheet launch-body">
+    <div class="container">
+      <div class="post">
+        
+        <section class="launch-stats" aria-label="Headline results">
+          <div class="stats launch-stats__grid">
+            
+            <div class="stat">
+  <span class="stat__value">21%</span>
+  <span class="stat__label">Better than libaom at equal quality (CVVDP) with faster encode time</span>
+</div>
+            
+            <div class="stat">
+  <span class="stat__value">20%</span>
+  <span class="stat__label">Better than Iris-WebP at equal quality and speed</span>
+</div>
+            
+            <div class="stat">
+  <span class="stat__value">29×</span>
+  <span class="stat__label">Faster than libaom at 1% better quality (CVVDP)</span>
+</div>
+            
+          </div>
+          
+          <p class="image-caption launch-stats__note">Measured Oct 2026 on the Kodak Lossless True Color Image Suite.</p>
+          
+        </section>
+        
+
+        <div id="article-text" class="prose prose--launch">
+          <p>We’re introducing Iris-AVIF (formerly codenamed Aperture), the world's best
+image encoder.</p>
+<p>Over a year ago, our research began with Iris-WebP. Extending our methodology
+and the techniques we've discovered to a vastly larger set of coding tools
+brings us to Iris-AVIF, where we've achieved state of the art results and
+produced a world-class image encoder that represents the frontier of image
+compression efficiency.</p>
+<section class="image-switcher">
+  <div
+    id="image-switcher-iris-avif-metrics"
+    class="image-container"
+    data-image-switcher
+    data-alt="Iris-AVIF compression efficiency comparison chart"
+    data-images='["/img/iris-avif/iris-avif_cvvdp.svg","/img/iris-avif/iris-avif_ms-ssim.svg","/img/iris-avif/iris-avif_ssimu2.svg"]'
+    data-subtitles='["CVVDP","MS-SSIM","SSIMULACRA2"]'
+    data-labels='["CVVDP","MS-SSIM","SSIMULACRA2"]'
+  ></div>
+</section>
+<h2 id="a-generational-improvement">A generational improvement</h2>
+<p>Competing with libwebp via Iris-WebP required discovering new psychovisual
+research and engaging in rigorous performance engineering. The best open-source
+AV1 encoders pushed our efforts even further; libwebp stopped improving a long
+time ago, while the best AV1 encoders continue to improve today. The two leading
+encoders (SVT-AV1 and libaom) are developed by massive companies with incredible
+resources, and lots of attention is put into AVIF.</p>
+<p>To compete at the frontier of image compression with Iris-WebP as a base, we had
+to go beyond what we initially thought was possible and experiment liberally
+with AV1's broad set of intra-coding tools to produce the best AVIF images.
+AV1's intra-coding toolset is wildly versatile; we've seen and even
+<a href="/blog/improving-avif-in-open-source">worked on</a> big improvements before.</p>
+<p>Iris-AVIF is the culmination of our best work. It represents years of
+multi-disciplinary effort: perceptual fidelity work, <a href="/blog/fcvvdp">new</a>
+<a href="/blog/fmetrics">tools</a> to measure improvements, new features WebP could never
+deliver, and setting a new pace for our research and engineering. The result is
+<strong>the world's most versatile, capable, and efficient image encoder</strong>.</p>
+<h2 id="avif">AVIF</h2>
+<p>AVIF has been considered widely supported since January 2024. Support is
+guaranteed on &gt;95% of all Web browsers, just 1.47% behind WebP and 1.67% behind
+JPEG. Decode speed is also
+<a rel="external" href="https://giannirosato.com/blog/post/case-against-jxl/#decode-time">fast</a>, not
+far from WebP or JPEG.</p>
+<p>Iris-AVIF is also a unique opportunity for us to focus beyond raw compression
+efficiency on new problems AVIF lets us solve: accurate film grain via synthetic
+reproduction and high-bitdepth HDR encoding stand out, and are not available in
+WebP. Because of these tools, Iris-AVIF is a uniquely intelligent encoder.</p>
+<h3 id="automatic-grain-synthesis">Automatic grain synthesis</h3>
+<p>Iris-AVIF intelligently detects whether an image contains a grain pattern it can
+reproduce synthetically, and then determines exactly how much. It can flexibly
+emulate anything from coarse film grain to fine digital chroma noise, without
+manual intervention.</p>
+<section class="image-switcher">
+  <div
+    id="image-switcher-iris-avif-grain"
+    class="image-container"
+    data-image-switcher
+    data-alt="Iris-AVIF grain synthesis comparison images"
+    data-images='["/img/iris-avif/sand-iris.avif","/img/iris-avif/sand-svt.avif","/img/iris-avif/sand-lossless.webp"]'
+    data-subtitles='["Iris-AVIF Speed 0 | 1,012 ms | 7,995 bytes","SVT-AV1\nTune 4 Preset 0 | 2,312 ms | 8,046 bytes","Source | 564,008 bytes"]'
+    data-labels='["Iris-AVIF","SVT-AV1","Source"]'
+  ></div>
+</section>
+<h3 id="hdr">HDR</h3>
+<p>HDR allows images to display a wider range of color and light, further extending
+an image's ability to saturate the infinite potential of the human eye. HDR
+isn't properly supported in JPEG and WebP, requiring inefficient layering
+tricks.</p>
+<p>AVIF supports HDR natively, and we're excited to support it in Iris-AVIF.
+Iris-AVIF's performance is a highlight; notice below how Iris retains the lines
+on the bottom building better than SVT-AV1 while being 5 times faster.</p>
+<section class="image-switcher">
+  <div
+    id="image-switcher-iris-avif-hdr"
+    class="image-container"
+    data-image-switcher
+    data-alt="Iris-AVIF HDR comparison
+images"
+    data-images='["/img/iris-avif/sf-t-iris.avif","/img/iris-avif/sf-t-svt.avif","/img/iris-avif/sf-t.png"]'
+    data-subtitles='["Iris-AVIF Speed 5 |\n20.4 ms | 20,028 bytes | 9.462 CVVDP","SVT-AV1 Tune 3 P5 | 102.5 ms | 20,802\nbytes | 9.402 CVVDP","Source | 3,185,254 bytes"]'
+    data-labels='["Iris-AVIF","SVT-AV1","Source"]'
+  ></div>
+</section>
+<p>Screen content encoding with Iris-AVIF offers up to 415% better compression than
+JPEG, and other areas like progressive decoding are yet to be explored by us.
+Whatever images need, Iris-AVIF aims to uniquely deliver via detection,
+adaptation, and efficient reproduction. While Iris-WebP is still versatile,
+Iris-AVIF is intelligent in its ability to understand and adapt to the content
+it encounters.</p>
+<h2 id="perceptual-alignment">Perceptual alignment</h2>
+<p>Iris-AVIF is our most perceptually optimized encoder, and places the preferences
+of the human eye first. We ran into some of the
+<a href="/blog/metric-limits">limitations of perceptual metrics</a> early in its
+development, and as Iris-WebP achieved perceptual improvements that metrics
+failed to reward, it became clear a strong perceptual tune should be available
+upon release. We took extra time to make sure it was up to our standards before
+this announcement.</p>
+<p>Perceptual fidelity remains top of mind in our mission to produce a more
+beautiful Web, but we understand that subjective methodology has limitations.
+Iris-AVIF has impressed us, but we believe it can be even better. Our work
+continues to focus on this aspect of the encoder, and we'll always strive to
+keep improving.</p>
+<h2 id="looking-forward">Looking Forward</h2>
+<p>Iris-AVIF has already been under evaluation since before this announcement.
+Iris-WebP remains mature, available, and continually improving. Looking ahead,
+we'd like to strengthen our perceptual tunes in both encoders and implement
+strong progressive decoding in Iris-AVIF, among other things. For those who
+value WebP, expect Iris-WebP to improve in tandem with Iris-AVIF.</p>
+<p>We're very proud of what Iris has become, and we're excited to see even more
+users take advantage of our most capable encoder. Iris-AVIF is our most
+ambitious bet to bring the world a more beautiful Internet, and we can't wait to
+see where it takes us all next.</p>
+<p>Send us an email if you're interested, we'd love to hear from you.</p>
+<div class="call-to-action">
+  <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+</div>
+
+        </div>
+
+        <nav class="post-nav" aria-label="More posts">
+          
+          <a class="post-nav__item" href="https://halide.cx/blog/wpd/">
+            <span class="post-nav__dir">Older post</span>
+            <span class="post-nav__title">Introducing wpd</span>
+          </a>
+          
+
+          
+        </nav>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer on-ink">
+      <div class="container site-footer__grid">
+        <div class="site-footer__brand">
+          <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+            <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+            </svg>
+            <span class="logo__word">Halide Compression</span>
+          </a>
+          <p class="site-footer__blurb">
+            Frontier compression technology for a more beautiful Internet.
+          </p>
+        </div>
+
+        <nav class="site-footer__links" aria-label="Footer">
+          <ul>
+            <li><a href="https://halide.cx/about/">About</a></li>
+            <li><a href="https://halide.cx/iris-avif/">Iris-AVIF</a></li>
+            <li><a href="https://halide.cx/iris/">Iris-WebP</a></li>
+            <li><a href="https://halide.cx/blog/">Blog</a></li>
+            <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+          </ul>
+          <ul>
+            <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+            <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+          </ul>
+        </nav>
+
+        <p class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

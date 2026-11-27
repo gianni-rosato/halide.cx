@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0e0b15">
+
+    <title>Introducing Iris for WebP | Halide Compression</title>
+    <meta name="description" content="Today we&#39;re excited to announce the Iris project, our in-house image encoder. We&#39;ve begun work on Iris&#39;s first codec, Iris-WebP: A WebP encoder that brings impressive gains over the reference encoder.">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Introducing Iris for WebP | Halide Compression">
+    <meta property="og:description" content="Today we&#39;re excited to announce the Iris project, our in-house image encoder. We&#39;ve begun work on Iris&#39;s first codec, Iris-WebP: A WebP encoder that brings impressive gains over the reference encoder.">
+    <meta property="og:url" content="https://halide.cx/blog/introducing-iris/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/blog/introducing-iris/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    <script defer src="https://halide.cx/js/motion.js"></script>
+    <script defer src="https://halide.cx/js/plates.js"></script>
+    
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header on-ink">
+      <div class="site-header__inner">
+        <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+          <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+          </svg>
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/">About</a>
+          <a href="https://halide.cx/iris-avif/">Iris-AVIF</a>
+          <a href="https://halide.cx/iris/">Iris-WebP</a>
+          <a href="https://halide.cx/blog/" class="is-current">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M3.75 8.25h16.5M3.75 15.75h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+<article class="sheet sheet--article">
+  <div class="container">
+    <div class="post">
+      <header class="post-header">
+        <h1 class="post-header__title">Introducing Iris for WebP</h1>
+        
+        <p class="lead">Today we&#39;re excited to announce the Iris project, our in-house image encoder. We&#39;ve begun work on Iris&#39;s first codec, Iris-WebP: A WebP encoder that brings impressive gains over the reference encoder.</p>
+        
+        <p class="post-header__meta">
+          Published <time datetime="2025-06-04">June 4, 2025</time> by the Halide Team
+        </p>
+      </header>
+
+      <div class="prose">
+        <figure class="post-hero">
+  <img src="https://halide.cx/img/sky.avif" alt="Sky" width="1536" height="864" decoding="async" fetchpriority="high">
+</figure>
+<h2 id="why-webp">Why WebP?</h2>
+<p>WebP was introduced in 2010 with the goal of providing better compression for
+Web images. While it claimed to offer significant efficiency advantages over
+JPEG, in practice this wasn't always true. Its adoption was also slow due to an
+initial lack of widespread browser support and further lackluster support
+outside of the Web ecosystem. This led to WebP being perceived as a confusing
+addition to the Web.</p>
+<p>Despite its reputation and unclear benefits, WebP has gained significant
+traction on the Web. It is available in over 95% of Web browsers, and large
+digital asset management companies serve billions of WebP images every day.</p>
+<p>Iris-WebP is a WebP encoder tuned for the human eye. At the same encode time, it
+produces smaller files than the reference encoder at equal visual quality, and
+it narrows most of the gap between WebP and slower formats like AVIF.</p>
+<h2 id="our-encoder">Our Encoder</h2>
+<p>Our primary goals building Iris-WebP are speed, compression efficiency, and
+consistency. We want to consistently output high-quality results from our
+encoder quickly, and in doing so provide an implementation that delivers on
+WebP's initial quality promises without compromise.</p>
+<p>In order to meet our goals, we've developed robust tooling to measure visual
+fidelity with SSIMULACRA2 and Butteraugli. Visual performance is paramount, and
+we work hard to ensure Iris-WebP isn't just overfit for metrics. Our featureset
+includes new compression techniques that came out of our own psychovisual
+research.</p>
+<p>To learn more about Iris-WebP and how it may benefit your workflow, visit the
+<a href="/iris/">Iris project page</a>. Metrics were not ready when this post went up; they
+are now published on the Iris page, along with the cases where Iris loses.</p>
+<div class="call-to-action">
+  <a href="/iris" class="btn btn--primary">Learn More About Iris</a>
+</div>
+
+      </div>
+
+      <nav class="post-nav" aria-label="More posts">
+        
+        <a class="post-nav__item" href="https://halide.cx/blog/">
+          <span class="post-nav__dir">All posts</span>
+          <span class="post-nav__title">Back to the blog</span>
+        </a>
+        
+
+        
+        <a class="post-nav__item post-nav__item--next" href="https://halide.cx/blog/improving-avif-in-open-source/">
+          <span class="post-nav__dir">Newer post</span>
+          <span class="post-nav__title">Improving AVIF in Open Source</span>
+        </a>
+        
+      </nav>
+    </div>
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer on-ink">
+      <div class="container site-footer__grid">
+        <div class="site-footer__brand">
+          <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+            <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+            </svg>
+            <span class="logo__word">Halide Compression</span>
+          </a>
+          <p class="site-footer__blurb">
+            Frontier compression technology for a more beautiful Internet.
+          </p>
+        </div>
+
+        <nav class="site-footer__links" aria-label="Footer">
+          <ul>
+            <li><a href="https://halide.cx/about/">About</a></li>
+            <li><a href="https://halide.cx/iris-avif/">Iris-AVIF</a></li>
+            <li><a href="https://halide.cx/iris/">Iris-WebP</a></li>
+            <li><a href="https://halide.cx/blog/">Blog</a></li>
+            <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+          </ul>
+          <ul>
+            <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+            <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+          </ul>
+        </nav>
+
+        <p class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0e0b15">
+
+    <title>Halide Compression</title>
+    <meta name="description" content="Halide Compression builds image encoders and measurement tools. Iris-WebP produces files 27% smaller than libwebp at equal quality and speed.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Halide Compression">
+    <meta property="og:description" content="Halide Compression builds image encoders and measurement tools. Iris-WebP produces files 27% smaller than libwebp at equal quality and speed.">
+    <meta property="og:url" content="https://halide.cx/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/RobotoMono-VariableFont_wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    <script defer src="https://halide.cx/js/motion.js"></script>
+    <script defer src="https://halide.cx/js/plates.js"></script>
+    
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header on-ink">
+      <div class="site-header__inner">
+        <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+          <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+          </svg>
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/">About</a>
+          <a href="https://halide.cx/iris-avif/">Iris-AVIF</a>
+          <a href="https://halide.cx/iris/">Iris-WebP</a>
+          <a href="https://halide.cx/blog/">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M3.75 8.25h16.5M3.75 15.75h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+
+
+
+
+<section class="plate plate--hero tone-violet"
+  style="--dcols:12;--drows:8;--ar:12 / 6.7;--min-h:40rem;--mcols:6;--mrows:4;--mar:6 / 3.6">
+  <div class="plate__field" aria-hidden="true">
+    <div class="win win--blur"
+  style="--dx:0;--dy:0;--dw:3;--dh:3;--mx:0;--my:0;--mw:3;--mh:2;" data-src="https://halide.cx/img/hero/bouquet-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--bits"
+  style="--dx:0;--dy:0;--dw:2;--dh:2;--mx:0;--my:1;--mw:2;--mh:2;" data-src="https://halide.cx/img/hero/bouquet-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--photo win--desk"
+  style="--dx:3;--dy:1;--dw:3;--dh:2;">
+  <div class="win__clip">
+    <img class="win__media" src="https://halide.cx/img/hero/bouquet-med.avif" alt="" decoding="async">
+  </div>
+</div>
+    <div class="win win--photo"
+  style="--dx:8;--dy:0;--dw:4;--dh:4;--mx:3;--my:0;--mw:3;--mh:3;">
+  <div class="win__clip">
+    <img class="win__media" src="https://halide.cx/img/hero/bouquet-med.avif" alt="" decoding="async">
+  </div>
+</div>
+    <div class="win win--bits"
+  style="--dx:7;--dy:2;--dw:2;--dh:2;--mx:2;--my:2;--mw:2;--mh:2;" data-src="https://halide.cx/img/hero/bouquet-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--blur"
+  style="--dx:9;--dy:4;--dw:3;--dh:3;--mx:4;--my:3;--mw:2;--mh:1;" data-src="https://halide.cx/img/hero/bouquet-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--bits win--desk"
+  style="--dx:11;--dy:4;--dw:1;--dh:2;" data-src="https://halide.cx/img/hero/bouquet-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+  </div>
+  <div class="plate__content" style="--dcx:1;--dcy:3.3;--dcw:7">
+    <h1 class="display"><span>Smaller images,</span><span>better quality.</span></h1>
+    <p class="plate__lead">
+      Halide Compression builds image encoders and the tools to measure them.
+      Iris-AVIF and Iris-WebP compress better than the reference encoders
+      for their formats, at equal visual quality and equal speed.
+    </p>
+    <div class="actions">
+      <a href="https://halide.cx/iris-avif/"
+        class="btn btn--primary">Explore Iris-AVIF</a>
+      <a href="https://halide.cx/about/"
+        class="btn btn--secondary">Consulting Services</a>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="container split">
+    <div class="split__head">
+      <h2>Frontier compression engineering.</h2>
+      <p>
+        We write encoders, we measure them with perceptual metrics, and we help
+        teams put the results into production. Our tuning targets what the human
+        eye sees.
+      </p>
+    </div>
+    <dl class="ledger">
+      <div class="ledger__row">
+        <dt>Encoder engineering</dt>
+        <dd>Encoders written from scratch, and speed and efficiency work on existing codecs in C, Zig, and assembly.</dd>
+      </div>
+      <div class="ledger__row">
+        <dt>Perceptual quality</dt>
+        <dd>We evaluate every change against the best perceptual metrics.</dd>
+      </div>
+      <div class="ledger__row">
+        <dt>Consulting</dt>
+        <dd>On-site and remote consulting on encoder selection, tuning, and image &amp; video pipelines at scale.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="plate plate--band tone-crimson"
+  style="--dcols:12;--drows:7;--ar:12 / 6.6;--min-h:44rem;--mcols:6;--mrows:3;--mar:6 / 3">
+  <div class="plate__field" aria-hidden="true">
+    <div class="win win--photo"
+  style="--dx:8;--dy:1;--dw:4;--dh:4;--mx:2;--my:0;--mw:4;--mh:2;">
+  <div class="win__clip">
+    <img class="win__media" src="https://halide.cx/img/fall_leaves.avif" alt="" decoding="async" loading="lazy">
+  </div>
+</div>
+    <div class="win win--bits"
+  style="--dx:6;--dy:0;--dw:3;--dh:2;--mx:0;--my:1;--mw:3;--mh:2;" data-src="https://halide.cx/img/fall_leaves.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--blur"
+  style="--dx:8;--dy:5;--dw:4;--dh:2;--mx:3;--my:2;--mw:3;--mh:1;" data-src="https://halide.cx/img/fall_leaves.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--bits win--desk"
+  style="--dx:11;--dy:0;--dw:1;--dh:1;" data-src="https://halide.cx/img/fall_leaves.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+  </div>
+  <div class="plate__content" style="--dcx:1;--dcy:1;--dcw:5">
+    <h2 class="band-title">Iris-AVIF</h2>
+    <p class="plate__lead">
+      Our most efficient encoder. Iris-AVIF brings the research behind
+      Iris-WebP to AV1's larger toolset, and adds grain synthesis and HDR.
+    </p>
+    <div class="actions">
+      <a href="https://halide.cx/iris-avif/" class="btn btn--secondary">See the full results</a>
+    </div>
+  </div>
+  <div class="plate__content plate__content--stats" style="--dcx:1;--dcy:5;--dcw:6">
+    <div class="stats stats--compact">
+      <div class="stat">
+  <span class="stat__value">21%</span>
+  <span class="stat__label">Better compression than libaom at equal CVVDP score, with a faster encode.</span>
+</div>
+      <div class="stat">
+  <span class="stat__value">20%</span>
+  <span class="stat__label">Better compression than Iris-WebP at equal quality and equal speed.</span>
+</div>
+      <div class="stat">
+  <span class="stat__value">29×</span>
+  <span class="stat__label">Faster than libaom at 1% better CVVDP score.</span>
+</div>
+    </div>
+  </div>
+</section>
+
+<section class="plate plate--band tone-tide"
+  style="--dcols:12;--drows:7;--ar:12 / 6.6;--min-h:44rem;--mcols:6;--mrows:3;--mar:6 / 3">
+  <div class="plate__field" aria-hidden="true">
+    <div class="win win--photo"
+  style="--dx:7;--dy:0;--dw:5;--dh:3;--mx:2;--my:0;--mw:4;--mh:2;">
+  <div class="win__clip">
+    <img class="win__media" src="https://halide.cx/img/hero/ocean-med.avif" alt="" decoding="async" loading="lazy">
+  </div>
+</div>
+    <div class="win win--bits"
+  style="--dx:7;--dy:2;--dw:3;--dh:3;--mx:1;--my:1;--mw:2;--mh:2;" data-src="https://halide.cx/img/hero/ocean-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--blur"
+  style="--dx:9;--dy:4;--dw:3;--dh:3;--mx:3;--my:2;--mw:3;--mh:1;" data-src="https://halide.cx/img/hero/ocean-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--blur win--desk"
+  style="--dx:5;--dy:0;--dw:2;--dh:1;" data-src="https://halide.cx/img/hero/ocean-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+  </div>
+  <div class="plate__content" style="--dcx:1;--dcy:1;--dcw:5">
+    <h2 class="band-title">Iris-WebP</h2>
+    <p class="plate__lead">
+      A WebP encoder tuned for the human visual system. Compared to
+      libwebp, the reference encoder, Iris-WebP produces smaller files at
+      the same visual quality and the same encode time.
+    </p>
+    <div class="actions">
+      <a href="https://halide.cx/iris/" class="btn btn--secondary">See the full results</a>
+    </div>
+  </div>
+  <div class="plate__content plate__content--stats" style="--dcx:1;--dcy:5;--dcw:6">
+    <div class="stats stats--compact">
+      <div class="stat">
+  <span class="stat__value">27%</span>
+  <span class="stat__label">Smaller files than libwebp at equal CVVDP score and equal speed. 13% by SSIMULACRA2, 29% by MS-SSIM.</span>
+</div>
+      <div class="stat">
+  <span class="stat__value">26%</span>
+  <span class="stat__label">Smaller files than libjpeg-turbo at equal CVVDP score. 24% by SSIMULACRA2, 35% by MS-SSIM.</span>
+</div>
+      <div class="stat">
+  <span class="stat__value">Drop-in</span>
+  <span class="stat__label">Output is standard WebP. Every browser that shows WebP today shows Iris output unchanged.</span>
+</div>
+    </div>
+  </div>
+</section>
+
+
+<section class="sheet">
+  <div class="container">
+    <div class="head">
+      <h2>From the blog.</h2>
+      <p>Encoder write-ups, metric comparisons, and interviews with people who work on compression.</p>
+    </div>
+    <div class="post-list">
+      
+        <a class="post-row" href="https://halide.cx/blog/introducing-iris-avif/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/fall_leaves.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Introducing Iris-AVIF</h3>
+    <time class="post-row__date" datetime="2026-10-07">Oct 7, 2026</time>
+    <p class="post-row__body">Iris-AVIF is our new AVIF encoder, and the best image encoder we know how to build. It sets a new frontier for how small a beautiful image can be.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/wpd/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/building.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Introducing wpd</h3>
+    <time class="post-row__date" datetime="2026-10-02">Oct 2, 2026</time>
+    <p class="post-row__body">Faster, safer WebP decoding for everyone.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/metric-limits/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/fsky-hdr.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Limitations of Perceptual Metrics</h3>
+    <time class="post-row__date" datetime="2026-09-05">Sep 5, 2026</time>
+    <p class="post-row__body">As encoders mature, metrics become less valuable.</p>
+  </div>
+</a>
+      
+    </div>
+    <p class="sheet__foot">
+      <a class="more-link" href="https://halide.cx/blog/">Read all posts</a>
+    </p>
+  </div>
+</section>
+
+
+<section class="plate plate--cta tone-umber"
+  style="--dcols:12;--drows:5;--ar:12 / 4.4;--min-h:30rem;--mcols:6;--mrows:3;--mar:6 / 3;--dcx:1;--dcy:1;--dcw:5">
+  <div class="plate__field" aria-hidden="true">
+    <div class="win win--blur"
+  style="--dx:5;--dy:0;--dw:2;--dh:3;--mx:0;--my:0;--mw:2;--mh:3;" data-src="https://halide.cx/img/hero/flower-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--photo"
+  style="--dx:8;--dy:0;--dw:4;--dh:5;--mx:3;--my:0;--mw:3;--mh:3;">
+  <div class="win__clip">
+    <img class="win__media" src="https://halide.cx/img/hero/flower-med.avif" alt="" decoding="async" loading="lazy">
+  </div>
+</div>
+    <div class="win win--bits"
+  style="--dx:7;--dy:1;--dw:2;--dh:3;--mx:2;--my:1;--mw:2;--mh:2;" data-src="https://halide.cx/img/hero/flower-med.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+  </div>
+  <div class="plate__content">
+    <h2 class="cta-title">Talk to us.</h2>
+    <p class="plate__lead">We license Iris-AVIF and Iris-WebP and take on consulting work. Send us a note about your image pipeline and we will reply.</p>
+    <div class="actions">
+      <a href="mailto:mail@halide.cx" class="btn btn--primary">Email Us</a>
+      <a href="https://halide.cx/about/" class="btn btn--secondary">About Halide</a>
+    </div>
+  </div>
+</section>
+
+
+    </main>
+
+    <footer class="site-footer on-ink">
+      <div class="container site-footer__grid">
+        <div class="site-footer__brand">
+          <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+            <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+            </svg>
+            <span class="logo__word">Halide Compression</span>
+          </a>
+          <p class="site-footer__blurb">
+            Frontier compression technology for a more beautiful Internet.
+          </p>
+        </div>
+
+        <nav class="site-footer__links" aria-label="Footer">
+          <ul>
+            <li><a href="https://halide.cx/about/">About</a></li>
+            <li><a href="https://halide.cx/iris-avif/">Iris-AVIF</a></li>
+            <li><a href="https://halide.cx/iris/">Iris-WebP</a></li>
+            <li><a href="https://halide.cx/blog/">Blog</a></li>
+            <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+          </ul>
+          <ul>
+            <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+            <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+          </ul>
+        </nav>
+
+        <p class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

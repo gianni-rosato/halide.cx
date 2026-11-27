@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0e0b15">
+
+    <title>Blog | Halide Compression</title>
+    <meta name="description" content="Research notes, encoder deep dives, and interviews from the world of image and video compression.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Halide Compression">
+    <meta property="og:title" content="Blog | Halide Compression">
+    <meta property="og:description" content="Research notes, encoder deep dives, and interviews from the world of image and video compression.">
+    <meta property="og:url" content="https://halide.cx/blog/">
+    <meta property="og:image" content="https://halide.cx/img/hero/bouquet-med.avif">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://halide.cx/blog/">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="https://halide.cx/atom.xml">
+    <link rel="icon" href="https://halide.cx/favicon.webp">
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/HankenGrotesk-VariableFont_wght.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://halide.cx/fonts/Inter-VariableFont_opsz,wght.woff2">
+    <link rel="stylesheet" href="https://halide.cx/main.css">
+
+    <script defer src="https://cloud.umami.is/script.js"
+      data-website-id="b3cce724-5063-4b5a-99d5-77f7d35b07d1"></script>
+    <script defer src="https://halide.cx/js/mobile_menu.js"></script>
+    <script defer src="https://halide.cx/js/image_switcher.js"></script>
+    <script defer src="https://halide.cx/js/motion.js"></script>
+    <script defer src="https://halide.cx/js/plates.js"></script>
+    
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header on-ink">
+      <div class="site-header__inner">
+        <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+          <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+          </svg>
+          <span class="logo__word">Halide Compression</span>
+        </a>
+
+        <nav class="main-nav" id="main-nav" aria-label="Main">
+          <a href="https://halide.cx/about/">About</a>
+          <a href="https://halide.cx/iris-avif/">Iris-AVIF</a>
+          <a href="https://halide.cx/iris/">Iris-WebP</a>
+          <a href="https://halide.cx/blog/" class="is-current" aria-current="page">Blog</a>
+        </nav>
+
+        <button class="mobile-menu-button" aria-label="Open menu"
+          aria-expanded="false" aria-controls="main-nav">
+          <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M3.75 8.25h16.5M3.75 15.75h16.5" />
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="square" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      
+
+<section class="plate plate--head tone-dusk"
+  style="--dcols:12;--drows:5;--ar:12 / 4.4;--min-h:28rem;--mcols:6;--mrows:3;--mar:6 / 2.6;--dcx:1;--dcy:1.5;--dcw:6">
+  <div class="plate__field" aria-hidden="true">
+    <div class="win win--blur win--desk"
+  style="--dx:5;--dy:0;--dw:2;--dh:1;" data-src="https://halide.cx/img/sky.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+    <div class="win win--photo"
+  style="--dx:8;--dy:0;--dw:4;--dh:3;--mx:2;--my:0;--mw:4;--mh:2;">
+  <div class="win__clip">
+    <img class="win__media" src="https://halide.cx/img/sky.avif" alt="" decoding="async">
+  </div>
+</div>
+    <div class="win win--blur"
+  style="--dx:9;--dy:3;--dw:3;--dh:2;--mx:3;--my:2;--mw:3;--mh:1;" data-src="https://halide.cx/img/sky.avif">
+  <div class="win__clip">
+    <canvas class="win__canvas" aria-hidden="true"></canvas>
+  </div>
+</div>
+  </div>
+  <div class="plate__content">
+    <h1 class="display">Blog</h1>
+    <p class="plate__lead">Research notes, encoder deep dives, and interviews from the world of image and video compression.</p>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="container">
+    
+    <div class="post-list">
+      
+        <a class="post-row" href="https://halide.cx/blog/introducing-iris-avif/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/fall_leaves.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Introducing Iris-AVIF</h3>
+    <time class="post-row__date" datetime="2026-10-07">Oct 7, 2026</time>
+    <p class="post-row__body">Iris-AVIF is our new AVIF encoder, and the best image encoder we know how to build. It sets a new frontier for how small a beautiful image can be.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/wpd/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/building.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Introducing wpd</h3>
+    <time class="post-row__date" datetime="2026-10-02">Oct 2, 2026</time>
+    <p class="post-row__body">Faster, safer WebP decoding for everyone.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/metric-limits/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/fsky-hdr.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Limitations of Perceptual Metrics</h3>
+    <time class="post-row__date" datetime="2026-09-05">Sep 5, 2026</time>
+    <p class="post-row__body">As encoders mature, metrics become less valuable.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/fmetrics/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/ceiling.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Introducing fmetrics</h3>
+    <time class="post-row__date" datetime="2026-07-07">Jul 7, 2026</time>
+    <p class="post-row__body">Faster perceptual video and image fidelity metrics.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/chroma-handling/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/rocks-hdr.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Same Image, Different Score?</h3>
+    <time class="post-row__date" datetime="2026-02-04">Feb 4, 2026</time>
+    <p class="post-row__body">Metrics don&#39;t just measure encoder performance; decoding matters too, and even after decoding, not all post-processing is created equal.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/fcvvdp/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/slate.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Introducing fcvvdp</h3>
+    <time class="post-row__date" datetime="2025-12-28">Dec 28, 2025</time>
+    <p class="post-row__body">A faster implementation of CVVDP, a perceptual video and image fidelity metric.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/consistency/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/streak.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Measuring Image Encoder Consistency</h3>
+    <time class="post-row__date" datetime="2025-09-14">Sep 14, 2025</time>
+    <p class="post-row__body">Quality and speed define an image encoder&#39;s compression performance. Consistency is a close third, and easily overlooked in image encoder design. What value does it provide, and how can we measure it?</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/julio-barba-interview/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/ocean.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">An Interview With Julio Barba</h3>
+    <time class="post-row__date" datetime="2025-08-29">Aug 29, 2025</time>
+    <p class="post-row__body">Julio Barba works on improving state of the art multimedia compression technology at Google. In this interview, Julio talks to Gianni about the future of multimedia compression, looking at AV2 and beyond.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/improving-avif-in-open-source/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/fall_leaves.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Improving AVIF in Open Source</h3>
+    <time class="post-row__date" datetime="2025-07-13">Jul 13, 2025</time>
+    <p class="post-row__body">AVIF is a complex image format with a lot of potential. A significant amount of this potential was unlocked in 2024; Gianni Rosato, our founder and contributor to these efforts, details how this was done &amp; talks about the future of modern image codecs on the Web.</p>
+  </div>
+</a>
+      
+        <a class="post-row" href="https://halide.cx/blog/introducing-iris/">
+  <div class="post-row__thumb">
+    <img src="https://halide.cx/img/sky.avif" alt="" loading="lazy" decoding="async">
+  </div>
+  <div class="post-row__text">
+    <h3 class="post-row__title">Introducing Iris for WebP</h3>
+    <time class="post-row__date" datetime="2025-06-04">Jun 4, 2025</time>
+    <p class="post-row__body">Today we&#39;re excited to announce the Iris project, our in-house image encoder. We&#39;ve begun work on Iris&#39;s first codec, Iris-WebP: A WebP encoder that brings impressive gains over the reference encoder.</p>
+  </div>
+</a>
+      
+    </div>
+    
+  </div>
+</section>
+
+
+    </main>
+
+    <footer class="site-footer on-ink">
+      <div class="container site-footer__grid">
+        <div class="site-footer__brand">
+          <a href="https://halide.cx/" class="logo" aria-label="Halide Compression, home">
+            <svg class="logo__mark" viewBox="0 0 455.19 394.36" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M113.8 0 83.58 52.35 278.8 0Zm167.22 0 142.75 142.76L341.37 0ZM82.32 54.53 0 197.18l30.09 52.14Zm108.92 79.7L154.9 197.2h-.01l36.34 62.97h72.58l36.33-62.97-36.32-62.97zM425 144.89l-52.42 195.43 82.6-143.12ZM31.64 252l82.15 142.35h60.2zm339.97 90L176.4 394.36h165z" />
+            </svg>
+            <span class="logo__word">Halide Compression</span>
+          </a>
+          <p class="site-footer__blurb">
+            Frontier compression technology for a more beautiful Internet.
+          </p>
+        </div>
+
+        <nav class="site-footer__links" aria-label="Footer">
+          <ul>
+            <li><a href="https://halide.cx/about/">About</a></li>
+            <li><a href="https://halide.cx/iris-avif/">Iris-AVIF</a></li>
+            <li><a href="https://halide.cx/iris/">Iris-WebP</a></li>
+            <li><a href="https://halide.cx/blog/">Blog</a></li>
+            <li><a href="https://halide.cx/privacy/">Privacy Policy</a></li>
+          </ul>
+          <ul>
+            <li><a href="mailto:mail@halide.cx">mail@halide.cx</a></li>
+            <li><a href="https://halide.cx/atom.xml">Atom feed</a></li>
+          </ul>
+        </nav>
+
+        <p class="site-footer__legal">
+          &copy; 2026 Halide Compression LLC. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
