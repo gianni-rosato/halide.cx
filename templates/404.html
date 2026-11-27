@@ -1,20 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="hero">
-  <div class="container">
-    <span class="eyebrow">error 404</span>
-    <h1 class="hero__title">Page not found</h1>
-    <p class="hero__lead">
-      The page you're looking for doesn't exist, or has moved somewhere else.
-    </p>
-    <div class="actions hero__actions">
-      <a href="{{ get_url(path='@/_index.md') }}"
-        class="btn btn--primary">Back home</a>
-      <a href="{{ get_url(path='@/blog/_index.md') }}"
-        class="btn btn--secondary">Read the blog</a>
-    </div>
-  </div>
-</section>
+{% set home_url = get_url(path='@/_index.md') %}
+{% set blog_url = get_url(path='@/blog/_index.md') %}
+
+{{ <head_plate
+  title="Page not found"
+  lead="The page you're looking for doesn't exist, or has moved somewhere else."
+  src="/img/hero/snails-med.avif"
+  url={home_url}
+  txt="Back home"
+  second_url={blog_url}
+  second_txt="Read the blog"
+/> }}
 
 {% endblock content %}

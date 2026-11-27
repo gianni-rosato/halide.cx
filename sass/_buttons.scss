@@ -1,79 +1,100 @@
 /* ==========================================================================
-   Buttons — one base plus three variants. `.cta-button` is retained as an
-   alias because it appears in generated markup and older shortcode calls.
+   Buttons — squared, like the tiles. Hovering one selects it: the four
+   corner handles from the plates appear around it. `.cta-button` is kept as
+   an alias for older markup.
    ========================================================================== */
 
 .btn,
 .cta-button {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--paper);
+  --btn-border: var(--ink);
+  --handle-c: var(--ink);
+
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
   font-family: var(--font-sans);
   font-size: var(--step--1);
-  font-weight: 500;
+  font-weight: 550;
   line-height: 1;
-  padding: 0.85em 1.4em;
-  border-radius: var(--radius-full);
-  border: 1px solid transparent;
+  padding: 1em 1.45em;
+  background-color: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--btn-border);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   transition: background-color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease), color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+    border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
-.btn--primary,
-.cta-button {
-  background-color: var(--inverse);
-  color: var(--on-inverse);
-  border-color: var(--inverse);
+.btn::before,
+.cta-button::before {
+  --hs: 5px;
+
+  content: "";
+  position: absolute;
+  inset: calc(var(--hs) / -2 - 4px);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  background:
+    linear-gradient(var(--handle-c) 0 0) 0 0 / var(--hs) var(--hs) no-repeat,
+    linear-gradient(var(--handle-c) 0 0) 100% 0 / var(--hs) var(--hs) no-repeat,
+    linear-gradient(var(--handle-c) 0 0) 0 100% / var(--hs) var(--hs) no-repeat,
+    linear-gradient(var(--handle-c) 0 0) 100% 100% / var(--hs) var(--hs) no-repeat;
 }
 
-.btn--primary:hover,
-.cta-button:hover {
-  background-color: var(--ink-700);
-  border-color: var(--ink-700);
-  color: var(--on-inverse);
+.btn:hover::before,
+.btn:focus-visible::before,
+.cta-button:hover::before {
+  opacity: 1;
+  transform: none;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  color: var(--btn-fg);
 }
 
 .btn--secondary,
 .cta-button.secondary {
-  background-color: transparent;
-  color: var(--heading);
-  border-color: var(--border);
+  --btn-bg: transparent;
+  --btn-fg: var(--heading);
+  --btn-border: var(--line-strong);
 }
 
-.btn--secondary:hover,
-.cta-button.secondary:hover {
-  background-color: var(--surface-alt);
-  border-color: var(--border-strong);
-  color: var(--heading);
+/* On ink, everything flips. */
+.on-ink .btn,
+.plate:not(.plate--paper) .btn,
+.launch-hero .btn {
+  --btn-bg: var(--on-ink);
+  --btn-fg: var(--ink);
+  --btn-border: var(--on-ink);
+  --handle-c: var(--on-ink);
 }
 
-.btn--ghost {
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--heading);
+.on-ink .btn--secondary,
+.plate:not(.plate--paper) .btn--secondary,
+.launch-hero .btn--secondary {
+  --btn-bg: transparent;
+  --btn-fg: var(--on-ink);
+  --btn-border: var(--ink-line);
+}
+
+.plate:not(.plate--paper) .btn--secondary,
+.launch-hero .btn--secondary {
+  --btn-bg: var(--ink);
+}
+
+/* A text link that leads somewhere further, set a little larger. */
+.more-link {
   font-family: var(--font-display);
   font-size: var(--step-0);
   font-weight: 500;
-  text-decoration: none;
-}
-
-.btn--ghost .btn__arrow {
-  display: inline-block;
-  transition: transform var(--dur) var(--ease);
-}
-
-.btn--ghost:hover {
   color: var(--heading);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .btn--ghost:hover .btn__arrow {
-    transform: translateX(0.25em);
-  }
 }

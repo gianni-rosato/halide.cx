@@ -1,63 +1,38 @@
 /* ==========================================================================
-   Article — blog index cards, post header, and prose body.
+   Article — post header, lead plate, prose body, post navigation.
    ========================================================================== */
 
-/* --- Blog index ---------------------------------------------------------- */
-
-.post-feature {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-5);
-  padding: var(--space-6);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  text-decoration: none;
-  color: inherit;
-  transition: border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
+.sheet--article {
+  padding-top: var(--space-10);
 }
 
-.post-feature:hover {
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-sm);
-  color: inherit;
-}
-
-.post-feature__title {
-  margin-top: var(--space-3);
-  font-size: var(--step-3);
-}
-
-.post-feature__body {
-  margin-top: var(--space-4);
-  color: var(--text-muted);
-  max-width: 60ch;
-}
-
-.post-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-5);
-  margin-top: var(--space-6);
-}
-
-@media (min-width: 768px) {
-  .post-feature {
-    padding: var(--space-8);
-  }
-
-  .post-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* --- Post layout --------------------------------------------------------- */
-
-/* The reading column. Centering it is what lets figures below break out
-   symmetrically instead of running off the left edge. */
+/* The reading column, centred on the plate grid. The container holds ten
+   columns inside the gutters: from 1024px the column takes the middle
+   eight, from 1280px the middle six, so both edges land on dashed guides.
+   Figures break out by one column on each side. */
 .post {
-  max-width: 46rem;
+  --post-span: 1;
+  --break-span: 1;
+
+  max-width: 44rem;
   margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  .post {
+    --post-span: 0.8;
+    --break-span: 1;
+
+    max-width: none;
+    width: calc(var(--post-span) * 100%);
+  }
+}
+
+@media (min-width: 1280px) {
+  .post {
+    --post-span: 0.6;
+    --break-span: 0.8;
+  }
 }
 
 .post .prose {
@@ -71,8 +46,8 @@
 }
 
 .post-header__title {
-  margin-top: var(--space-2);
-  max-width: 20ch;
+  font-size: var(--step-4);
+  max-width: 18ch;
 }
 
 .post-header .lead {
@@ -80,34 +55,52 @@
   color: var(--text-muted);
 }
 
-/* Lead image emitted by the `hero` component at the top of each post. */
-.post-hero {
-  margin-bottom: var(--space-8);
+.post-header__meta {
+  margin-top: var(--space-5);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
 }
 
-.post-hero img {
+/* Lead plate emitted by the `hero` component at the top of each post. */
+.post-hero {
+  margin-block: var(--space-6) var(--space-10);
+}
+
+.post-hero > img,
+.prose .post-hero > img {
+  display: block;
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  height: auto;
+  margin: 0;
 }
 
 /* --- Prose --------------------------------------------------------------- */
 
 .prose {
   max-width: var(--measure);
+  line-height: 1.7;
 }
 
 .prose > * + * {
   margin-top: var(--space-4);
 }
 
+.prose h2,
+.prose h3 {
+  text-wrap: pretty;
+}
+
 .prose h2 {
   font-size: var(--step-2);
-  margin-top: var(--space-10);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: var(--space-12);
 }
 
 .prose h3 {
   font-size: var(--step-1);
+  font-weight: 550;
   margin-top: var(--space-8);
 }
 
@@ -129,19 +122,29 @@
 }
 
 .prose blockquote {
-  margin-block: var(--space-6);
+  margin-block: var(--space-8);
   padding-left: var(--space-5);
-  border-left: 2px solid var(--text-muted);
-  color: var(--text-muted);
+  border-left: 1px solid var(--heading);
+  color: var(--text);
+  font-family: var(--font-display);
   font-size: var(--step-0);
-  line-height: 1.5;
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+}
+
+@media (min-width: 768px) {
+  .prose blockquote {
+    font-size: var(--step-1);
+  }
 }
 
 .prose blockquote p + p {
   margin-top: var(--space-4);
 }
 
-.prose img,
+.prose > img,
+.prose p > img,
+.prose figure > img,
 .prose .image-container,
 .prose .media {
   margin-block: var(--space-8);
@@ -149,8 +152,19 @@
 
 /* Charts and figures keep their natural size; center them in whatever
    column or breakout box they land in. */
-.prose img {
+.prose > img,
+.prose p > img,
+.prose figure > img {
   margin-inline: auto;
+}
+
+/* Plates manage their own images. */
+.prose .plate img {
+  margin: 0;
+}
+
+.prose > .image-switcher {
+  margin-block: var(--space-10);
 }
 
 .post .prose .image-switcher > .image-container {
@@ -159,6 +173,7 @@
 
 .post .prose .image-switcher-container img {
   margin-block: 0;
+  max-width: 100%;
 }
 
 .post .prose > .image-switcher:not(:has(> h3)) {
@@ -175,17 +190,24 @@
 
 .prose figcaption {
   margin-top: var(--space-3);
-  font-family: var(--font-mono);
   font-size: var(--step--1);
   color: var(--text-muted);
   text-align: center;
 }
 
-@media (min-width: 1080px) {
+@media (min-width: 1024px) {
+  .post .prose .image-switcher-container img {
+    --breakout: calc(100% * var(--break-span) / var(--post-span));
+
+    width: var(--breakout);
+    max-width: none;
+    margin-inline: calc((100% - var(--breakout)) / 2);
+  }
+
   .post .prose > figure,
   .post .prose > .image-container,
   .post .prose > p:has(> img:only-child) {
-    --breakout: min(64rem, 100vw - 2 * var(--gutter));
+    --breakout: calc(100% * var(--break-span) / var(--post-span));
 
     width: var(--breakout);
     margin-inline: calc((100% - var(--breakout)) / 2);
@@ -199,43 +221,40 @@
 
 .prose table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
+  border-collapse: collapse;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
   font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
 }
 
 .prose th,
 .prose td {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
   text-align: left;
-  border-bottom: 1px solid var(--border);
+  background-image: repeating-linear-gradient(to right, var(--guide) 0 4px, transparent 4px 9px);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: bottom;
 }
 
 .prose th {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 550;
   color: var(--heading);
-  background-color: var(--surface-sunken);
   white-space: nowrap;
 }
 
 .prose tr:last-child td {
-  border-bottom: 0;
-}
-
-.prose tbody tr:nth-child(even) td {
-  background-color: var(--ink-050);
+  background-image: none;
 }
 
 /* --- Post footer nav ----------------------------------------------------- */
 
 .post-nav {
-  margin-top: var(--space-10);
+  margin-top: var(--space-12);
   padding-top: var(--space-6);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line-strong);
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-5);
@@ -248,31 +267,33 @@
 
 .post-nav__item:hover .post-nav__title {
   text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
 
 .post-nav__dir {
-  font-family: var(--font-mono);
   font-size: var(--step--1);
-  text-transform: uppercase;
   color: var(--text-muted);
 }
 
 .post-nav__title {
   display: block;
-  margin-top: var(--space-2);
+  margin-top: var(--space-1);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-size: var(--step-1);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
   color: var(--heading);
 }
 
-.post-nav__item--next {
-  text-align: left;
-}
-
+/* Each link takes the width its title needs, so short titles never wrap
+   early; two long titles share the row. */
 @media (min-width: 640px) {
   .post-nav {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, max-content) minmax(0, max-content);
+    justify-content: space-between;
+    column-gap: var(--space-8);
   }
 
   .post-nav__item--next {

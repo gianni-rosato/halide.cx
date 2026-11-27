@@ -1,97 +1,182 @@
 /* ==========================================================================
-   Layout — container, section rhythm, full-bleed bands, grids, skip link.
-   `main` deliberately has no container of its own: each section supplies one,
-   which is what lets `.band` run edge to edge.
+   Layout — container, paper sections, ledger rows, skip link.
+   Plates (the dark image collages) are full-bleed and live in _plate.scss.
    ========================================================================== */
 
 .container {
   width: 100%;
-  max-width: var(--container);
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
 
-.container--narrow {
-  max-width: 860px;
+/* On desktop the gutter is exactly one plate column, so paper text sits on
+   the same vertical line as the first dashed guide in every plate. */
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: calc(100% / 12);
+  }
 }
 
+/* Paper lives on main; the body behind it is ink, so a sub-pixel gap
+   between a plate and the footer can never show a light line. */
 main {
   flex: 1 0 auto;
+  background-color: var(--paper);
 }
 
-/* --- Section rhythm ------------------------------------------------------ */
-
-.section {
-  padding-block: var(--space-10);
+/* A plate's height is rarely a whole pixel, so the row where main meets
+   the footer can blend in a line of paper. A closing plate reaches 1px
+   past main's edge to cover that row with its own ink. */
+main > .plate:last-child {
+  margin-bottom: -1px;
 }
 
-.section--tight {
-  padding-block: var(--space-8);
+/* --- Paper sections ------------------------------------------------------ */
+
+/* One vertical rhythm for paper: --sheet-pad above and below every
+   section. Unruled neighbours share one gap; a dashed rule between two
+   sections sits in the middle of the gap, with equal air on each side. */
+.sheet {
+  --sheet-pad: var(--space-10);
+
+  padding-block: var(--sheet-pad);
 }
 
-.section--lead {
-  padding-block: var(--space-12) var(--space-10);
+@media (min-width: 768px) {
+  .sheet {
+    --sheet-pad: var(--space-12);
+  }
 }
 
-.section > * + * {
-  margin-top: var(--space-6);
+.sheet--tight {
+  --sheet-pad: var(--space-8);
 }
 
-/* A full-bleed tinted band, used to break up long runs of white. */
-.band {
-  background-color: var(--surface-alt);
-  border-block: 1px solid var(--border);
-  padding-block: var(--space-10);
+.sheet + .sheet:not(.sheet--ruled) {
+  padding-top: 0;
 }
 
-.band + .band {
-  border-top: 0;
+/* Nothing inside a section adds to its edges. */
+.sheet .container > :first-child {
+  margin-top: 0;
 }
 
-/* --- Section heading block ----------------------------------------------- */
+.sheet .container > :last-child {
+  margin-bottom: 0;
+}
 
-.section-head {
+/* A dashed guide running edge to edge between two paper sections. */
+.sheet--ruled {
+  position: relative;
+}
+
+.sheet--ruled::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background-image: repeating-linear-gradient(to right, var(--guide) 0 4px, transparent 4px 9px);
+}
+
+/* Heading on the left, content on the right, both on the twelve-column grid
+   (the container's padding already accounts for the outer two columns). */
+.split {
+  display: grid;
+  gap: var(--space-6) var(--space-8);
+}
+
+.split__head h2 {
+  max-width: 14ch;
+}
+
+.split__head p {
+  margin-top: var(--space-5);
+  color: var(--text-muted);
+  max-width: 42ch;
+}
+
+/* Stacked, the second column is its own block: a dashed rule and a full
+   section gap set it apart from the heading above. */
+@media (max-width: 1023px) {
+  /* With the grid's row gap, the rule sits midway: 3rem each side. */
+  .split > .profile .profile__bio {
+    margin-top: var(--space-5);
+    padding-top: 0;
+    background-image: none;
+  }
+
+  .split > .profile {
+    margin-top: var(--space-4);
+    padding-top: var(--space-8);
+    background-image: repeating-linear-gradient(to right, var(--guide) 0 4px, transparent 4px 9px);
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+  }
+}
+
+@media (min-width: 1024px) {
+  .split {
+    /* Three columns of heading, one of air, six of body. */
+    grid-template-columns: 3fr 6fr;
+    column-gap: 10%;
+  }
+}
+
+.head {
   max-width: var(--measure);
   margin-bottom: var(--space-8);
 }
 
-.section-head p {
+.head p {
   margin-top: var(--space-4);
   color: var(--text-muted);
-  font-size: var(--step-0);
 }
 
-.section-head--center {
-  margin-inline: auto;
-  text-align: center;
+/* --- Ledger: definition rows separated by dashed guides ------------------ */
+
+.ledger {
+  border-top: 1px solid var(--line-strong);
 }
 
-/* Trailing "see all" link under a section's content. */
-.section-foot {
-  margin-top: var(--space-6);
-}
-
-/* --- Generic grids ------------------------------------------------------- */
-
-.grid {
+.ledger__row {
   display: grid;
-  gap: var(--space-5);
-  grid-template-columns: 1fr;
+  gap: var(--space-2) var(--space-6);
+  padding-block: var(--space-5);
+  background-image: repeating-linear-gradient(to right, var(--guide) 0 4px, transparent 4px 9px);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+.ledger__row:last-child {
+  background-image: none;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.ledger dt,
+.ledger__title {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--heading);
+}
+
+.ledger dd,
+.ledger__body {
+  color: var(--text-muted);
+  max-width: 46ch;
 }
 
 @media (min-width: 640px) {
-  .grid--2 {
-    grid-template-columns: repeat(2, 1fr);
+  .ledger__row {
+    grid-template-columns: 2fr 4fr;
+    padding-block: var(--space-6);
   }
 }
 
-@media (min-width: 880px) {
-  .grid--3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* --- Flow helper --------------------------------------------------------- */
+/* --- Flow helpers -------------------------------------------------------- */
 
 .flow > * + * {
   margin-top: var(--space-4);
@@ -116,10 +201,9 @@ main {
   top: var(--space-4);
   z-index: 100;
   transform: translateY(-200%);
-  background-color: var(--inverse);
-  color: var(--on-inverse);
+  background-color: var(--paper);
+  color: var(--ink);
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-sm);
   text-decoration: none;
   font-family: var(--font-display);
   font-weight: 500;
@@ -128,5 +212,8 @@ main {
 
 .skip-link:focus {
   transform: translateY(0);
-  color: var(--on-inverse);
+}
+
+.sheet__foot {
+  margin-top: var(--space-6);
 }

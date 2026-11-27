@@ -2,12 +2,11 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background-color: oklch(0.1487 0.0236 291.71);
-  color: var(--paper);
+  background-color: var(--ink);
+  color: var(--on-ink);
   min-height: clamp(30rem, 78vh, 46rem);
   display: flex;
   align-items: flex-start;
-  border-bottom: 1px solid var(--border);
 }
 
 .launch-hero__canvas {
@@ -29,19 +28,20 @@
   background:
     linear-gradient(
       to right,
-      oklch(0.08 0.02 300 / 0.8) 0%,
-      oklch(0.08 0.02 300 / 0.5) 28%,
-      oklch(0.08 0.02 300 / 0) 52%
+      oklch(0.12 0.022 295 / 0.8) 0%,
+      oklch(0.12 0.022 295 / 0.5) 28%,
+      oklch(0.12 0.022 295 / 0) 52%
     ),
     linear-gradient(
       to bottom,
-      oklch(0.08 0.02 300 / 0.7) 0%,
-      oklch(0.08 0.02 300 / 0.35) 36%,
-      oklch(0.08 0.02 300 / 0) 62%
+      oklch(0.12 0.022 295 / 0.7) 0%,
+      oklch(0.12 0.022 295 / 0.35) 36%,
+      oklch(0.12 0.022 295 / 0) 62%
     );
 }
 
 .launch-hero__content {
+  width: 100%;
   position: relative;
   z-index: 2;
   pointer-events: none;
@@ -52,21 +52,19 @@
   pointer-events: auto;
 }
 
-.launch-hero__eyebrow {
-  display: block;
-  font-family: var(--font-mono);
+.launch-hero__meta {
+  margin-top: var(--space-5);
   font-size: var(--step--1);
-  font-weight: 450;
-  color: var(--ink-300);
-  margin-bottom: var(--space-4);
+  font-variant-numeric: tabular-nums;
+  color: var(--on-ink-muted);
 }
 
 .launch-hero__title {
-  color: var(--paper);
-  font-size: var(--step-5);
+  color: var(--on-ink);
+  font-size: var(--step-display);
   font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.015em;
+  line-height: 0.94;
+  letter-spacing: -0.042em;
   max-width: 12ch;
   text-shadow: 0 2px 24px oklch(0 0 0 / 0.45);
 }
@@ -75,7 +73,7 @@
   margin-top: var(--space-5);
   font-size: var(--step-1);
   line-height: 1.45;
-  color: var(--ink-200);
+  color: var(--on-ink);
   max-width: 34ch;
   text-shadow: 0 1px 16px oklch(0 0 0 / 0.55);
 }
@@ -84,39 +82,14 @@
   margin-top: var(--space-6);
 }
 
-.launch-hero .btn--primary {
-  background-color: var(--paper);
-  color: var(--ink-900);
-  border-color: var(--paper);
-}
-
-.launch-hero .btn--primary:hover {
-  background-color: var(--ink-200);
-  border-color: var(--ink-200);
-  color: var(--ink-900);
-}
-
-.launch-hero .btn--secondary {
-  color: var(--paper);
-  border-color: oklch(1 0 0 / 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.launch-hero .btn--secondary:hover {
-  background-color: oklch(1 0 0 / 0.12);
-  border-color: var(--paper);
-  color: var(--paper);
-}
-
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .launch-hero__scrim {
     background:
       linear-gradient(
         to bottom,
-        oklch(0.08 0.02 300 / 0.78) 0%,
-        oklch(0.08 0.02 300 / 0.55) 45%,
-        oklch(0.08 0.02 300 / 0) 78%
+        oklch(0.12 0.022 295 / 0.86) 0%,
+        oklch(0.12 0.022 295 / 0.78) 45%,
+        oklch(0.12 0.022 295 / 0) 72%
       );
   }
 }
@@ -127,10 +100,35 @@
   }
 }
 
+/* Below desktop the text spans the hero, so the hero runs on under the
+   buttons just far enough to hold the mark (js/binary_fire.js centres it
+   in that room). */
+@media (max-width: 1023px) {
+  .launch-hero {
+    min-height: 0;
+  }
+
+  .launch-hero__content {
+    padding-bottom: calc(var(--space-6) + min(56vw, 17rem));
+  }
+}
+
 .launch-stats {
-  background-color: var(--surface-alt);
-  border-bottom: 1px solid var(--border);
-  padding-block: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.launch-stats .stat__label {
+  font-size: var(--step-0);
+  color: var(--text);
+}
+
+@media (min-width: 1024px) {
+  .launch-stats {
+    --breakout: calc(100% * var(--break-span) / var(--post-span));
+
+    width: var(--breakout);
+    margin-inline: calc((100% - var(--breakout)) / 2);
+  }
 }
 
 .launch-stats__grid {
@@ -148,30 +146,21 @@
   font-variant-numeric: tabular-nums;
 }
 
-.launch-stats .stat__label {
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  line-height: 1.5;
-}
+
 
 .launch-stats__note {
   margin-top: var(--space-5);
+  margin-inline: 0;
   text-align: left;
 }
 
 @media (min-width: 768px) {
-  .launch-stats {
-    padding-block: var(--space-8);
-  }
-
   .launch-stats .stat {
     padding-block: var(--space-2);
   }
 }
 
-.launch-body {
-  padding-top: var(--space-12);
-}
+
 
 .prose--launch > p:first-child {
   font-size: var(--step-1);
@@ -181,19 +170,19 @@
 }
 
 .prose--launch > h2 {
-  font-size: var(--step-3);
+  font-size: var(--step-2);
   font-weight: 500;
   letter-spacing: -0.01em;
   margin-top: var(--space-12);
   padding-top: var(--space-6);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line-strong);
 }
 
 .prose--launch blockquote {
   margin-block: var(--space-10);
   padding: var(--space-6) 0;
   border-left: 0;
-  border-block: 1px solid var(--border);
+  border-block: 1px solid var(--line-strong);
   font-family: var(--font-display);
   font-size: var(--step-2);
   font-weight: 500;
@@ -205,7 +194,7 @@
 
 .prose--launch blockquote p + p {
   margin-top: var(--space-3);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--step--1);
   font-weight: 450;
   letter-spacing: 0;
@@ -220,15 +209,11 @@
   margin-top: 0;
 }
 
-@media (min-width: 1080px) {
+@media (min-width: 1024px) {
   .post .prose--launch > .grid {
-    --breakout: min(64rem, 100vw - 2 * var(--gutter));
+    --breakout: calc(100% * var(--break-span) / var(--post-span));
 
     width: var(--breakout);
     margin-inline: calc((100% - var(--breakout)) / 2);
   }
-}
-
-.prose--launch .cta-band {
-  margin-top: var(--space-12);
 }

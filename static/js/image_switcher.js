@@ -82,12 +82,29 @@ class ImageSwitcher {
 
     this.container.appendChild(switcherContainer);
 
-    const warm = () =>
-      this.images.forEach((src) => this.preload(src).catch(() => {}));
-    if ("requestIdleCallback" in globalThis) {
-      requestIdleCallback(warm, { timeout: 3000 });
-    } else {
-      setTimeout(warm, 1000);
+    // Warm the other variants only when the reader nears the comparison,
+    // so a page with several switchers does not fetch them all up front.
+    // Lossless sources are large, so they wait until the reader points at
+    // or focuses the buttons.
+    const isSource = (i) => /^source$/i.test(this.args[i]);
+    const warm = (all) =>
+      this.images.forEach((src, i) => {
+        if (all || !isSource(i)) this.preload(src).catch(() => {});
+      });
+    const intent = () => warm(true);
+    this.buttonContainer.addEventListener("pointerenter", intent, { once: true });
+    this.buttonContainer.addEventListener("focusin", intent, { once: true });
+    this.buttonContainer.addEventListener("touchstart", intent, { once: true, passive: true });
+    if ("IntersectionObserver" in globalThis) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          io.disconnect();
+          warm(false);
+        },
+        { rootMargin: "300px 0px" },
+      );
+      io.observe(this.container);
     }
   }
 }
